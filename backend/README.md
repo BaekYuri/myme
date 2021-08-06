@@ -1,33 +1,53 @@
-### SSAFY-SERVER
+### MYME-SERVER
 
 ### History
-- __07-19 ~ 07-23__ : 데이터베이스 및 프로젝트 아키텍처 설계, 백엔드 서버 기초 구성 및 User관련 API 완성
+- __07-19 ~ 07-23__ : 데이터베이스 및 프로젝트 아키텍처 설계, 백엔드 서버 기초 구성
+- __07-23 ~ 07-29__ : 데이터베이스 구축 백엔드 및 프론트엔드 서버 구축 및 로그인 회원가입 API 완성
 
-#### 스켈레톤
+#### MYME Back
 
 ```
-"실시간 선호도 조사"은 투표를 통해 유저들끼리의 커뮤니티를 형성 할 수있는 가상의
-주제로써 이 프로젝트를 통해 React, Node.js, Mysql, Hw등 다양한 기술을
-접하는것을 목표로한다.
+MYME 서비스의 백엔드 서버를 개발하고 있습니다.
+Node.js의 Express 프레임워크를 사용하여 개발할 예정입니다.
+
+일반 데스크톱, 모바일에서 접속 가능한 web과
+MYME 스마트미러에서 접속 가능한 web을 따로 둘 생각입니다.
+
+Back server 2대 Front server 2대 총 4대의 AWS EC2를 생성하였습니다.
+이미지 업로드를 해야할 작업이 있기 때문에 AWS S3, lambda를 사용할 예정입니다.
+
 ```
 
 #### directory
 
 ```
-/env
-    - env.json
-/middleware
-    - db.js
-
-/route
-    /base
-	    - auth.js
-        - base.js
-/sql
-    /base
-	    - base.xml
+/config
+    - config.js
+/migrations
+/models
+    - habit.js
+    - index.js
+    - routine.js
+    - user.js
+/modules
+    - swagger.js
+/passport
+    - index.js
+    - kakao.js
+    - local.js
+/public
+/routes
+    - auth.js
+    - index.js
+    - middlewares.js
+    - user.js
+/seeders
+- .gitignore
+- app.js
+- index.html
+- package-lock.json
+- package.json
 - README.md
-- server.js
 ```
 
 ### description
@@ -47,13 +67,15 @@ express에서 제공되는 기능으로
 - https://expressjs.com/en/resources/middleware.html
 
 
-추가로 DB와 연동하기위해 Sequelize라이브러리를 사용하며
-추가로 mybatis-mapper라는 라이브러리를 통해 XML로 된 SQL를 분리하여 사용한다.
+추가로 DB와 연동하기위해 Sequelize라이브러리를 사용한다.
 
 - https://sequelize.org/master/
-- https://github.com/OldBlackJoe/mybatis-mapper#readme
 
 ```
+
+### Dabtabase
+
+- https://app.diagrams.net/#G1vJliTyhuFDLXzTC2KZrurrbWdzVOYVtw
 
 #### run
 
@@ -61,18 +83,15 @@ express에서 제공되는 기능으로
 npm install
 npm start
 
-- http://localhost:3001
+- http://i5a201.p.ssafy.io:3000
 
 ```
 
 ### routes
 
 ```
-GET     http://localhost:3001/
-GET     http://localhost:3001/base
-GET     http://localhost:3001/base/auth/users/:id
+GET     http://i5a201.p.ssafy.io:3000/
+POST    http://i5a201.p.ssafy.io:3000/auth/join
+POST    http://i5a201.p.ssafy.io:3000/auth/login
 
-POST    http://localhost:3001/base
-PUT     http://localhost:3001/base
-DELETE  http://localhost:3001/base
 ```

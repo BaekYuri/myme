@@ -1,11 +1,11 @@
 export default [
     {
       name: "checkedA",
-      label: "건강",
+      label: "운동",
     },
     {
         name: "checkedB",
-        label: "정서",
+        label: "공부",
     },
     {
         name: "checkedC",
@@ -13,11 +13,11 @@ export default [
       },
       {
           name: "checkedD",
-          label: "역량",
+          label: "식사",
       },
       {
         name: "checkedE",
-        label: "자산",
+        label: "역량",
     },
     {
         name: "checkedF",
@@ -25,6 +25,6 @@ export default [
       },
       {
           name: "checkedG",
-          label: "기타",
+          label: "자산",
       },
   ] 

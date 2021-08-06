@@ -31,13 +31,14 @@ const TealSwitch = withStyles({
 const MirrorSetting = () => {
 
     return(
-        <Container maxWidth="lg" style={{background: '#eee'}}>
+        <Container maxWidth="lg">
             <Wrapper>
             <Grid container xs={12} className="grid" style={{padding: '20px', margin: '10px'}}>
                 <Grid item xs={12} className="titleGrid">
                     <h1>미러 관리</h1>
                 </Grid>
-                <Grid item xs={12} style={{height: '50px'}}></Grid>
+                <Grid item xs={12} className="BottomTitle"><hr/></Grid>
+                
                 <Grid
                     container
                     direction="row"

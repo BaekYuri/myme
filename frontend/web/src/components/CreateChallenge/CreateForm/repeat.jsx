@@ -13,22 +13,22 @@ export default [
     },
     {
         name: "checkedD",
-        label: "주 1일",
+        label: "선택",
     },
-    {
-        name: "checkedE",
-        label: "주 2일",
-    },
-    {
-        name: "checkedF",
-        label: "주 3일",
-    },
-    {
-        name: "checkedG",
-        label: "주 4일",
-    },
-    {
-        name: "checkedH",
-        label: "주 5일",
-    },
+    // {
+    //     name: "checkedE",
+    //     label: "주 2일",
+    // },
+    // {
+    //     name: "checkedF",
+    //     label: "주 3일",
+    // },
+    // {
+    //     name: "checkedG",
+    //     label: "주 4일",
+    // },
+    // {
+    //     name: "checkedH",
+    //     label: "주 5일",
+    // },
   ] 

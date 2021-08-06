@@ -1,31 +1,41 @@
 import React, { useContext, useEffect } from 'react';
-import Login from '../../components/Auth/SignResponsiveDialog'
-import { CommonContext } from '../../context/CommonContext';
 import Wrapper from './styles';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { LOAD_MY_INFO_REQUEST } from '../../reducers/user';
+import LoginForm from '../../components/Auth/LoginForm';
+import SignupForm from '../../components/Auth/SignupForm'
 
 const Auth = () => {
-  const { user, setSignDialogOpen, setUserDetailDialogOpen } = useContext(
-    CommonContext,
-  );
+  const dispatch = useDispatch()
+  const history = useHistory()
+
+  const { me, isSignUp } = useSelector((state) => state.user)
 
   useEffect(() => {
-    if (user.status === '') {
-      setSignDialogOpen(true);
-    } else if (user.status === 'login') {
-      setUserDetailDialogOpen(true);
-    } else if (user.status === 'default') {
-      setSignDialogOpen(false);
-    } else {
-      alert('More than');
+    dispatch({
+      type: LOAD_MY_INFO_REQUEST
+    })
+  }, [])
+
+  // 로그인 상태이면 홈 화면으로 이동!
+  useEffect(() => {
+    if (me) {
+      history.push('/Home')
     }
-  }, []);
+  }, [me])
 
   return(
     <Wrapper>
       <div className="box">
-        <div className="box2"><img src="/images/contact_us_img_4.png" alt="" width="40px" style={{margin: "20px"}}/></div>
+        <div className="box2">
+          <img src="/images/contact_us_img_4.png" alt="" width="40px" style={{margin: "20px"}}/>
+        </div>
         <div className="LoginCard">
-          <Login />
+          {isSignUp
+            ? <SignupForm />
+            : <LoginForm />
+          }
         </div>
       </div>
     </Wrapper>

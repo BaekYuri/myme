@@ -22,3 +22,7 @@ html::-webkit-scrollbar {
 .menu{
   margin:20px;
 }
+
+.btn{
+  cursor: pointer;
+}

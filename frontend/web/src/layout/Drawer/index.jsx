@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {connect} from 'react-redux';
+import {connect, useSelector} from 'react-redux';
 import Hidden from '@material-ui/core/Hidden';
 import {
   Divider,
@@ -10,13 +10,15 @@ import Wrapper from './styles';
 import DrawerListGroup from './DrawerListGroup/index';
 
 function PersistentDrawerLeft(state) {
+  const { drawerOpen } = useSelector((state) => state.layout)
+
   return (
     <Wrapper>
       <Drawer
         className="drawer"
         variant="persistent"
         anchor="left"
-        open={state.layoutStore.drawerOpen}
+        open={drawerOpen}
       >
         <Divider />
         <DrawerListGroup />

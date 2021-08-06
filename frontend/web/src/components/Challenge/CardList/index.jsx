@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from 'react-slick';
+import Wrapper from './styles'
 import styled from 'styled-components';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { 
     makeStyles,
     Card,
@@ -13,8 +15,10 @@ import {
     Button,
     Typography,
     Chip,
-    Grid
+    Grid,
+    Container
      } from '@material-ui/core/';
+
 import PersonIcon from '@material-ui/icons/Person';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import DetailChallenge from '../DetailChallenge/';
@@ -27,30 +31,6 @@ const useStyles = makeStyles({
     height: 150,
   },
 });
-
-
-
-const Container = styled.div`
-    min-height: 200px;
-    //background: #000;
-  `,
-  StyledSlider = styled(Slider)`
-    & .slick-slide img {
-      max-width: 100%;
-      min-height: 400;
-    }
-  `,
-  ImageContainer = styled.div`
-    position: relative;
-    color: white;
-    margin: 0 20px;
-  `,
-  Image = styled.img``,
-  BottomLeft = styled.div`
-    position: absolute;
-    bottom: 8px;
-    left: 16px;
-  `;
 
 const items = [
   { id: 1, url: "http://placekitten.com/g/400/200", caption: "Cute Kitten" },
@@ -65,18 +45,14 @@ const items = [
   { id: 10, url: "http://placekitten.com/g/400/200", caption: "Cute Kitten" }
 ];
 
-const Challenge = () => {
+const Challenge = (props) => {
+  const dispatch = useDispatch()
+  const { challenge } = useSelector((state) => state.challenge)
     const classes = useStyles();
     const [favorite, setFavorite] = useState(false);
 
     const settings = {
-        // slidesToShow: 2,
-        // slidesToScroll: 1,
-        // dots: true,
-        // centerMode: true,
-        // infinite: true,
-        // adaptiveHeight: true,
-        // arrows: true
+
         className: "center",
         centerPadding: "60px",
         dots: true, // 캐러셀이미지가 몇번째인지 알려주는 점을 보여줄지 정한다.
@@ -115,7 +91,8 @@ const Challenge = () => {
       ]
       };
       return (
-        <Container>
+        <Wrapper>
+        <Container maxWidth="lg" >
         <Slider
           {...settings}
           style={{
@@ -145,7 +122,7 @@ const Challenge = () => {
                             <Grid container spacing={2}>
                                 <Grid item xs container direction="column" spacing={2}>
                                     <Typography gutterBottom variant="h5" component="h2">
-                                    10분 명상
+                                    {challenge}
                                     </Typography>
                                 </Grid>
                                 <Grid item>
@@ -153,7 +130,7 @@ const Challenge = () => {
                                 </Grid>
                             </Grid>
                             <Typography variant="body2" color="textSecondary" component="p">
-                            매일 아침 10분 명상을 통해 내면을 들여다 봅시다.
+                            {challenge}
                             </Typography>
                         </CardContent>
 
@@ -170,7 +147,8 @@ const Challenge = () => {
           })}
         </Slider>
       </Container>
+      </Wrapper>
       );
- }
+}
 
 export default Challenge;

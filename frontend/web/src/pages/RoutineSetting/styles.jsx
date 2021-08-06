@@ -10,5 +10,8 @@ const Wrapper = styled.div`
     .daily-menu > * {
         display: inline-block;
     }
+    .MuiContainer-root {
+        margin-bottom: 10px;
+    }
 `;
 export default Wrapper;

@@ -31,7 +31,7 @@ function App(props){
             <Grid item xs={3}><span className="float-right">70%</span></Grid>
             </Grid>
             <Grid container spacing={0}>
-                <Grid item xs={12} className='term confirm-btn'>인증하기</Grid>
+                <Grid item xs={12} className='term confirm-btn btn'>인증하기</Grid>
             </Grid>
         </Wrapper>
     );

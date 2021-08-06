@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-const Wrapper = styled.div`
+import Paper from '@material-ui/core/Paper';
+const Wrapper = styled(Paper)`
     display: inline-block;
-    border : 1px solid #66A091;
     padding : 10px;
     border-radius : 10px;
     min-width:220px;

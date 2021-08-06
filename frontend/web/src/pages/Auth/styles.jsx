@@ -3,7 +3,7 @@ import styled from 'styled-components';
 const Wrapper = styled.div`
 .box{
     background: #89DDBF;
-    height: 300px;
+    height: 400px;
 }
 .box2{
     height: 130px;
@@ -12,7 +12,7 @@ const Wrapper = styled.div`
 .LoginCard{ 
     display: flex;
     justify-content: center;
- 
+
    // margin-top: 100px;
     //flex: 1;
 }

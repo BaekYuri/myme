@@ -1,8 +1,7 @@
-import React, {Fragment } from 'react';
+import React, { Fragment, useCallback, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import {connect} from 'react-redux';
-import {closeDrawer } from '../../../redux/modules/layoutStore';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {
   Avatar,
@@ -15,81 +14,100 @@ import {
   AccordionSummary,
   AccordionDetails,
 } from '@material-ui/core';
+import { logoutRequestAction } from '../../../reducers/user';
+import { CLEAR_MY_ROUTINES } from '../../../reducers/routine';
+import { CLOSE_DRAWER } from '../../../reducers/layout';
 
 const DrawerListGroup = (props) => {
-  
-    let history = useHistory();
-  
-    const onClickRedirectPathHandler = name => () => {
-        props.dispatch(closeDrawer());
-        window.scrollTo(0, 0);
-        history.push(name);
-    };
-  
-    return (
-      <>
-        <List className="drawer-list-group-list">
-  
-          <Fragment>
-            <ListItem button key={'Me'} className="bg-unset">
-                <Accordion className="panel">
-                  <AccordionSummary
-                    className="panel-summary"
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
+  const dispatch = useDispatch()
+  const { me } = useSelector((state) => state.user)
+
+  let history = useHistory();
+
+  const onClickRedirectPathHandler = name => () => {
+      dispatch({
+        type: CLOSE_DRAWER
+      })
+      window.scrollTo(0, 0);
+      history.push(name);
+  };
+
+  const onSignOut = useCallback(() => {
+    dispatch({
+      type: CLEAR_MY_ROUTINES
+    })
+    dispatch(logoutRequestAction())
+  }, [me])
+
+  useEffect(() => {
+    if (!me) {
+      history.push('/')
+    }
+  }, [me])
+
+  return (
+    <>
+      <List className="drawer-list-group-list">
+        <Fragment>
+          <ListItem button key={'Me'} className="bg-unset">
+            <Accordion className="panel">
+              <AccordionSummary
+                className="panel-summary"
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+              >
+                <Avatar
+                  alt="profile picture"
+                  src={`https://picsum.photos/id/82/200/300.webp`}
+                  className="avatar"
+                />
+                <ListItemText
+                  primary={me?.nickname}
+                  disableTypography
+                  className="list-item"
+                />
+              </AccordionSummary>
+              <AccordionDetails>
+                <List className="expansion-panel">
+                  <ListItem
+                    button
+                    key={'Edit Profile '}
                   >
-                    <Avatar
-                      alt="profile picture"
-                      src={`https://picsum.photos/id/82/200/300.webp`}
-                      className="avatar"
-                    />
                     <ListItemText
-                      primary={'Me'}
+                      primary={'Edit Profile'}
+                      disableTypography
+                    />
+                  </ListItem>
+                  <ListItem
+                    button
+                    key={'Change Password'}
+                  >
+                    <ListItemText
+                      primary={'Change Password'}
+                      disableTypography
+                    />
+                  </ListItem>
+                  <ListItem button key={'Sign Out'}>
+                    <ListItemText
+                      primary={'Sign Out'}
                       disableTypography
                       className="list-item"
+                      onClick={onSignOut}
                     />
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <List className="expansion-panel">
-                      <ListItem
-                        button
-                        key={'Edit Profile '}
-                      >
-                        <ListItemText
-                          primary={'Edit Profile'}
-                          disableTypography
-                        />
-                      </ListItem>
-                      <ListItem
-                        button
-                        key={'Change Password'}
-                      >
-                        <ListItemText
-                          primary={'Change Password'}
-                          disableTypography
-                        />
-                      </ListItem>
-                      <ListItem button key={'Sign Out'}>
-                        <ListItemText
-                          primary={'Sign Out'}
-                          disableTypography
-                          className="list-item"
-                        />
-                      </ListItem>
-                    </List>
-                  </AccordionDetails>
-                </Accordion>
-              </ListItem>
-          <ListItem
-            button
-            key={'MyRoutine'}
-            onClick={onClickRedirectPathHandler('/')}
-          >
-            <ListItemText primary={'나의 루틴'} disableTypography />
+                  </ListItem>
+                </List>
+              </AccordionDetails>
+            </Accordion>
           </ListItem>
-          
-            
+        <ListItem
+          button
+          key={'MyRoutine'}
+          onClick={onClickRedirectPathHandler('/Home')}
+        >
+          <ListItemText primary={'홈'} disableTypography />
+        </ListItem>
+ 
               <ListItem
                 button
                 key={'RoutineSetting'}
@@ -98,6 +116,13 @@ const DrawerListGroup = (props) => {
                 <ListItemText primary={'루틴 설정'} disableTypography />
               </ListItem>
               
+              <ListItem
+                button
+                key={'Challenge'}
+                onClick={onClickRedirectPathHandler('/Challenge')}
+              >
+                <ListItemText primary={'챌린지'} disableTypography />
+              </ListItem>
             
           <ListItem
             button
@@ -119,6 +144,7 @@ const DrawerListGroup = (props) => {
       </>
     );
   };
+
 
   const mapStateToProps= (state) =>{
   

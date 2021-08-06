@@ -74,26 +74,36 @@ const SignInSection01 = () => {
       return;
     }
 
-    let respone = [];
-    let hashPassword = '';
-    try {
-      hashPassword = crypto
-        .createHash('sha512')
-        .update(password)
-        .digest('hex');
-    } catch (error) {
-      return;
-    }
+    Axios.post(`${serverUrl}/user/login`, {
+      email: id,
+      password
+    })
+    .then(response => {
+      console.log(response)
+      setIsSignUp('SignIn');
+      history.replace('/Home')
+    })
+    .catch(error => console.error(error))
 
-    setUser({ ...userData });
-    setSignDialogOpen(false);
-    setIsSignUp('SignIn');
+    // let respone = [];
+    // let hashPassword = '';
+    // try {
+    //   hashPassword = crypto
+    //     .createHash('sha512')
+    //     .update(password)
+    //     .digest('hex');
+    // } catch (error) {
+    //   return;
+    // }
 
-    history.goBack();
+    // setUser({ ...userData });
+    // setSignDialogOpen(false);
+
+    // history.goBack();
   };
 
   useEffect(() => {
-    console.log({ user });
+    // console.log({ user });
 
     if (signInUserData.id !== '' && signInUserData.email !== '') {
       setDisabled(false);
@@ -309,32 +319,48 @@ const SignUpSection02 = () => {
       return;
     }
 
-    let respone = [];
-    let hashPassword = 'test2';
-    try {
-      hashPassword = crypto
-        .createHash('sha512')
-        .update(password)
-        .digest('hex');
-    } catch (error) {
-      console.log('PPAP: signInHandler -> error', error);
-    }
+    Axios.post(`${serverUrl}/user/join`, {
+      name,
+      email: id,
+      nickname: 'wook',
+      password,
+      address: '서울시 마포구 창전동 6-206 301호'
+    })
+    .then(response => {
+      console.log(response)
+      setSignUpUserData({
+        id: '',
+        name: '',
+        password: '',
+      });
+      setIsSignUp('SignIn');
+    })
+    .catch(error => console.error(error))
 
-    var body = {
-      id: id,
-      name: name,
-      pwd: hashPassword,
-    };
-    console.log('PPAP: signUpHandler -> body', body);
+    // let respone = [];
+    // let hashPassword = 'test2';
+    // try {
+    //   hashPassword = crypto
+    //     .createHash('sha512')
+    //     .update(password)
+    //     .digest('hex');
+    // } catch (error) {
+    //   console.log('PPAP: signInHandler -> error', error);
+    // }
 
-    //
+    // var body = {
+    //   id: id,
+    //   name: name,
+    //   pwd: hashPassword,
+    // };
+    // console.log('PPAP: signUpHandler -> body', body);
 
-    setIsSignUp('SignIn');
-    setSignUpUserData({
-      id: '',
-      name: '',
-      password: '',
-    });
+    // setIsSignUp('SignIn');
+    // setSignUpUserData({
+    //   id: '',
+    //   name: '',
+    //   password: '',
+    // });
   };
 
   return (

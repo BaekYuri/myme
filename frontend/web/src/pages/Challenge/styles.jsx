@@ -16,10 +16,26 @@
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
-  max-width: 1280px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 50px;
+
+  width: auto;
+padding: 10px;
+hr {
+  border: white 1px solid;
+  margin-top: 20px;
+}
+  .daily-menu{
+    width:auto;
+}
+.grid{
+
+ & .CardContent{
+    margin-top: 30px;
+  }
+  & .TotalCard{
+    margin-bottom: 20px;
+  }
+}
 `;
 
 export default Wrapper;
+

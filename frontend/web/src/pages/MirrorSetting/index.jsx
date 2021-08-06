@@ -1,14 +1,13 @@
 import React from 'react';
-import {Grid} from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import Mirror from '../../components/MirrorSetting/';
 import Layout from '../../layout/index'
 const MirrorSetting = () => {
-
     return (
         <Layout>
-        <Grid container item xs={12} style={{background: '#eee'}}>
-             <Mirror></Mirror>
-        </Grid>        
+          <Grid container item xs={12}>
+            <Mirror></Mirror>
+          </Grid>        
         </Layout>        
     );
 }

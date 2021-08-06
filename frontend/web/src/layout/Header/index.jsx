@@ -3,8 +3,8 @@ import { useHistory } from 'react-router-dom';
 import store from 'store';
 
 import { useTheme } from '@material-ui/core/styles';
-import {connect} from 'react-redux';
-import { openDrawer } from '../../redux/modules/layoutStore';
+import {connect, useDispatch, useSelector} from 'react-redux';
+import { TOGGLE_DRAWER } from '../../reducers/layout';
 
 import {
   Grid,
@@ -21,6 +21,9 @@ const Header = (state) => {
   let history = useHistory();
   const theme = useTheme();
   const isTablet = useMediaQuery(theme.breakpoints.down('md'));
+
+  const dispatch = useDispatch()
+  const { drawerOpen } = useSelector((state) => state.layout)
 
   const handleSignInDialogOpen = () => {
     history.push('/Auth');
@@ -47,12 +50,12 @@ const Header = (state) => {
           <Grid
             container
             direction="column"
-            justify="space-between"
+            justifyContent="space-between"
             aria-label="open drawer"
             onClick={
-              ()=>{ state.dispatch(openDrawer());}
+              ()=>{ dispatch({type: TOGGLE_DRAWER})}
             }
-            className={state.state.layoutStore.drawerOpen ? 'menu-button on' : 'menu-button'}
+            className={drawerOpen ? 'menu-button on' : 'menu-button'}
           >
             <Grid></Grid>
             <Grid></Grid>
@@ -61,9 +64,9 @@ const Header = (state) => {
         )}
         <AppBar
           position="fixed" style={{background:'#89DDBF'}}
-          className={state.state.layoutStore.drawerOpen ? 'appbar appbar-shift' : 'appbar'}
+          className={drawerOpen ? 'appbar appbar-shift' : 'appbar'}
         >
-          <Grid container justify={!isTablet?'space-between':'space-evenly'} alignItems="center">
+          <Grid container justifyContent={!isTablet?'space-between':'space-evenly'} alignItems="center">
             <Grid item>
               <Typography
                 variant="h6"
@@ -83,7 +86,7 @@ const Header = (state) => {
                     onClick={onClickRedirectPathHandler('/SearchVote')}
                   >
                     <SearchIcon
-                      fontSize="default"
+                      fontSize='medium'
                       color="inherit"
                       htmlColor="#eeeeee"
                     />
@@ -91,7 +94,7 @@ const Header = (state) => {
                 </Grid>
                 <Grid item>
                   <Button
-                   style={{background:'#89DDBF'}}
+                    style={{background:'#89DDBF'}}
                     variant="contained"
                     onClick={handleSignInDialogOpen}
                     className="display-none header-button"

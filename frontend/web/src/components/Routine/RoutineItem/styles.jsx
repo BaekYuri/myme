@@ -1,27 +1,33 @@
 import styled from 'styled-components';
-const Wrapper = styled.div`
+import Container from '@material-ui/core/Container';
+const Wrapper = styled(Container)`
     width: auto;
     .routine-item{
-        border: 1px solid #66A091;
+        margin-bottom : 10px;
         width:100%;
     }
     .details{
         display: block;
     }
-    .button-div{
-        text-align-last: center;
+
+    .modify-btn{
+        float: right;
+        width: 40px;
+        height: auto;
+        color: darkgray;
+        margin: 10px;
     }
 
-    .button-div > button{
-        padding: 10px;
-        width: 70px;
-        height: 70px;
-        border-radius: 100px;
-        background-color: #89DDBF;
-        border: none;
-        color: white;
-        font-weight: 100;
-        font-size: 40px;
+    #add-btn{
+        color:#5FA16A;
+    }
+
+    #delete-btn{
+        color:#A1777F;
+    }
+
+    #save-btn{
+        color:#6F93A1;
     }
 `;
 export default Wrapper;
