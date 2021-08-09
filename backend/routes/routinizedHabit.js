@@ -42,7 +42,7 @@ router.post('/:routineId', isLoggedIn, async (req, res, next) => {
   try {
     const routinizedHabit = await RoutinizedHabit.create({
       order: req.body.order,
-      achieve_count: 0,
+      achieve_count: req.body.achieve_count,
       RoutineId: req.params.routineId,
       HabitId: req.body.habitId
     })
@@ -77,23 +77,17 @@ router.post('/:routineId', isLoggedIn, async (req, res, next) => {
  *        '200':
  *          description: Success
  */
-router.patch('/order', isLoggedIn, async (req, res, next) => {
+router.put('/order', isLoggedIn, async (req, res, next) => {
   try {
-    const routinizedHabits = await RoutinizedHabit.findAll({
-      where: { RoutineId: req.body.routineId },
+    req.body.habits.map(async (routinizedHabit) => {
+          await RoutinizedHabit.update(
+            {order: routinizedHabit.order},
+            {
+              where: { id: routinizedHabit.id }
+            }
+          )
     })
-    // 이게 맞나 싶다...
-    routinizedHabits.map(async (routinizedHabit) => {
-      for(let i=0; i<routinizedHabits.length; i++) {
-        if (routinizedHabit.id === req.body.habits[i].habitId) {
-          await RoutinizedHabit.update({
-            order: req.body.habits[i].order,
-            where: { id: routinizedHabit.id }
-          })
-        }
-      }
-    })
-    res.status(200).json(routinizedHabits)
+    res.status(200).json(req.body.habits)
   } catch (error) {
     console.error(error)
     next(error)
@@ -138,5 +132,90 @@ router.post('/', isLoggedIn, async (req, res, next) => {
     next(error)
   }
 })
+
+// 루틴 내 습관 삭제하기
+/**
+ * @swagger
+ *  /routinizedHabit/{routinizedHabitId}
+ *    delete:
+ *      tags:
+ *      - routinizedHabit
+ *      description: 루틴 내 습관 삭제하기
+ *      parameters:
+ *        - in: path
+ *          name: routinizedHabitId
+ *          required: true
+ *          schema:
+ *            type: integer
+ *            minimum: 1
+ *          description: 루틴습관 Id
+ *      responses:
+ *        '200':
+ *          description: Success
+ */
+router.delete('/:routinizedHabitId', isLoggedIn, async (req, res, next) => {
+  try {
+    await RoutinizedHabit.destroy({
+      where: { id: req.params.routinizedHabitId}
+    })
+    res.status(200).json()
+  } catch (error) {
+    console.error(error)
+    next(error)
+  }
+})
+
+// // 루틴에 저장된 습관 목록 불러오기
+// /**
+//  * @swagger
+//  *  /routinizedHabit/{routineId}:
+//  *    get:
+//  *      tags:
+//  *      - routinizedHabit
+//  *      description: 루틴에 저장된 습관 목록 불러오기
+//  *      parameters:
+//  *        - in: path
+//  *          name: routineId
+//  *          required: true
+//  *          schema:
+//  *            type: integer
+//  *            minimum: 1
+//  *          description: 저장된 습관 목록을 불러오려는 루틴의 Id
+//  *      responses:
+//  *        '200':
+//  *          description: Success
+//  *          content:
+//  *            application/json:
+//  *              schema:
+//  *                type: object
+//  *                properties:
+//  *                  order:
+//  *                    type: integer
+//  *                  assist_content:
+//  *                    type: text
+//  *                  assist_link:
+//  *                    type: string
+//  *                  achieve_count:
+//  *                    type: integer
+//  *                    description: 초기에 무조건 0으로 고정
+//  *                  HabitId:
+//  *                    type: integer
+//  *                  RoutineId:
+//  *                    type: integer
+//  */
+// router.get('/:routineId', isLoggedIn, async (req, res, next) => {
+//   try {
+//     const routinizedHabits = await RoutinizedHabit.findAll({
+//       where: { RoutineId: req.params.routineId },
+//       include: [{
+//         model: DailyAchieveHabit,
+//       }]
+//     })
+//     res.status(200).json(routinizedHabits)
+//   } catch (error) {
+//     console.error(error)
+//     next(error)
+//   }
+// })
 
 module.exports = router

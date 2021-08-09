@@ -8,9 +8,9 @@
  *          content:
  *            type: text
  *          UserId:
- *            type: string
+ *            type: integer
  *          ChallengeId:
- *            type: string
+ *            type: integer
  */
 module.exports = (sequelize, DataTypes) => {
   const Comment = sequelize.define('Comment', {

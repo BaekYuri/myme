@@ -34,20 +34,14 @@ sequelize.sync()
 // 아래의 미들웨어들은 내부적으로 next를 실행 해준다!
 // 미들웨어간 순서도 매우 중요하다! 왜?
 // 요청에 따라서 어디까지 실행되는지 결정된다. 중간에 실행 되면 => 거기서 멈춤, 서버 부하 줄어든다!
-app.set('trust proxy', 1)
-app.use(morgan('combined'))
+// app.set('trust proxy', 1)
+// app.use(morgan('dev'))
 app.use(cookieParser(process.env.COOKIE_SECRET))
 app.use(session({
   httpOnly: true,
-  secure: true,
   resave: false,
   saveUninitialized: false,
-  proxy: true,
   secret: process.env.COOKIE_SECRET,
-  cookie: {
-    httpOnly: true,
-    secure: true,
-  },
   name: 'connect.sid',
 }))
 // app.use('요청경로', express.static(path.join('실제 경로'))) -> 보안에 좋음, 서버 구조를 예측 불가능!

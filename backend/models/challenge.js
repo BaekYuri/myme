@@ -5,6 +5,8 @@
  *      Challenge:
  *        type: object
  *        properties:
+ *          id:
+ *            type: integer
  *          name:
  *            type: string
  *          img_addr:
@@ -13,14 +15,21 @@
  *            type: text
  *          start_date:
  *            type: date
+ *          end_date:
+ *            type: date
  *          period:
  *            type: integer
- *          repeat_cycle:
+ *          certification_cycle:
  *            type: integer
- *            description: 반복 주기입니다. (월~금 매일 이런식 코드로 분류해야 할듯...)
- *          auth_count:
+ *            description: 매일 0 / 평일만 1 / 주말만 2 / 주6일 4 / 주5일 5 / 주4일 6 / 주3일 7 / 주2일 8 / 주1일 9 
+ *          total_number_of_certification:
  *            type: integer
- *            description: 하루에 인증해야 하는 횟수입니다.
+ *            description: 챌린지 100% 달성을 위해 필요한 총 인증 횟수
+ *          UserId:
+ *            type: integer
+ *            description: 챌린지를 생성한 유저 아이디
+ *          CategoryId:
+ *            type: integer
  */
 module.exports = (sequelize, DataTypes) => {
   const Challenge = sequelize.define('Challenge', {
@@ -37,18 +46,22 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     start_date: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: false,
+    },
+    end_date: {
+      type: DataTypes.DATEONLY,
+      allowNull: false
     },
     period: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    repeat_cycle: {
+    certification_cycle: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    auth_count: {
+    total_number_of_certification: {
       type: DataTypes.INTEGER,
       allowNull: false,
     }
@@ -59,11 +72,13 @@ module.exports = (sequelize, DataTypes) => {
 
   Challenge.associate = (db) => {
     db.Challenge.belongsTo(db.User)
+    db.Challenge.hasMany(db.Comment)
+    db.Challenge.hasMany(db.ChallengeParticipation)
+    db.Challenge.hasMany(db.ChallengeCertificationTime)
+    db.Challenge.hasMany(db.ChallengeCertificationDay)
     db.Challenge.belongsToMany(db.Category, {
       through: 'ChallengeCategory'
     })
-    db.Challenge.hasMany(db.Comment)
-    db.Challenge.hasOne(db.ChallengeParticipation, {foreignKey: 'ChallengeId'})
   }
 
   return Challenge

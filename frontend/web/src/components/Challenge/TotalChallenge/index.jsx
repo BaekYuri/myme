@@ -18,7 +18,7 @@ const chipStyles = makeStyles((theme) => ({
 export default function TotalChallenge() {
     const chipClasses = chipStyles();
     const handleClick = () => {
-        console.info('You clicked the Chip.');
+        console.info('주제선택');
       };
   return (
     <div>
@@ -33,7 +33,7 @@ export default function TotalChallenge() {
             </div>
        </AppBar>
             <div style={{height: '20px'}}></div>
-      <CardList></CardList>
+      {/* <CardList></CardList> */}
     </div>
   );
 }

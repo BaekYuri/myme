@@ -25,13 +25,13 @@ function PersistentDrawerLeft(state) {
       </Drawer>
       <Hidden mdDown>
         <Drawer
-        className="drawer drawer-tablet"
-        variant="persistent"
-        open
-      >
-        <Divider />
-        <DrawerListGroup />
-      </Drawer>
+          className="drawer drawer-tablet"
+          variant="persistent"
+          open
+        >
+          <Divider />
+          <DrawerListGroup />
+        </Drawer>
       </Hidden>
     </Wrapper>
   );

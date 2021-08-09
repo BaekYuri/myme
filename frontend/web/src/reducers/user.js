@@ -1,6 +1,9 @@
 import produce from 'immer'
 
 const initialState = {
+  updateMyInfoLoading: false, // 유저 정보 가져오기 시도 중
+  updateMyInfoDone: false,
+  updateMyInfoError: null,
   loadMyInfoLoading: false, // 유저 정보 가져오기 시도 중
   loadMyInfoDone: false,
   loadMyInfoError: null,
@@ -18,6 +21,8 @@ const initialState = {
 }
 
 export const UPDATE_MY_INFO_REQUEST = 'UPDATE_MY_INFO_REQUEST'
+export const UPDATE_MY_INFO_SUCCESS = 'UPDATE_MY_INFO_SUCCESS'
+export const UPDATE_MY_INFO_FAILURE = 'UPDATE_MY_INFO_FAILURE'
 
 export const LOAD_MY_INFO_REQUEST = 'LOAD_MY_INFO_REQUEST'
 export const LOAD_MY_INFO_SUCCESS = 'LOAD_MY_INFO_SUCCESS'
@@ -52,6 +57,20 @@ export const logoutRequestAction = () => {
 
 const reducer = (state = initialState, action) => produce(state, (draft) => {
   switch (action.type) {
+    case UPDATE_MY_INFO_REQUEST:
+      draft.updateMyInfoLoading = true
+      draft.updateMyInfoDone = false
+      draft.updateMyInfoError = null
+      break
+    case UPDATE_MY_INFO_SUCCESS:
+      draft.updateMyInfoLoading = false
+      draft.updateMyInfoDone = true
+      draft.me = action.data
+      break
+    case UPDATE_MY_INFO_FAILURE:
+      draft.updateMyInfoLoading = false
+      draft.updateMyInfoError = action.error
+      break
     case LOAD_MY_INFO_REQUEST:
       draft.loadMyInfoLoading = true
       draft.loadMyInfoDone = false
@@ -59,8 +78,8 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
       break
     case LOAD_MY_INFO_SUCCESS:
       draft.loadMyInfoLoading = false
-      draft.me = action.data
       draft.loadMyInfoDone = true
+      draft.me = action.data
       break
     case LOAD_MY_INFO_FAILURE:
       draft.loadMyInfoLoading = false

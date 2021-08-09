@@ -12,29 +12,32 @@ const initialState = {
   loadMyRoutinesDone: false,
   loadMyRoutinesError: null,
 
-  addHabitLoading: false,
-  addHabitDone: false,
-  addHabitError: null,
+  deleteRoutineLoading: false,
+  deleteRoutineDone : false,
+  deleteRoutineError : null,
 
-  loadMyHabitsLoading: false,
-  loadMyHabitsDone: false,
-  loadMyHabitsError: null,
+  modifyRoutineLoading: false,
+  modifyRoutineDone : false,
+  modifyRoutineError : null,
 
   addRoutinizedHabitLoading: false,
   addRoutinizedHabitDone: false,
   addRoutinizedHabitError: null,
 
-  loadRoutinizedHabitsLoading: false,
-  loadRoutinizedHabitsDone: false,
-  loadRoutinizedHabitsError: null,
+  deleteRoutinizedHabitLoading: false,
+  deleteRoutinizedHabitDone: false,
+  deleteRoutinizedHabitError: null,
+
+  setOrderLoading: false,
+  setOrderDone:false,
+  setOrderError:null,
 
   choosedRoutine : -1,
   createRoutineInfo : {
-      "rid" : -1,
+      "id" : -1,
       "name" : '',
       "alarm" : false,
-      "day_of_week" : [{day : "월", "activeDayOfWeek" : false,"time": ""},{day : "월", "activeDayOfWeek" : false,"time": ""},{day : "월", "activeDayOfWeek" : false,"time": ""},{day : "월", "activeDayOfWeek" : false,"time": ""},{day : "월", "activeDayOfWeek" : false,"time": ""},{day : "월", "activeDayOfWeek" : false,"time": ""},{day : "월", "activeDayOfWeek" : false,"time": ""}],
-      "routinizedHabit":[]    
+      "active_day_of_week" : [{"active" : false,"start_time": "00:00"},{"active" : false,"start_time": "00:00"},{"active" : false,"start_time": "00:00"},{"active" : false,"start_time": "00:00"},{"active" : false,"start_time": "00:00"},{"active" : false,"start_time": "00:00"},{"active" : false,"start_time": "00:00"}],
   },
 }
 
@@ -46,43 +49,35 @@ export const LOAD_MY_ROUTINES_REQUEST = 'LOAD_MY_ROUTINES_REQUEST'
 export const LOAD_MY_ROUTINES_SUCCESS = 'LOAD_MY_ROUTINES_SUCCESS'
 export const LOAD_MY_ROUTINES_FAILURE = 'LOAD_MY_ROUTINES_FAILURE'
 
-export const ADD_HABIT_REQUEST = 'ADD_HABIT_REQUEST'
-export const ADD_HABIT_SUCCESS = 'ADD_HABIT_SUCCESS'
-export const ADD_HABIT_FAILURE = 'ADD_HABIT_FAILURE'
+export const DELETE_ROUTINE_REQUEST = 'DELETE_ROUTINE_REQUEST'
+export const DELETE_ROUTINE_SUCCESS = 'DELETE_ROUTINE_SUCCESS'
+export const DELETE_ROUTINE_FAILURE = 'DELETE_ROUTINE_FAILURE'
 
-export const LOAD_MY_HABITS_REQUEST = 'LOAD_MY_HABITS_REQUEST'
-export const LOAD_MY_HABITS_SUCCESS = 'LOAD_MY_HABITS_SUCCESS'
-export const LOAD_MY_HABITS_FAILURE = 'LOAD_MY_HABITS_FAILURE'
+export const MODIFY_ROUTINE_REQUEST = 'MODIFY_ROUTINE_REQUEST'
+export const MODIFY_ROUTINE_SUCCESS = 'MODIFY_ROUTINE_SUCCESS'
+export const MODIFY_ROUTINE_FAILURE = 'MODIFY_ROUTINE_FAILURE'
 
 export const ADD_ROUTINIZED_HABIT_REQUEST = 'ADD_ROUTINIZED_HABIT_REQUEST'
 export const ADD_ROUTINIZED_HABIT_SUCCESS = 'ADD_ROUTINIZED_HABIT_SUCCESS'
 export const ADD_ROUTINIZED_HABIT_FAILURE = 'ADD_ROUTINIZED_HABIT_FAILURE'
 
-export const LOAD_ROUTINIZED_HABIT_REQUEST = 'LOAD_ROUTINIZED_HABITS_REQUEST'
-export const LOAD_ROUTINIZED_HABIT_SUCCESS = 'LOAD_ROUTINIZED_HABITS_SUCCESS'
-export const LOAD_ROUTINIZED_HABIT_FAILURE = 'LOAD_ROUTINIZED_HABITS_FAILURE'
+export const DELETE_ROUTINIZED_HABIT_REQUEST = 'DELETE_ROUTINIZED_HABIT_REQUEST'
+export const DELETE_ROUTINIZED_HABIT_SUCCESS = 'DELETE_ROUTINIZED_HABIT_SUCCESS'
+export const DELETE_ROUTINIZED_HABIT_FAILURE = 'DELETE_ROUTINIZED_HABIT_FAILURE'
 
 export const CLEAR_MY_ROUTINES = 'CLEAR_MY_ROUTINES'
 
-
-export const SET_ORDER = 'routine/setOrder';
+export const SET_ORDER_REQUEST = 'SET_ORDER_REQUEST';
+export const SET_ORDER_SUCCESS = 'SET_ORDER_SUCCESS';
+export const SET_ORDER_FAILURE = 'SET_ORDER_FAILURE';
 
 export const SET_CHOOSED_ROUTINE='routine/setChoosedRoutine';
-export const MODIFY_ROUTINE='routine/modifyRoutine';
-export const DELETE_ROUTINE='routine/deleteRoutine';
-export const ADD_ROUTINE_ITEM='routine/addRoutineItem';
 export const DELETE_ROUTINE_ITEM='routine/deleteRoutineItem';
 export const SET_MODAL_INPUT='routine/setModalInput';
 export const SET_MODAL_INPUT_NAME='routine/setModalInputName';
 export const SET_MODAL_INPUT_ALARM='routine/setModalInputAlarm';
 export const SET_MODAL_INPUT_ACTIVE_DAY='routine/setModalInputActiveDay';
 
-
-const sortHabit = (obj) => {
-  for (let i=0; i<obj.length; i++) {
-    obj[i].routinizedHabit.sort((a,b) => { return a.order-b.order })
-  }
-}
 
 const reducer = (state = initialState, action) => produce(state, (draft) => {
   switch (action.type) {
@@ -112,40 +107,42 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
       draft.loadMyRoutinesLoading = false
       draft.loadMyRoutinesDone = true
       draft.myRoutines = []
+      for(let i=0;i<action.data.length;i++){
+        action.data[i].RoutinizedHabits.sort((a,b)=>{return a.order-b.order})
+      }
       draft.myRoutines = draft.myRoutines.concat(action.data)
       break
     case LOAD_MY_ROUTINES_FAILURE:
       draft.loadMyRoutinesLoading = false
       draft.loadMyRoutinesError = action.error
       break
-    case ADD_HABIT_REQUEST:
-      draft.addHabitLoading = true
-      draft.addHabitDone = false
-      draft.addHabitError = null
+    case DELETE_ROUTINE_REQUEST:
+      draft.deleteRoutineLoading = true
+      draft.deleteRoutineDone = false
+      draft.deleteRoutineError = null
       break
-    case ADD_HABIT_SUCCESS:
-      draft.addHabitLoading = false
-      draft.addHabitDone = true
-      draft.myHabits = draft.myHabits.concat(action.data)
+    case DELETE_ROUTINE_SUCCESS:
+      draft.deleteRoutineLoading = false
+      draft.deleteRoutineDone = true
+      draft.myRoutines.splice(action.idx, 1)
       break
-    case ADD_HABIT_FAILURE:
-      draft.addHabitLoading = false
-      draft.addHabitError = action.error
+    case DELETE_ROUTINE_FAILURE:
+      draft.deleteRoutineLoading = false
+      draft.deleteRoutineError = true
       break
-    case LOAD_MY_HABITS_REQUEST:
-      draft.loadMyHabitsLoading = true
-      draft.loadMyHabitsDone = false
-      draft.loadMyHabitsError = null
+    case MODIFY_ROUTINE_REQUEST:
+      draft.modifyRoutineLoading = true
+      draft.modifyRoutineDone = false
+      draft.modifyRoutineError = null
       break
-    case LOAD_MY_HABITS_SUCCESS:
-      draft.loadMyHabitsLoading = false
-      draft.loadMyHabitsDone = true
-      draft.myHabits = []
-      draft.myHabits = draft.myHabits.concat(action.data)
+    case MODIFY_ROUTINE_SUCCESS:
+      draft.modifyRoutineLoading = false
+      draft.modifyRoutineDone = true
+      draft.myRoutines[draft.choosedRoutine] = action.data
       break
-    case LOAD_MY_HABITS_FAILURE:
-      draft.loadMyHabitsLoading = false
-      draft.loadMyHabitsError = action.error
+    case MODIFY_ROUTINE_FAILURE:
+      draft.modifyRoutineLoading = false
+      draft.modifyRoutineError = true
       break
     case ADD_ROUTINIZED_HABIT_REQUEST:
       draft.addRoutinizedHabitLoading = true
@@ -155,63 +152,60 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
     case ADD_ROUTINIZED_HABIT_SUCCESS:
       draft.addRoutinizedHabitLoading = false
       draft.addRoutinizedHabitDone = true
+      draft.myRoutines[draft.choosedRoutine].RoutinizedHabits.push({...action.data, Habit:{name:action.name}})
       break
     case ADD_ROUTINIZED_HABIT_FAILURE:
       draft.addRoutinizedHabitLoading = false
       draft.addRoutinizedHabitError = action.error
       break
-    case LOAD_ROUTINIZED_HABIT_REQUEST:
-      draft.loadRoutinizedRoutinesLoading = true
-      draft.loadRoutinizedRoutinesDone = false
-      draft.loadRoutinizedRoutinesError = null
+    case DELETE_ROUTINIZED_HABIT_REQUEST:
+      draft.deleteRoutinizedHabitLoading = true
+      draft.deleteRoutinizedHabitDone = false
+      draft.deleteRoutinizedHabitError = null
       break
-    case LOAD_ROUTINIZED_HABIT_SUCCESS:
-      draft.loadRoutinizedRoutinesLoading = false
-      draft.loadRoutinizedRoutinesDone = true
-      // draft.myRoutines = []
-      // draft.myRoutines = draft.myRoutines.concat(action.data)
+    case DELETE_ROUTINIZED_HABIT_SUCCESS:
+      draft.deleteRoutinizedHabitLoading = false
+      draft.deleteRoutinizedHabitDone = true
+      draft.myRoutines[action.routineIdx].RoutinizedHabits.splice(action.habitIdx, 1)
       break
-    case LOAD_ROUTINIZED_HABIT_FAILURE:
-      draft.loadRoutinizedRoutinesLoading = false
-      draft.loadRoutinizedRoutinesError = action.error
+    case DELETE_ROUTINIZED_HABIT_FAILURE:
+      draft.deleteRoutinizedHabitLoading = false
+      draft.deleteRoutinizedHabitError = action.error
+      break
+    case SET_ORDER_REQUEST:
+      draft.setOrderLoading = true
+      draft.setOrderDone = false
+      break
+    case SET_ORDER_SUCCESS:
+      draft.setOrderLoading = false
+      draft.setOrderDone = true
+      draft.myRoutines[action.idx].RoutinizedHabits = action.data
+      break
+    case SET_ORDER_FAILURE:
+      draft.setOrderLoading = false
+      draft.setOrderError = action.error
       break
     case SET_CHOOSED_ROUTINE:
       draft.choosedRoutine = action.idx
       break
-    case MODIFY_ROUTINE:
-      draft.myRoutines[draft.choosedRoutine] = draft.createRoutineInfo
-      break
-    case DELETE_ROUTINE:
-      draft.myRoutines.splice(draft.choosedRoutine, draft.choosedRoutine+1)
-      break
-    case ADD_ROUTINE_ITEM:
-      //임의로 rhid, hid 설정. 나중에 꼭 바꿔야함 !!
-      // console.log(draft.myRoutines[draft.choosedRoutine].routinizedHabit);
-      // action.habit.rhid = draft.myRoutines[draft.choosedRoutine].routinizedHabit
-      // action.habit.hid = action.habit.rhid
-      // action.habit.order = action.habit.rhid
-      draft.myRoutines[draft.choosedRoutine].routinizedHabit.push(action.habit)
-      break
     case DELETE_ROUTINE_ITEM:
-      draft.myRoutines[action.routineIdx].routinizedHabit.splice(action.habitIdx, action.habitIdx+1)
+      draft.myRoutines[action.routineIdx].RoutinizedHabits.splice(action.habitIdx, 1)
       break
     case SET_MODAL_INPUT:
-      if(draft.choosedRoutine ==-1){
+      draft.choosedRoutine = action.idx
+      if(action.idx ===-1){
         draft.createRoutineInfo={
-          "rid" : -1,
+          "id" : -1,
           "name" : '',
           "alarm" : false,
-          "day_of_week" : [{day : "월", "activeDayOfWeek" : false,"time": ""},{day : "월", "activeDayOfWeek" : false,"time": ""},{day : "월", "activeDayOfWeek" : false,"time": ""},{day : "월", "activeDayOfWeek" : false,"time": ""},{day : "월", "activeDayOfWeek" : false,"time": ""},{day : "월", "activeDayOfWeek" : false,"time": ""},{day : "월", "activeDayOfWeek" : false,"time": ""}],
-          "routinizedHabit":[]    
+          "active_day_of_week" : [{"active" : false,"start_time": "00:00"},{"active" : false,"start_time": "00:00"},{"active" : false,"start_time": "00:00"},{"active" : false,"start_time": "00:00"},{"active" : false,"start_time": "00:00"},{"active" : false,"start_time": "00:00"},{"active" : false,"start_time": "00:00"}],  
         }
       }else{
-        draft.createRoutineInfo = draft.myRoutines[draft.choosedRoutine];
         draft.createRoutineInfo = {
-          "rid" : draft.myRoutines[draft.choosedRoutine].id,
+          "id" : draft.myRoutines[draft.choosedRoutine].id,
           "name" : draft.myRoutines[draft.choosedRoutine].name,
           "alarm" : draft.myRoutines[draft.choosedRoutine].alarm,
-          "day_of_week" : [{day : "월", "activeDayOfWeek" : false,"time": ""},{day : "화", "activeDayOfWeek" : false,"time": ""},{day : "수", "activeDayOfWeek" : false,"time": ""},{day : "목", "activeDayOfWeek" : false,"time": ""},{day : "금", "activeDayOfWeek" : false,"time": ""},{day : "토", "activeDayOfWeek" : false,"time": ""},{day : "일", "activeDayOfWeek" : false,"time": ""}],
-          "routinizedHabit":[]    
+          "active_day_of_week" : draft.myRoutines[draft.choosedRoutine].RoutineActiveDays,
         }
       }
       break
@@ -222,7 +216,7 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
       draft.createRoutineInfo.alarm = action.checked
       break
     case SET_MODAL_INPUT_ACTIVE_DAY:
-      draft.createRoutineInfo.day_of_week[action.idx] = action.activeDay
+      draft.createRoutineInfo.active_day_of_week[action.idx] = action.activeDay
       break
   }
 })

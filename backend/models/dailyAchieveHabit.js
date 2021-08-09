@@ -1,14 +1,29 @@
+/**
+ * @swagger
+ *  components:
+ *    schemas:
+ *      DailyAchieveHabit:
+ *        description: 루틴 내 습관 항목 달성 체크
+ *        type: object
+ *        properties:
+ *          id:
+ *            type: integer
+ *          authorized:
+ *            type: boolean
+ *          achieve_datetime:
+ *            type: datetime
+ *          RoutinizedHabitId:
+ *            type: integer
+ */
 module.exports = (sequelize, DataTypes) => {
   const DailyAchieveHabit = sequelize.define('DailyAchieveHabit', {
-    date_time: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      primaryKey: true,
-      defaultValue: sequelize.literal('now()')
-    },
     authorized: {
       type: DataTypes.BOOLEAN,
       allowNull: true,
+    },
+    achieve_datetime: {
+      type: DataTypes.DATE,
+      allowNull: false,
     }
   }, {
     charset: 'utf8',

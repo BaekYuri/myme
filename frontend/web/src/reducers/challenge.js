@@ -1,23 +1,26 @@
 import produce from 'immer'
 
 const initialState = {
-  challenges: [],
-  myChallenges: [],
-  addChallengeLoading: false, //챌린지 생성 중
+  challenges: [], // 전체 챌린지 목록
+  myChallenges: [], // 내가 참여하는 챌린지
+  myCreateChallenges: [], // 내가 생성한 챌린지
+  addChallengeLoading: false, // 챌린지 생성 중
   addChallengeDone: false,
   addChallengeError: null,
-  loadChallengsLoading: false,
+  loadChallengesLoading: false,
   loadChallengesDone: false,
   loadChallengesError: null,
-  loadMyChallengsLoading: false,
+  loadMyChallengesLoading: false,
   loadMyChallengesDone: false,
   loadMyChallengesError: null,
+  loadMyCreateChallengesLoading: false,
+  loadMyCreateChallengesDone: false,
+  loadMyCreateChallengesError: null,
   createChallengeInfo : {
     "rid" : -1,
     "name" : '',
     // "subject" : '',
     "start_date" : '',
-    // "createdAt" : '',
     "period" : -1,
     "repeat_cycle" : 1,
     "auth_count": 1,
@@ -37,13 +40,21 @@ export const LOAD_MY_CHALLENGES_REQUEST = 'LOAD_MY_CHALLENGES_REQUEST'
 export const LOAD_MY_CHALLENGES_SUCCESS = 'LOAD_MY_CHALLENGES_SUCCESS'
 export const LOAD_MY_CHALLENGES_FAILURE = 'LOAD_MY_CHALLENGES_FAILURE'
 
+export const LOAD_MY_CREATE_CHALLENGES_REQUEST = 'LOAD_MY_CREATE_CHALLENGES_REQUEST'
+export const LOAD_MY_CREATE_CHALLENGES_SUCCESS = 'LOAD_MY_CREATE_CHALLENGES_SUCCESS'
+export const LOAD_MY_CREATE_CHALLENGES_FAILURE = 'LOAD_MY_CREATE_CHALLENGES_FAILURE'
+
 export const CLEAR_CHALLENGES = 'CLEAR_CHALLENGES'
+export const CLEAR_MY_CHALLENGES = 'CLEAR_MY_CHALLENGES'
 // export const ADD_CHALLENGE='challenge/addChallenge';
 
 const reducer = (state = initialState, action) => produce(state, (draft) => {
   switch (action.type) {
     case CLEAR_CHALLENGES:
       draft.challenges = []
+      break
+    case CLEAR_MY_CHALLENGES:
+      draft.myChallenges = []
       break
     case ADD_CHALLENGE_REQUEST:
       draft.addChallengeLoading = true
@@ -87,6 +98,21 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
     case LOAD_MY_CHALLENGES_FAILURE:
       draft.loadMyChallengesLoading = false
       draft.loadMyChallengesError = action.error
+      break
+    case LOAD_MY_CREATE_CHALLENGES_REQUEST:
+      draft.loadMyCreateChallengesLoading = true
+      draft.loadMyCreateChallengesDone = false
+      draft.loadMyCreateChallengesError = null
+      break
+    case LOAD_MY_CREATE_CHALLENGES_SUCCESS:
+      draft.loadMyCreateChallengesLoading = false
+      draft.loadMyCreateChallengesDone = true
+      draft.myCreateChallenges = []
+      draft.myCreateChallenges = draft.myCreateChallenges.concat(action.data)
+      break
+    case LOAD_MY_CREATE_CHALLENGES_FAILURE:
+      draft.loadMyCreateChallengesLoading = false
+      draft.loadMyCreateChallengesError = action.error
       break
   }
 })

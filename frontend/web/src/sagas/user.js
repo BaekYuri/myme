@@ -25,6 +25,9 @@ import {
   LOAD_MY_INFO_REQUEST,
   LOAD_MY_INFO_SUCCESS,
   LOAD_MY_INFO_FAILURE,
+  UPDATE_MY_INFO_REQUEST,
+  UPDATE_MY_INFO_SUCCESS,
+  UPDATE_MY_INFO_FAILURE,
   // CHANGE_NICKNAME_REQUEST,
   // CHANGE_NICKNAME_SUCCESS,
   // CHANGE_NICKNAME_FAILURE,
@@ -132,6 +135,25 @@ function* loadMyInfo(action) {
   } catch (err) {
       yield put({
           type: LOAD_MY_INFO_FAILURE,
+          error: err.response.data
+      })
+  }
+}
+
+function updateMyInfoAPI(data) {
+  return axios.patch('/user/profile', data)
+}
+
+function* updateMyInfo(action) {
+  try {
+      const result = yield call(updateMyInfoAPI, action.data)
+      yield put({
+          type: UPDATE_MY_INFO_SUCCESS,
+          data: result.data
+      })
+  } catch (err) {
+      yield put({
+          type: UPDATE_MY_INFO_FAILURE,
           error: err.response.data
       })
   }
@@ -273,6 +295,10 @@ function* watchLoadMyInfo() {
   yield takeLatest(LOAD_MY_INFO_REQUEST, loadMyInfo)
 }
 
+function* watchUpdateMyInfo() {
+  yield takeLatest(UPDATE_MY_INFO_REQUEST, updateMyInfo)
+}
+
 // function* watchLoadUser() {
 //   yield takeLatest(LOAD_USER_REQUEST, loadUser);
 // }
@@ -306,6 +332,7 @@ export default function* userSaga() {
       // fork(watchUnfollow),
       // fork(watchLoadUser),
       fork(watchLoadMyInfo),
+      fork(watchUpdateMyInfo),
       // fork(watchChangeNickname),
       // fork(watchLoadFollowers),
       // fork(watchLoadFollowings),

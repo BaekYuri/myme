@@ -5,19 +5,13 @@
  *      Category:
  *        type: object
  *        properties:
- *          category_code:
+ *          id:
  *            type: integer
- *            description: primaryKey
  *          name:
  *            type: string
  */
 module.exports = (sequelize, DataTypes) => {
-  const Category = sequelize.define('Category', {
-    code: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true,
-    },
+  const Category = sequelize.define('Category', { // Categories
     name: {
       type: DataTypes.STRING(20),
       allowNull: false,

@@ -3,9 +3,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import {connect, useDispatch, useSelector} from 'react-redux';
 import { CLOSE_ROUTINE_MODAL } from '../../../reducers/modal';
-import { ADD_HABIT_REQUEST, ADD_ROUTINIZED_HABIT_REQUEST } from '../../../reducers/routine';
+import { ADD_MY_HABIT_REQUEST} from '../../../reducers/habit';
+import { ADD_ROUTINIZED_HABIT_REQUEST, LOAD_MY_ROUTINES_REQUEST } from '../../../reducers/routine';
 import {Paper, Grid, TextField} from '@material-ui/core';
-import {Create, Event} from '@material-ui/icons';
+import {Create, Event, Close} from '@material-ui/icons';
 import Habit from '../Habit/';
 function getModalStyle() {
   return {
@@ -82,7 +83,8 @@ const useStyles = makeStyles((theme) => ({
 
 function SimpleModal(props) {
   const { routineModal } = useSelector((state) => state.modal)
-  const { myHabits, choosedRoutine, myRoutines } = useSelector((state) => state.routine)
+  const { choosedRoutine, myRoutines } = useSelector((state) => state.routine)
+  const {myHabits} = useSelector((state) => state.habit)
   const dispatch = useDispatch()
   let [title,setTitle] = useState('');
   let [content,setContent] = useState('');
@@ -107,14 +109,13 @@ function SimpleModal(props) {
   function addHabit(){
     if(validate()){
       dispatch({
-        type: ADD_HABIT_REQUEST,
+        type: ADD_MY_HABIT_REQUEST,
         data: {
           name: title,
           content,
           "time_required": time
         }
       })
-      connectRoutinizedHabit(myHabits[myHabits.length-1].id)
     }
     
   }
@@ -123,11 +124,15 @@ function SimpleModal(props) {
     dispatch({
       type: ADD_ROUTINIZED_HABIT_REQUEST,
       data: {
-        "order": 0,
+        "order": myRoutines[choosedRoutine].RoutinizedHabits.length,
         "achieve_count": 0,
-        "HabitId": habitId
+        habitId
       },
-      id:myRoutines[choosedRoutine].id
+      id:myRoutines[choosedRoutine].id,
+      name: myHabits[clickedHabit].name
+    })
+    dispatch({
+      type: LOAD_MY_ROUTINES_REQUEST,
     })
     closeRoutine()
   }
@@ -151,10 +156,13 @@ function SimpleModal(props) {
 
   const body = (
     <div style={modalStyle} className={classes.paper}>
-      <h2 id="simple-modal-title" style={{marginBottom:'20px'}}>습관 추가하기</h2>
+      <div style={{height:'30px'}}>
+      <h2 id="simple-modal-title" style={{float:'left'}}>습관 추가하기</h2>
+      <Close onClick={closeRoutine} style={{ float:'right'}}></Close>
+      </div>
       {
         !newHabit && !existHabit?
-        <Grid container md={12}>
+        <Grid container >
           <Grid item md={6}>
             <Paper className={classes.habitBtn+' btn'} onClick={()=>{setNewHabit(true)}}>
             <Create className={classes.habitIcon} style={{color:'tan'}}></Create>
@@ -166,9 +174,6 @@ function SimpleModal(props) {
             <Event className={classes.habitIcon} style={{color:'lightgray'}}></Event>
             기존 습관 추가
             </Paper>
-          </Grid>
-          <Grid item md={12} className={classes.buttonDiv}>
-            <button className={classes.buttonLeft} onClick={closeRoutine}>취소</button>
           </Grid>
         </Grid>
         :null
@@ -190,9 +195,12 @@ function SimpleModal(props) {
       {
         existHabit?
         <>
+        <div style={{overflowY: "scroll",
+    height: "500px"}}>
         {
-          myHabits.map((item, idx) =>(<Habit habit={item} clickedHabit={clickedHabit} idx={idx} onClick={()=>{setClickedHabit(idx)}}></Habit>))
+          myHabits.map((item, idx) =>(<Habit key ={idx} habit={item} clickedHabit={clickedHabit} idx={idx} onClick={()=>{setClickedHabit(idx)}}></Habit>))
         }
+        </div>
         <div className={classes.buttonDiv}>
             <button className={classes.buttonLeft} onClick={goBack}>뒤로가기</button>
             <button className={classes.buttonRight} onClick={()=>{connectRoutinizedHabit(myHabits[clickedHabit].id)}}>저장</button>

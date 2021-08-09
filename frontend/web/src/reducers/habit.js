@@ -20,6 +20,20 @@ export const ADD_MY_HABIT_FAILURE = 'ADD_MY_HABIT_FAILURE'
 
 const reducer = (state = initialState, action) => produce(state, (draft) => {
   switch (action.type) {
+    case ADD_MY_HABIT_REQUEST:
+      draft.addHabitLoading = true
+      draft.addHabitDone = false
+      draft.addHabitError = null
+      break
+    case ADD_MY_HABIT_SUCCESS:
+      draft.addHabitLoading = false
+      draft.addHabitDone = true
+      draft.myHabits = draft.myHabits.concat(action.data)
+      break
+    case ADD_MY_HABIT_FAILURE:
+      draft.addHabitLoading = false
+      draft.addHabitError = action.error
+      break
     case LOAD_MY_HABITS_REQUEST:
       draft.loadMyHabitsLoading = true
       draft.loadMyHabitsDone = false
@@ -28,25 +42,12 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
     case LOAD_MY_HABITS_SUCCESS:
       draft.loadMyHabitsLoading = false
       draft.loadMyHabitsDone = true
+      draft.myHabits = []
       draft.myHabits = draft.myHabits.concat(action.data)
       break
     case LOAD_MY_HABITS_FAILURE:
       draft.loadMyHabitsLoading = false
       draft.loadMyHabitsError = action.error
-      break
-    case ADD_MY_HABIT_REQUEST:
-      draft.addMyHabitLoading = true
-      draft.addMyHabitDone = false
-      draft.addMyHabitError = null
-      break
-    case ADD_MY_HABIT_SUCCESS:
-      draft.addMyHabitLoading = false
-      draft.addMyHabitDone = true
-      draft.myHabits = draft.myHabits.concat(action.data)
-      break
-    case ADD_MY_HABIT_FAILURE:
-      draft.addMyHabitLoading = false
-      draft.addMyHabitError = action.error
       break
   }
 })

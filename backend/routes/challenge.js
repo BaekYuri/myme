@@ -1,5 +1,5 @@
 const express = require('express')
-const { Challenge, User, Comment } = require('../models')
+const { Challenge, User, Comment, ChallengeParticipation } = require('../models')
 const { isLoggedIn } = require('./middlewares')
 
 const router = express.Router()
@@ -78,7 +78,7 @@ router.get('/', async (req, res, next) => { // GET /challenge
  *    get:
  *      tags:
  *        - challenge
- *      description: 내 챌린지 목록 가져오기
+ *      description: 내가 생성한 챌린지 목록 가져오기
  *      responses:
  *        '200':
  *          description: Success
@@ -112,7 +112,7 @@ router.get('/', async (req, res, next) => { // GET /challenge
  *                    type: array
  *                    description: 어떤 형태로 들어올지 모르겠다.
  */
-router.get('/mychallenge', async (req, res, next) => { // GET /mychallenge
+router.get('/mychallenge', isLoggedIn, async (req, res, next) => { // GET /mychallenge
   try {
     const where = { UserId: req.user.id }
     const myChallenges = await Challenge.findAll({
@@ -178,7 +178,7 @@ router.get('/mychallenge', async (req, res, next) => { // GET /mychallenge
  */
 router.post('/', isLoggedIn, async (req, res, next) => { // POST /challenge
   try {
-    console.log(req.user)
+    // console.log(req.user)
     const challenge = await Challenge.create({
       name: req.body.name,
       content: req.body.content,
@@ -187,6 +187,11 @@ router.post('/', isLoggedIn, async (req, res, next) => { // POST /challenge
       repeat_cycle: req.body.repeat_cycle,
       auth_count: req.body.auth_count,
       UserId: req.user.id,
+    })
+    const challengeParticipation = await ChallengeParticipation.create({
+      achieve_count: req.body.achieve_count,
+      UserId: req.user.id,
+      ChallengeId: challenge.id
     })
     const fullChallenge = await Challenge.findOne({
       where: { id: challenge.id },

@@ -1,8 +1,48 @@
 const express = require('express')
-const { ChallengeParticipation, User, DailyAchieveChallenge } = require('../models')
+const { ChallengeParticipation, User, DailyAchieveChallenge, Challenge } = require('../models')
 const { isLoggedIn } = require('./middlewares')
 
 const router = express.Router()
+
+/**
+ * @swagger
+ *  /challengeParticipation:
+ *    get:
+ *      tags:
+ *        - challengeParticipation
+ *      description: 내가 참여하고 있는 챌린지 목록 가져오기
+ *      responses:
+ *        '200':
+ *          description: Success
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  id:
+ *                    type: integer
+ *                  achieve_count:
+ *                    type: integer
+ *                  UserId:
+ *                    type: integer
+ *                    description: 챌린지에 참여하고 있는 사용자의 Id
+ *                  ChallengeId:
+ *                    type: integer
+ */
+ router.get('/', isLoggedIn, async (req, res, next) => { // GET /challengeParticipation
+  try {
+    const challengeParticipation = await ChallengeParticipation.findAll({
+      where: { UserId: req.user.id },
+      include: [{
+        model: Challenge,
+      }]
+    })
+    res.status(200).json(challengeParticipation)
+  } catch (error) {
+    console.error(error)
+    next(error)
+  }
+})
 
 /**
  * @swagger
@@ -98,5 +138,7 @@ router.post('/:challengeId', isLoggedIn, async (req, res, next) => {  // POST /c
     next(error)
   }
 })
+
+
 
 module.exports = router

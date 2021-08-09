@@ -4,9 +4,10 @@ import Modal from '@material-ui/core/Modal';
 import DayOfWeek from './DayOfWeek/index';
 import DayTimeInput from './DayTimeInput/index';
 import Switch from '@material-ui/core/Switch';
+import {Close} from '@material-ui/icons';
 import {connect, useDispatch, useSelector} from 'react-redux';
 import { CLOSE_CREATE_ROUTINE_MODAL } from '../../../reducers/modal';
-import { ADD_ROUTINE_REQUEST, SET_MODAL_INPUT_NAME, SET_MODAL_INPUT_ALARM, SET_MODAL_INPUT_ACTIVE_DAY, MODIFY_ROUTINE, ADD_ROUTINE } from '../../../reducers/routine';
+import { ADD_ROUTINE_REQUEST, SET_MODAL_INPUT_NAME, SET_MODAL_INPUT_ALARM, SET_MODAL_INPUT_ACTIVE_DAY, MODIFY_ROUTINE_REQUEST} from '../../../reducers/routine';
 function getModalStyle() {
   return {
     top: `50%`,
@@ -41,20 +42,8 @@ const useStyles = makeStyles((theme) => ({
     width:'100%',
     border:'#66A091 1px solid'
   },
-  buttonLeft:{
-    width: '47.5%',
-    marginRight: '2.5%',
-    border: 'none',
-    padding: '5px',
-    borderRadius: '20px',
-    height:'40px',
-    backgroundColor: '#776D61',
-    color:'white',
-    fontWeight:'bold'
-  },
   buttonRight:{
-    width: '47.5%',
-    marginLeft: '2.5%',
+    width: '100%',
     border: 'none',
     padding: '5px',
     borderRadius: '20px',
@@ -98,22 +87,22 @@ function SimpleModal(props) {
   };
 
   const changeDayClicked =(idx) =>{
-    let tempClicked = Object.assign({},createRoutineInfo.day_of_week[idx]);
-    tempClicked.activeDayOfWeek = !tempClicked.activeDayOfWeek;
-    console.log({type: SET_MODAL_INPUT_ACTIVE_DAY, activeDay: tempClicked, "idx":idx })
+    let tempClicked = Object.assign({},createRoutineInfo.active_day_of_week[idx]);
+    tempClicked.active = !tempClicked.active;
+    // console.log({type: SET_MODAL_INPUT_ACTIVE_DAY, activeDay: tempClicked, "idx":idx })
     dispatch({type: SET_MODAL_INPUT_ACTIVE_DAY, activeDay: tempClicked, "idx":idx });
   };
 
   const changeName = (e) =>{
     dispatch({type:SET_MODAL_INPUT_NAME, name: e.target.value});
   }
+
   const changeAlarm = (e) =>{
     dispatch({type:SET_MODAL_INPUT_ALARM, checked : e.target.checked});
   }
+
   const changeTimeInfo = (e, idx) =>{
-    let tempClicked = Object.assign({},createRoutineInfo.day_of_week[idx]);
-    tempClicked.time = e.target.value;
-    dispatch({type: SET_MODAL_INPUT_ACTIVE_DAY, activeDay: tempClicked, "idx":idx });
+    createRoutineInfo.active_day_of_week[idx].start_time = e.target.value
   }
   
   const add = () =>{
@@ -124,12 +113,20 @@ function SimpleModal(props) {
           data: {
             name: createRoutineInfo.name,
             alarm: createRoutineInfo.alarm,
-            "day_of_week": createRoutineInfo.day_of_week
+            "active_day_of_week": createRoutineInfo.active_day_of_week
           }
           
         })
-      }else{
-        dispatch({type:MODIFY_ROUTINE});
+      } else {
+        dispatch({
+          type:MODIFY_ROUTINE_REQUEST,
+          data:{
+            name: createRoutineInfo.name,
+            alarm: createRoutineInfo.alarm,
+            "active_day_of_week": createRoutineInfo.active_day_of_week
+          },
+          id: createRoutineInfo.id
+        });
       }
     }
     
@@ -149,13 +146,14 @@ function SimpleModal(props) {
 
   const body = (
     <div style={modalStyle} className={classes.paper}>
-      
-           <h2 id="simple-modal-title" style={{marginBottom: "10px"}}>루틴 {choosedRoutine==-1?'생성':'수정'}</h2>
+            <div>
+           <h2 id="simple-modal-title" style={{marginBottom: "10px", float:'left'}}>루틴 {choosedRoutine==-1?'생성':'수정'}</h2><Close onClick={handleClose} style={{float:'right'}}></Close>
+           </div>
            <input type="text" placeholder="루틴 이름 입력" className={classes.inputDiv} onChange={changeName} defaultValue={createRoutineInfo.name}></input>
             <div className={classes.day}>
                 {
                   dayName.map((str, idx) => (
-                    <DayOfWeek dayName={str} clicked={createRoutineInfo.day_of_week[idx].activeDayOfWeek} onClick={()=>{changeDayClicked(idx);}}></DayOfWeek>
+                    <DayOfWeek key={idx} dayName={str} clicked={createRoutineInfo.active_day_of_week[idx].active} onClick={()=>{changeDayClicked(idx);}}></DayOfWeek>
                   ))
                 }
               </div>
@@ -163,7 +161,7 @@ function SimpleModal(props) {
                 <h3 className={classes.text}>시작 시간을 선택해주세요.</h3>
                 {
                   dayName.map((str, idx) => (
-                    <DayTimeInput dayName={str} idx = {idx} clicked={createRoutineInfo.day_of_week[idx].activeDayOfWeek} timeInfo={createRoutineInfo.day_of_week[idx].time} change={changeTimeInfo}/>
+                    <DayTimeInput dayName={str} key={idx} idx = {idx} clicked={createRoutineInfo.active_day_of_week[idx].active} timeInfo={createRoutineInfo.active_day_of_week[idx].start_time} change={changeTimeInfo}/>
                   ))
                 }   
               </div>
@@ -171,7 +169,7 @@ function SimpleModal(props) {
                 <span className={classes.text}>알림</span><div className={classes.floatRight}><Switch className={classes.switch} onChange={changeAlarm} defaultChecked={createRoutineInfo.alarm}/></div>
               </div>
         <div className={classes.buttonDiv}>
-          <button className={classes.buttonLeft +' btn'} onClick={handleClose}>취소</button>
+          {/* <button className={classes.buttonLeft +' btn'} onClick={handleClose}>취소</button> */}
           <button className={classes.buttonRight +' btn'} onClick = {add}>완료</button>
         </div>
     </div>

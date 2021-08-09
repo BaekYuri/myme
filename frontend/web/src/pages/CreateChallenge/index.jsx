@@ -6,7 +6,7 @@ const CreateChallenge = () => {
   return (
     <Layout>
       <Grid container item xs={12}>
-        <CreateChallengeForm></CreateChallengeForm>
+        <CreateChallengeForm />
       </Grid>       
     </Layout>         
   );

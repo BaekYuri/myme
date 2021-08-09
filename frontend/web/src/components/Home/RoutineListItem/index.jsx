@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Wrapper from './styles'
 import {
     Accordion,
@@ -8,11 +8,10 @@ import {
     ListItem
   } from '@material-ui/core';
 import RoutineItemCheck from '../RoutineItemCheck/index';
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 
 const App = (props) => {
   const { routine } = props
-  // console.log(routine.RoutinizedHabits)
 
   return(
     <Wrapper>
@@ -25,26 +24,20 @@ const App = (props) => {
           <h2 className="title">{routine.name}</h2>
         </AccordionSummary>
         <AccordionDetails className='routine-list-item-detail'>
-          <List class='accordian-detail-list'>
+          <List className='accordian-detail-list'>
             {
               routine.RoutinizedHabits
                 ? (
-                  routine.RoutinizedHabits.map((habit) => {
+                  routine.RoutinizedHabits.map((habit, idx) => {
                     return (
-                      <ListItem className='items'>
-                        <RoutineItemCheck routineId={habit?.name} />
+                      <ListItem className='items' key={idx}>
+                        <RoutineItemCheck habit={habit} />
                       </ListItem>
                     )
                   })
                 )
                 : null
             }
-            {/* <ListItem className='items'>
-              <RoutineItemCheck routineId='하루 10분 명상'/>
-            </ListItem>
-            <ListItem className='items'>
-              <RoutineItemCheck routineId='오늘의 다짐 작성'/>
-            </ListItem> */}
           </List>
         </AccordionDetails>
       </Accordion>

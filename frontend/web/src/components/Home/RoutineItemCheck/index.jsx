@@ -8,19 +8,21 @@ import {
   } from '@material-ui/core';
 import ProgressItem from '../ProgressItem/index';
 import {connect} from 'react-redux';
+
 function App(props){
-    return(
+  const { habit } = props
+    return (
         <Wrapper>
             <Accordion className="panel" className='routine-item-check'>
                 <AccordionSummary
                   className="check-summary"
                   aria-controls="panel1a-content"
                 >
-                  <h3>{props.state.routineStore.routine[props.listIdx].routinizedHabit[props.itemIdx].habitName}</h3>
+                  <h3>{habit.Habit.name}</h3>
                   <Checkbox color='primary' className='Mui-disabled'></Checkbox>
                 </AccordionSummary>
                 <AccordionDetails>
-                  <ProgressItem listIdx={props.listIdx} itemIdx = {props.itemIdx}/>
+                  <ProgressItem habit={habit}/>
                 </AccordionDetails>
               </Accordion>
         </Wrapper>

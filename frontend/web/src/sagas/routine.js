@@ -1,4 +1,4 @@
-import { all, fork, put, takeLatest, call } from "redux-saga/effects";
+import { all, fork, put, takeLatest, call, take, select } from "redux-saga/effects";
 import axios from 'axios'
 import {
   ADD_ROUTINE_REQUEST,
@@ -7,19 +7,24 @@ import {
   LOAD_MY_ROUTINES_REQUEST,
   LOAD_MY_ROUTINES_SUCCESS,
   LOAD_MY_ROUTINES_FAILURE,
-  ADD_HABIT_REQUEST,
-  ADD_HABIT_SUCCESS,
-  ADD_HABIT_FAILURE,
-  LOAD_MY_HABITS_REQUEST,
-  LOAD_MY_HABITS_SUCCESS,
-  LOAD_MY_HABITS_FAILURE,
+  DELETE_ROUTINE_REQUEST,
+  DELETE_ROUTINE_SUCCESS,
+  DELETE_ROUTINE_FAILURE,
   ADD_ROUTINIZED_HABIT_REQUEST,
   ADD_ROUTINIZED_HABIT_SUCCESS,
   ADD_ROUTINIZED_HABIT_FAILURE,
-  LOAD_ROUTINIZED_HABIT_SUCCESS,
-  LOAD_ROUTINIZED_HABIT_REQUEST,
-  LOAD_ROUTINIZED_HABIT_FAILURE
+  DELETE_ROUTINIZED_HABIT_REQUEST,
+  DELETE_ROUTINIZED_HABIT_SUCCESS,
+  DELETE_ROUTINIZED_HABIT_FAILURE,
+  SET_ORDER_REQUEST,
+  SET_ORDER_SUCCESS,
+  SET_ORDER_FAILURE,
+  MODIFY_ROUTINE_REQUEST,
+  MODIFY_ROUTINE_SUCCESS,
+  MODIFY_ROUTINE_FAILURE
 } from '../reducers/routine'
+import { RestoreOutlined } from "@material-ui/icons";
+
 
 function addRoutineAPI(data) {
   console.log('요청함!')
@@ -63,43 +68,39 @@ function* loadRoutines() {
   }
 }
 
-function loadHabitsAPI(){
-  console.log('습관 로드')
-  return axios.get('/habit')
+function deleteRoutineAPI(id){
+  console.log('루틴 삭제')
+  return axios.delete('/routine/'+id)
 }
-
-function* loadHabits(){
+function* deleteRoutine(action){
   try{
-    const result = yield call(loadHabitsAPI)
-    console.log(result)
+    const result = yield call(deleteRoutineAPI, action.id)
     yield put({
-      type: LOAD_MY_HABITS_SUCCESS,
-      data: result.data
+      type: DELETE_ROUTINE_SUCCESS,
+      idx: action.idx
     })
   }catch(error){
     yield put({
-      type: LOAD_MY_HABITS_FAILURE,
+      type: DELETE_ROUTINE_FAILURE,
       error: error.response.data
     })
   }
 }
 
-function addHabitAPI(data) {
-  console.log('습관 등록 요청')
-  return axios.post('/habit', data)
+function modifyRoutineAPI(data, id){
+  console.log('루틴 수정')
+  return axios.put('/routine/'+id, data)
 }
-
-function* addHabit(action) {
-  try {
-    const result = yield call(addHabitAPI, action.data)
-    console.log(result)
+function* modifyRoutine(action){
+  try{
+    const result = yield call(modifyRoutineAPI, action.data, action.id)
     yield put({
-      type: ADD_HABIT_SUCCESS,
+      type: MODIFY_ROUTINE_SUCCESS,
       data: result.data
     })
-  } catch (error) {
+  }catch(error){
     yield put({
-      type: ADD_HABIT_FAILURE,
+      type: MODIFY_ROUTINE_FAILURE,
       error: error.response.data
     })
   }
@@ -113,11 +114,12 @@ function addRoutinizedHabitAPI(data, id) {
 function* addRoutinizedHabit(action) {
   try {
     const result = yield call(addRoutinizedHabitAPI, action.data, action.id)
-    console.log(result)
     yield put({
       type: ADD_ROUTINIZED_HABIT_SUCCESS,
-      data: result.data
+      data: result.data,
+      name : action.name
     })
+    console.log(result);
   } catch (error) {
     yield put({
       type: ADD_ROUTINIZED_HABIT_FAILURE,
@@ -126,25 +128,46 @@ function* addRoutinizedHabit(action) {
   }
 }
 
-function loadRoutinizedHabitAPI(data, id){
-  console.log('습관 로드')
-  return axios.get('/routinizedHabit'+id)
+function deleteRoutinizedHabitAPI(id){
+  console.log('루틴 습관 삭제 요청')
+  return axios.delete('/routinizedHabit/'+id)
+}
+function* deleteRoutinizedHabit(action){
+  try {
+    const result = yield call(deleteRoutinizedHabitAPI, action.id)
+    yield put({
+      type: DELETE_ROUTINIZED_HABIT_SUCCESS,
+      routineIdx: action.routineIdx , 
+      routineItemIdx: action.routineItemIdx
+    })
+    console.log(result);
+  } catch (error) {
+    yield put({
+      type: DELETE_ROUTINIZED_HABIT_FAILURE,
+    })
+  }
 }
 
-function* loadRoutinizedHabit(){
+function setOrderAPI(habits, routineId){
+  console.log('순서 저장')
+  return axios.put('/routinizedHabit/order', {habits})
+}
+
+function* setOrder(action){
   try{
-    const result = yield call(loadRoutinizedHabitAPI)
-    console.log(result)
+    const result = yield call(setOrderAPI,action.habits, action.routineId)
     yield put({
-      type: LOAD_ROUTINIZED_HABIT_SUCCESS,
-      data: result.data
+      type: SET_ORDER_SUCCESS,
+      data: result.data,
+      idx : action.idx
     })
   }catch(error){
     yield put({
-      type: LOAD_ROUTINIZED_HABIT_FAILURE,
-      error: error.response.data
+      type: SET_ORDER_FAILURE,
+      error: error
     })
   }
+
 }
 
 function* watchAddRoutine() {
@@ -155,29 +178,34 @@ function* watchLoadRoutines() {
   yield takeLatest(LOAD_MY_ROUTINES_REQUEST, loadRoutines)
 }
 
-function* watchLoadHabits(){
-  yield takeLatest(LOAD_MY_HABITS_REQUEST, loadHabits)
+function* watchDeleteRoutine(){
+  yield takeLatest(DELETE_ROUTINE_REQUEST, deleteRoutine)
 }
 
-function* watchAddHabit() {
-  yield takeLatest(ADD_HABIT_REQUEST, addHabit)
+function* watchModifyRoutine(){
+  yield takeLatest(MODIFY_ROUTINE_REQUEST, modifyRoutine)
 }
-
 function* watchAddRoutinizedHabit() {
   yield takeLatest(ADD_ROUTINIZED_HABIT_REQUEST, addRoutinizedHabit)
 }
 
-function* watchLoadRoutinizedHabit() {
-  yield takeLatest(LOAD_ROUTINIZED_HABIT_REQUEST, loadRoutinizedHabit)
+function* watchDeleteRoutinizedHabit(){
+  yield takeLatest(DELETE_ROUTINIZED_HABIT_REQUEST, deleteRoutinizedHabit)
 }
+
+function* watchSetOrder(){
+  yield takeLatest(SET_ORDER_REQUEST, setOrder)
+}
+
 
 export default function* routineSaga() {
   yield all([
     fork(watchAddRoutine),
     fork(watchLoadRoutines),
-    fork(watchLoadHabits),
-    fork(watchAddHabit),
+    fork(watchDeleteRoutine),
+    fork(watchModifyRoutine),
     fork(watchAddRoutinizedHabit),
-    // fork(watchLoadRoutinizedHabit)
+    fork(watchDeleteRoutinizedHabit),
+    fork(watchSetOrder)
   ])
 }

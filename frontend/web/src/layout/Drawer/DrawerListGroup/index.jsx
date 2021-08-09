@@ -16,6 +16,7 @@ import {
 } from '@material-ui/core';
 import { logoutRequestAction } from '../../../reducers/user';
 import { CLEAR_MY_ROUTINES } from '../../../reducers/routine';
+import { CLEAR_MY_CHALLENGES } from '../../../reducers/challenge';
 import { CLOSE_DRAWER } from '../../../reducers/layout';
 
 const DrawerListGroup = (props) => {
@@ -35,6 +36,12 @@ const DrawerListGroup = (props) => {
   const onSignOut = useCallback(() => {
     dispatch({
       type: CLEAR_MY_ROUTINES
+    })
+    dispatch({
+      type: CLEAR_MY_CHALLENGES
+    })
+    dispatch({
+      type: CLOSE_DRAWER
     })
     dispatch(logoutRequestAction())
   }, [me])
@@ -107,7 +114,7 @@ const DrawerListGroup = (props) => {
         >
           <ListItemText primary={'홈'} disableTypography />
         </ListItem>
- 
+
               <ListItem
                 button
                 key={'RoutineSetting'}

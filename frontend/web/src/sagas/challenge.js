@@ -10,11 +10,12 @@ import {
   LOAD_MY_CHALLENGES_REQUEST,
   LOAD_MY_CHALLENGES_SUCCESS,
   LOAD_MY_CHALLENGES_FAILURE,
-
+  LOAD_MY_CREATE_CHALLENGES_REQUEST,
+  LOAD_MY_CREATE_CHALLENGES_SUCCESS,
+  LOAD_MY_CREATE_CHALLENGES_FAILURE,
 } from '../reducers/challenge'
 
 function addChallengeAPI(data) {
-  console.log('요청함!')
   return axios.post('/challenge', data)
 }
   
@@ -35,7 +36,6 @@ function* addChallenge(action) {
 }
 
 function loadChallengesAPI() {
-  console.log('challenge load 요청')
   return axios.get('/challenge')
 }
 
@@ -56,14 +56,12 @@ function* loadChallenges() {
 }
 
 function loadMyChallengesAPI() {
-  console.log('my challenge load 요청')
-  return axios.get('/challenge/mychallenge')
+  return axios.get('/challengeParticipation')
 }
 
 function* loadMyChallenges() {
   try {
     const result = yield call(loadMyChallengesAPI)
-    console.log(result)
     yield put({
       type: LOAD_MY_CHALLENGES_SUCCESS,
       data: result.data
@@ -71,6 +69,25 @@ function* loadMyChallenges() {
   } catch (error) {
     yield put({
       type: LOAD_MY_CHALLENGES_FAILURE,
+      error: error.response.data
+    })
+  }
+}
+
+function loadMyCreateChallengesAPI() {
+  return axios.get('/challenge/mychallenge')
+}
+
+function* loadMyCreateChallenges() {
+  try {
+    const result = yield call(loadMyCreateChallengesAPI)
+    yield put({
+      type: LOAD_MY_CREATE_CHALLENGES_SUCCESS,
+      data: result.data
+    })
+  } catch (error) {
+    yield put({
+      type: LOAD_MY_CREATE_CHALLENGES_FAILURE,
       error: error.response.data
     })
   }
@@ -88,10 +105,15 @@ function* watchLoadMyChallenges() {
   yield takeLatest(LOAD_MY_CHALLENGES_REQUEST, loadMyChallenges)
 }
 
+function* watchLoadMyCreateChallenges() {
+  yield takeLatest(LOAD_MY_CREATE_CHALLENGES_REQUEST, loadMyCreateChallenges)
+}
+
 export default function* challengeSaga() {
   yield all([
     fork(watchAddChallenge),
     fork(watchLoadChallenges),
-    fork(watchLoadMyChallenges)
+    fork(watchLoadMyChallenges),
+    fork(watchLoadMyCreateChallenges)
   ])
 }

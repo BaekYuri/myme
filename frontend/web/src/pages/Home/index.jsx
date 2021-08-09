@@ -3,8 +3,9 @@ import Layout from '../../layout/';
 import Wrapper from './styles';
 import ChallengeItem from '../../components/Home/ChallengeItem/index';
 import RoutineListItem from '../../components/Home/RoutineListItem/index';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { LOAD_MY_ROUTINES_REQUEST } from '../../reducers/routine';
+import {LOAD_MY_HABITS_REQUEST} from '../../reducers/habit';
 import { LOAD_MY_CHALLENGES_REQUEST } from '../../reducers/challenge';
 
 const App = () => {
@@ -15,6 +16,9 @@ const App = () => {
   useEffect(() => {
     dispatch({
       type: LOAD_MY_ROUTINES_REQUEST
+    })
+    dispatch({
+      type: LOAD_MY_HABITS_REQUEST
     })
     dispatch({
       type: LOAD_MY_CHALLENGES_REQUEST
@@ -28,7 +32,7 @@ const App = () => {
         <hr/>
         {
           myChallenges.map((challenge) => {
-            return <ChallengeItem key={challenge.id} challengeId={challenge.name} />
+            return <ChallengeItem key={challenge.id} challengeId={challenge.Challenge.name} />
           })
         }
         <div className='menu'><h1>나의 루틴 목록</h1></div>
@@ -42,9 +46,5 @@ const App = () => {
     </Layout>
   );
 }
-const mapStateToProps = (state) =>{
-    return {
-        state
-    }
-}
-export default connect(mapStateToProps)(App);
+
+export default App

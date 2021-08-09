@@ -5,11 +5,19 @@
    *      Habit:
    *        type: object
    *        properties:
+   *          id:
+   *            type: integer
    *          name:
+   *            type: string
+   *          icon_src:
    *            type: string
    *          content:
    *            type: text
    *          time_required:
+   *            type: integer
+   *          UserId:
+   *            type: integer
+   *          CategoryId:
    *            type: integer
    */
 module.exports = (sequelize, DataTypes) => {
@@ -17,6 +25,10 @@ module.exports = (sequelize, DataTypes) => {
     name: {
       type: DataTypes.STRING(50),
       allowNull: false,
+    },
+    icon_src: {
+      type: DataTypes.STRING(50),
+      allowNull: true,
     },
     content: {
       type: DataTypes.TEXT,
@@ -33,7 +45,7 @@ module.exports = (sequelize, DataTypes) => {
 
   Habit.associate = (db) => {
     db.Habit.belongsTo(db.User)
-    db.Habit.hasOne(db.RoutinizedHabit, {foreignKey: 'HabitId'})
+    db.Habit.hasMany(db.RoutinizedHabit)
     db.Habit.belongsToMany(db.Category, {
       through: 'HabitCategory'
     })

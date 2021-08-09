@@ -1,8 +1,15 @@
+@font-face {
+  font-family: 'SCDream4';
+  font-style: normal;
+  font-weight: 100;
+  src: url("./fonts/SCDream4.otf") format('truetype')
+}
+
 body,
 html {
   margin: 0;
   padding: 0;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: 'SCDream4';
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
@@ -15,6 +22,7 @@ html::-webkit-scrollbar {
   padding: 0;
   list-style: none;
   text-decoration: none;
+  font-family: 'SCDream4';
 }
 #root{
   background-color:#E5E5E5;

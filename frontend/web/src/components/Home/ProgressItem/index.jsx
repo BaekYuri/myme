@@ -8,6 +8,7 @@ import NextIcon from '@material-ui/icons/SkipNext'
 import {connect} from 'react-redux';
 
 function App(props){
+    const { habit } = props
     return(
         <Wrapper className='progress-item'>
             <Grid container spacing={0}>
@@ -26,7 +27,7 @@ function App(props){
                 </Grid>
                 <Grid item xs={4} className='assist'>
                     <h2>Assist</h2>
-                    <a href={props.state.routineStore.routine[props.listIdx].routinizedHabit[props.itemIdx].assistLink}>{props.state.routineStore.routine[props.listIdx].routinizedHabit[props.itemIdx].assistContent}</a>
+                    <a href={habit?.assist_link}>{habit?.assist_content}</a>
                 </Grid>
             </Grid>
         </Wrapper>

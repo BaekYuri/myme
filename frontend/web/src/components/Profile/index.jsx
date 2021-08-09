@@ -1,156 +1,175 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Grid, Container } from '@material-ui/core/';
 import { teal } from '@material-ui/core/colors';
-import { makeStyles, withStyles, FilledInput, FormControl, FormHelperText, Input, InputLabel, OutlinedInput, MenuItem, TextField, Paper, InputBase, IconButton, Typography, Button  } from '@material-ui/core/';
+import { withStyles, MenuItem, TextField, Typography, Button } from '@material-ui/core/';
 import { useSelector, useDispatch } from 'react-redux';
-import { LOAD_MY_INFO_REQUEST } from '../../reducers/user';
+import { LOAD_MY_INFO_REQUEST, UPDATE_MY_INFO_REQUEST } from '../../reducers/user';
 
-const genders = [
-    {
-      value: '남',
-      label: '남',
+const ColorTeal = withStyles((theme) => ({
+  root: {
+    color: theme.palette.getContrastText(teal[500]),
+    backgroundColor: teal[500],
+    '&:hover': {
+      backgroundColor: teal[700],
     },
-    {
-      value: '여',
-      label: '여',
-    },
-  ];
-
-  const ColorTeal = withStyles((theme) => ({
-    root: {
-      color: theme.palette.getContrastText(teal[500]),
-      backgroundColor: teal[500],
-      '&:hover': {
-        backgroundColor: teal[700],
-      },
-    },
-  }))
+  },
+}))
   
-  const ColorButton = ColorTeal(Button);
+const ColorButton = ColorTeal(Button);
 
-  const MyInfoContentDefaultComponent = props => {
-    const { LefetComponent, RightComponet } = props;
+const MyInfoContentDefaultComponent = props => {
+  const { LefetComponent, RightComponet } = props;
 
-    return (
-      <Grid
-        container
-        direction="row"
-        justify="center"
-        alignItems="center"
-        spacing={2}
-      >
-        <Grid item xs={2} style={{color: 'teal'}}>
-          {LefetComponent}
-        </Grid>
-        <Grid item xs={8}>
-          {RightComponet}
-        </Grid>
-        <Grid item xs={2}></Grid>
+  return (
+    <Grid
+      container
+      direction="row"
+      justifyContent="center"
+      alignItems="center"
+      spacing={2}
+    >
+      <Grid item xs={2} style={{ color: 'teal' }}>
+        {LefetComponent}
       </Grid>
-    );
-  };
+      <Grid item xs={8}>
+        {RightComponet}
+      </Grid>
+      <Grid item xs={2}></Grid>
+    </Grid>
+  );
+};
 
-  const MyInfoInputComponent = props => {
-    let { keyValue, title, rows, defaultValue, disabled } = props;
+const MyInfoInputComponent = props => {
+  let { title, data, defaultValue, handleChange, disabled } = props;
 
-    return (
-      <MyInfoContentDefaultComponent
-        LefetComponent={
-          <Typography variant="body1" className="title">
-            {title}
-          </Typography>
-        }
-        RightComponet={
-          <TextField
-            id={`outlined-basic-${keyValue}`}
-            value={defaultValue}
-            variant="outlined"
-            fullWidth={true}
-            style={{backgroundColor:"white"}}
-            multiline={rows !== null ? true : false}
-            rows={rows !== null ? rows : 1}
-            rowsMax={3}
-            disabled={disabled}
-          />
-        }
-      />
-    );
-  };
-
-  const MyInfoSelectComponent = props => {
-    let { keyValue, title, rows, data, handleChange  } = props;
-
-    return (
-      <MyInfoContentDefaultComponent
-        LefetComponent={
-          <Typography variant="body1" className="title">
-            {title}
-          </Typography>
-        }
-        RightComponet={
-          <TextField
-            id={`outlined-basic-${keyValue}`}
-            select
-            value={data}
-            style={{backgroundColor:"white"}}
-            fullWidth={true}
-            onChange={handleChange}
-            variant="outlined"
-            >
-            {genders.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                {option.label}
-                </MenuItem>
-            ))}
-        </TextField>
-        }
-      />
-    );
-  };
-
-  const MyInfoBirthdayComponent = props => {
-    let { keyValue, title, rows } = props;
-
-    return (
-      <MyInfoContentDefaultComponent
-        LefetComponent={
-          <Typography variant="body1" className="title">
-            {title}
-          </Typography>
-        }
-        RightComponet={
-            <TextField
-            id="date"
-            type="date"
-            style={{backgroundColor:"white"}}
-            variant="outlined"
-            defaultValue="1998-01-12"
-            fullWidth={true}
-            InputLabelProps={{
-            shrink: true,
-            }}
+  return (
+    <MyInfoContentDefaultComponent
+      LefetComponent={
+        <Typography variant="body1" className="title">
+          {title}
+        </Typography>
+      }
+      RightComponet={
+        <TextField
+          value={data}
+          defaultValue={defaultValue}
+          variant="outlined"
+          fullWidth={true}
+          onChange={handleChange}
+          style={{ backgroundColor: "white" }}
+          disabled={ disabled }
         />
-        }
-      />
-    );
-  }
+      }
+    />
+  );
+};
+
+const MyInfoSelectComponent = props => {
+  let { title, data, handleChange, defaultValue, arrays } = props;
+
+  return (
+    <MyInfoContentDefaultComponent
+      LefetComponent={
+        <Typography variant="body1" className="title">
+          {title}
+        </Typography>
+      }
+      RightComponet={
+        <TextField
+          select
+          value={data}
+          defaultValue={defaultValue}
+          style={{ backgroundColor: "white" }}
+          fullWidth={true}
+          onChange={handleChange}
+          variant="outlined"
+        >
+          {arrays.map((option, i) => (
+            <MenuItem key={i} value={option} >
+              {option}
+            </MenuItem>
+          ))}
+        </TextField>
+      }
+    />
+  );
+};
+
+// const MyInfoBirthdayComponent = props => {
+//   let { title } = props;
+
+//   return (
+//     <MyInfoContentDefaultComponent
+//       LefetComponent={
+//         <Typography variant="body1" className="title">
+//           {title}
+//         </Typography>
+//       }
+//       RightComponet={
+//         <TextField
+//           id="date"
+//           type="date"
+//           style={{ backgroundColor: "white" }}
+//           variant="outlined"
+//           fullWidth={true}
+//           InputLabelProps={{ shrink: true }}
+//         />
+//       }
+//     />
+//   );
+// }
 
 const Profile = () => {
   const dispatch = useDispatch()
   const { me } = useSelector((state) => state.user)
+
+  const genders = ['남', '여', '기타'];
+
+  const [nickname, setNickname] = useState('')
+  const onChangeNickname = useCallback((e) => {
+    setNickname(e.target.value)
+  }, [])
+
+  const [phoneNumber, setPhoneNumber] = useState('')
+  const onChangePhoneNumber = useCallback((e) => {
+    setPhoneNumber(e.target.value)
+  }, [])
+
+  const [gender, setGender] = useState('');
+  const onChangeGender = useCallback((e) => {
+    setGender(e.target.value)
+  }, [])
+
+  const [age, setAge] = useState('')
+  const onChangeAge = useCallback((e) => {
+    setAge(e.target.value)
+  }, [])
+
+  const [address, setAddress] = useState('')
+  const onChangeAddress = useCallback((e) => {
+    setAddress(e.target.value)
+  }, [])
   
-  const [name, setName] = useState('Composed TextField');
-  const [gender, setGender] = useState('여');
-  
+
+  const onSubmit = useCallback(() => {
+    dispatch({
+      type: UPDATE_MY_INFO_REQUEST,
+      data: {
+
+      }
+    })
+  }, [])
+
   useEffect(() => {
     dispatch({
       type: LOAD_MY_INFO_REQUEST
     })
   }, [])
-  
-  const handleChange = (event) => {
-    setName(event.target.value);
-  };
+
+  useEffect(() => {
+    console.log(nickname)
+  }, [nickname])
+
   
   return (
     <Container maxWidth="lg" style={{background: '#eee'}}>
@@ -162,35 +181,164 @@ const Profile = () => {
           <Grid
             container
             direction="row"
-            justify="center"
+            justifyContent="center"
             alignItems="center"
             spacing={2}
           >
             <Grid item xs={12}>
-              <MyInfoInputComponent title="이름" keyValue="user_id" defaultValue={me?.name} disabled={true}/>
-            </Grid>
-            <Grid item xs={12}>
-              <MyInfoInputComponent title="이메일" keyValue="user_nm" defaultValue={me?.email} disabled={true}/>
+              <MyInfoContentDefaultComponent
+                LefetComponent={
+                  <Typography className="title">
+                    이름
+                  </Typography>
+                }
+                RightComponet={
+                  <TextField
+                    defaultValue={me?.name}
+                    variant="outlined"
+                    fullWidth={true}
+                    style={{ backgroundColor: "white" }}
+                    disabled
+                  />
+                }
+              />
             </Grid>
 
             <Grid item xs={12}>
-              <MyInfoInputComponent title="전화번호" keyValue="web_site" defaultValue={me?.phone_number}/>
+              <MyInfoContentDefaultComponent
+                LefetComponent={
+                  <Typography className="title">
+                    이메일
+                  </Typography>
+                }
+                RightComponet={
+                  <TextField
+                    defaultValue={me?.email}
+                    variant="outlined"
+                    fullWidth={true}
+                    style={{ backgroundColor: "white" }}
+                    disabled
+                  />
+                }
+              />
             </Grid>
 
             <Grid item xs={12}>
-              <MyInfoSelectComponent title="성별" keyValue="web_site" data={me?.gender} handelChange="handelChange" defaultValue={me?.gender}/>
+              <MyInfoContentDefaultComponent
+                LefetComponent={
+                  <Typography className="title">
+                    닉네임
+                  </Typography>
+                }
+                RightComponet={
+                  <TextField
+                    value={nickname}
+                    placeholder={me?.nickname}
+                    variant="outlined"
+                    fullWidth={true}
+                    onChange={onChangeNickname}
+                    style={{ backgroundColor: "white" }}
+                  />
+                }
+              />
             </Grid>
 
             <Grid item xs={12}>
-              <MyInfoBirthdayComponent title="생년월일" keyValue="birthday" />
+              <MyInfoContentDefaultComponent
+                LefetComponent={
+                  <Typography className="title">
+                    전화번호
+                  </Typography>
+                }
+                RightComponet={
+                  <TextField
+                    value={phoneNumber}
+                    placeholder={me?.phone_number}
+                    variant="outlined"
+                    fullWidth={true}
+                    onChange={onChangePhoneNumber}
+                    style={{ backgroundColor: "white" }}
+                  />
+                }
+              />
             </Grid>
 
             <Grid item xs={12}>
-              <MyInfoInputComponent title="주소" keyValue="web_site" defaultValue={me?.address} />
+              <MyInfoContentDefaultComponent
+                LefetComponent={
+                  <Typography className="title">
+                    성별
+                  </Typography>
+                }
+                RightComponet={
+                  <TextField
+                    select
+                    value={gender}
+                    placeholder={me?.gender}
+                    style={{ backgroundColor: "white" }}
+                    fullWidth={true}
+                    onChange={onChangeGender}
+                    variant="outlined"
+                  >
+                    {genders.map((option, i) => (
+                      <MenuItem key={i} value={option} >
+                        {option}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                }
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <MyInfoContentDefaultComponent
+                LefetComponent={
+                  <Typography className="title">
+                    나이
+                  </Typography>
+                }
+                RightComponet={
+                  <TextField
+                    select
+                    value={age}
+                    placeholder={me?.age}
+                    style={{ backgroundColor: "white" }}
+                    fullWidth={true}
+                    onChange={onChangeAge}
+                    variant="outlined"
+                  >
+                    {[...Array(100).keys()].map(x => ++x).map((age, i) => (
+                      <MenuItem key={i} value={age} >
+                        {age}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                }
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <MyInfoContentDefaultComponent
+                LefetComponent={
+                  <Typography className="title">
+                    주소
+                  </Typography>
+                }
+                RightComponet={
+                  <TextField
+                    value={address}
+                    placeholder={me?.address}
+                    variant="outlined"
+                    fullWidth={true}
+                    onChange={onChangeAddress}
+                    style={{ backgroundColor: "white" }}
+                  />
+                }
+              />
             </Grid>
           </Grid>
           <Grid item xs={12} style={{marginTop:'40px'}}>
-            <ColorButton variant="contained" >수정</ColorButton>
+            <ColorButton variant="contained" onSubmit={onSubmit} >수정</ColorButton>
             <Button variant="contained" style={{margin: '10px'}} >취소</Button>
           </Grid>
         </form>

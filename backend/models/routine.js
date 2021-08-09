@@ -8,7 +8,7 @@
  *          name:
  *            type: string
  *          alarm:
- *            type: bool
+ *            type: boolean
  */
 module.exports = (sequelize, DataTypes) => {
   const Routine = sequelize.define('Routine', { // MySQL에는 users 테이블 생성
