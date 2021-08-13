@@ -1,4 +1,4 @@
-import React,{useCallback, useEffect, useState} from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import DayOfWeek from './DayOfWeek/index';
@@ -6,13 +6,14 @@ import DayTimeInput from './DayTimeInput/index';
 import Switch from '@material-ui/core/Switch';
 import {Close} from '@material-ui/icons';
 import {connect, useDispatch, useSelector} from 'react-redux';
-import { CLOSE_CREATE_ROUTINE_MODAL } from '../../../reducers/modal';
+import { CLOSE_CREATE_ROUTINE_MODAL, OPEN_ALERT_MODAL, OPEN_CONFIRM_MODAL, SET_ALERT_MODAL_FUNCTION } from '../../../reducers/modal';
 import { ADD_ROUTINE_REQUEST, SET_MODAL_INPUT_NAME, SET_MODAL_INPUT_ALARM, SET_MODAL_INPUT_ACTIVE_DAY, MODIFY_ROUTINE_REQUEST} from '../../../reducers/routine';
 function getModalStyle() {
   return {
     top: `50%`,
     left: `50%`,
     transform: `translate(-50%, -50%)`,
+    overflow:'auto'
   };
 }
 
@@ -23,12 +24,14 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#E5E3E3',
     border: '1px solid #66A091',
     boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
+    padding: '16px',
     borderRadius:'10px',
+    maxWidth:'90%',
+    maxHeight:'90%'
   },
   day:{
     textAlign: 'center',
-    marginBottom:'20px'
+    marginBottom:'10px'
   },
   text:{
     textAlign: "center",
@@ -38,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor:'white',
     padding:'10px',
     borderRadius:'20px',
-    marginBottom:'20px',
+    marginBottom:'10px',
     width:'100%',
     border:'#66A091 1px solid'
   },
@@ -53,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight:'bold'
   },
   buttonDiv:{
-    marginTop:'20px',
+    marginTop:'10px',
   },
   floatRight:{
     float:'right',
@@ -63,14 +66,6 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '-7px',
   }
 }));
-
-function getDefaultTimes(){
-  let arr = new Array();
-  for(let i=0;i<7;i++){
-    arr.push('00:00');
-  }
-  return arr;
-}
 
 function SimpleModal(props) {
   const dispatch = useDispatch()
@@ -128,20 +123,43 @@ function SimpleModal(props) {
           id: createRoutineInfo.id
         });
       }
+      handleClose()
     }
     
   }
 
+  function setAdd(){
+    if(validate()){
+      dispatch({type: SET_ALERT_MODAL_FUNCTION, alertModalFunction: add})
+      if(choosedRoutine == -1){
+        dispatch({type: OPEN_ALERT_MODAL, message:'루틴을 생성하시겠습니까?'})
+      }else{
+        dispatch({type: OPEN_ALERT_MODAL, message:'루틴을 수정하시겠습니까?'})
+      }
+    }
+  }
   const validate = () =>{
     let titlesKorean = ['루틴 이름을']
     let titlesEnglish =['name']
     for(let i=0;i<titlesKorean.length;i++){
       if(!createRoutineInfo[titlesEnglish[i]]){
-        alert(titlesKorean[i]+' 입력해주세요')
+        dispatch({
+          type:OPEN_CONFIRM_MODAL,
+          message:titlesKorean[i]+' 입력해주세요.'
+        })
         return false;
       }
     }
-    return true;
+    for(let item of createRoutineInfo.active_day_of_week){
+      if(item.active){
+        return true;
+      }
+    }
+    dispatch({
+      type:OPEN_CONFIRM_MODAL,
+      message:'요일을 하나 이상 선택해주세요.'
+    })
+    return false;
   }
 
   const body = (
@@ -149,6 +167,7 @@ function SimpleModal(props) {
             <div>
            <h2 id="simple-modal-title" style={{marginBottom: "10px", float:'left'}}>루틴 {choosedRoutine==-1?'생성':'수정'}</h2><Close onClick={handleClose} style={{float:'right'}}></Close>
            </div>
+           <div>
            <input type="text" placeholder="루틴 이름 입력" className={classes.inputDiv} onChange={changeName} defaultValue={createRoutineInfo.name}></input>
             <div className={classes.day}>
                 {
@@ -168,9 +187,10 @@ function SimpleModal(props) {
               <div className={classes.inputDiv}>
                 <span className={classes.text}>알림</span><div className={classes.floatRight}><Switch className={classes.switch} onChange={changeAlarm} defaultChecked={createRoutineInfo.alarm}/></div>
               </div>
+              </div>
         <div className={classes.buttonDiv}>
           {/* <button className={classes.buttonLeft +' btn'} onClick={handleClose}>취소</button> */}
-          <button className={classes.buttonRight +' btn'} onClick = {add}>완료</button>
+          <button className={classes.buttonRight +' btn'} onClick = {setAdd}>완료</button>
         </div>
     </div>
   );

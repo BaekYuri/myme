@@ -1,5 +1,5 @@
 const express = require('express')
-const { ChallengeParticipation, User, DailyAchieveChallenge, Challenge } = require('../models')
+const { ChallengeParticipation, User, Challenge, ChallengeCertificationDay, ChallengeCertificationTime, DailyCertifyChallenge } = require('../models')
 const { isLoggedIn } = require('./middlewares')
 
 const router = express.Router()
@@ -35,6 +35,11 @@ const router = express.Router()
       where: { UserId: req.user.id },
       include: [{
         model: Challenge,
+        include: [{
+          model: ChallengeCertificationDay,
+        }, {
+          model: ChallengeCertificationTime
+        }]
       }]
     })
     res.status(200).json(challengeParticipation)
@@ -72,20 +77,33 @@ const router = express.Router()
  */
 router.post('/', isLoggedIn, async (req, res, next) => { // POST /challengeParticipation
   try {
+    const alreadyParticipate = await ChallengeParticipation.findOne({
+      where: { UserId: req.user.id, ChallengeId: req.body.challengeId }
+    })
+    if (alreadyParticipate) {
+      return res.status(403).send('이미 참여하고 있습니다!')
+    }
     const challengeParticipation = await ChallengeParticipation.create({
+      start_date: req.body.start_date,
+      end_date: req.body.end_date,
       period: req.body.period,
-      achieve_count: req.body.achieve_count,
+      certification_count: req.body.certification_count,
+      total_number_of_certification: req.body.total_number_of_certification,
       UserId: req.user.id,
       ChallengeId: req.body.challengeId
     })
-    await challengeParticipation.findOne({
+    const fullChallengeParticipation = await ChallengeParticipation.findOne({
       where: { id: challengeParticipation.id },
       include: [{
         model: User,
         attributes: ['id', 'nickname']
+      }, {
+        model: Challenge
+      }, {
+        model: DailyCertifyChallenge
       }]
     })
-    res.status(200).json(challengeParticipation)
+    res.status(200).json(fullChallengeParticipation)
   } catch (error) {
     console.error(error)
     next(error)
@@ -125,14 +143,26 @@ router.post('/', isLoggedIn, async (req, res, next) => { // POST /challengeParti
 router.post('/:challengeId', isLoggedIn, async (req, res, next) => {  // POST /challengeParticipation/1
   try {
     const challengeParticipation = await ChallengeParticipation.findOne({
-      where: { UserId: req.user.id, ChallengeId: req.params.challengeId }
+      where: { id: req.params.challengeId }
     })
-    const dailyAchieveChallenge = await DailyAchieveChallenge.create({
+    const exDailyCertifyChallenge = await DailyCertifyChallenge.findOne({
+      where: { ChallengeParticipationId: challengeParticipation.id }
+    })
+    if (exDailyCertifyChallenge) {
+      return res.status(403).send('이미 인증했습니다!')
+    }
+    const dailyCertifyChallenge = await DailyCertifyChallenge.create({
       img_addr: req.body.img_addr,
       content: req.body.content,
+      certification_datetime: req.body.certification_datetime,
       ChallengeParticipationId: challengeParticipation.id
     })
-    res.status(200).json(dailyAchieveChallenge)
+    await ChallengeParticipation.update({
+        certification_count: challengeParticipation.certification_count + 1
+      },
+      { where: { id: challengeParticipation.id } }
+    )
+    res.status(200).json(dailyCertifyChallenge)
   } catch (error) {
     console.error(error)
     next(error)

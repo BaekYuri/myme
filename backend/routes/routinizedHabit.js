@@ -1,5 +1,8 @@
 const express = require('express')
-const { Routine, Habit, RoutinizedHabit, DailyAchieveHabit } = require('../models')
+const moment = require('moment')
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
+const { Routine, Habit, RoutinizedHabit, DailyAchieveHabit, sequelize } = require('../models')
 const { isLoggedIn } = require('./middlewares')
 
 const router = express.Router()
@@ -46,7 +49,13 @@ router.post('/:routineId', isLoggedIn, async (req, res, next) => {
       RoutineId: req.params.routineId,
       HabitId: req.body.habitId
     })
-    res.status(200).json(routinizedHabit)
+    const result = await RoutinizedHabit.findOne({
+      where:{id: routinizedHabit.id},
+      include: [{
+        model: Habit,
+      }]
+    })
+    res.status(200).json(result)
   } catch (error) {
     console.error(error)
     next(error)
@@ -78,17 +87,22 @@ router.post('/:routineId', isLoggedIn, async (req, res, next) => {
  *          description: Success
  */
 router.put('/order', isLoggedIn, async (req, res, next) => {
+  const t = await sequelize.transaction();
   try {
-    req.body.habits.map(async (routinizedHabit) => {
-          await RoutinizedHabit.update(
-            {order: routinizedHabit.order},
-            {
-              where: { id: routinizedHabit.id }
-            }
-          )
-    })
+    for(let i=0; i<req.body.habits.length;i++){
+      let routinizedHabit = req.body.habits[i]
+      await RoutinizedHabit.update(
+        {order: i},
+        {
+          where: { id: routinizedHabit.id }
+        }
+        ,{ transaction: t }
+      )
+    }
+    await t.commit();
     res.status(200).json(req.body.habits)
   } catch (error) {
+    await t.rollback();
     console.error(error)
     next(error)
   }
@@ -122,10 +136,25 @@ router.post('/', isLoggedIn, async (req, res, next) => {
     const routinizedHabit = await RoutinizedHabit.findOne({
       where: { RoutineId: req.body.routineId, HabitId: req.body.habitId }
     })
-    const dailyAchieveHabit = await DailyAchieveHabit.create({
+    const existDailyAchiveHabit = await DailyAchieveHabit.findOne({
+      where:{
+        RoutinizedHabitId: routinizedHabit.id,
+        achieve_datetime:{
+          [Op.between]: [moment().startOf('day'), moment().endOf('day')],
+        }
+      }
+    })
+    if(existDailyAchiveHabit){
+      res.status(200).json(existDailyAchiveHabit)
+      return
+    }
+
+    const dailyAchieveHabit =await DailyAchieveHabit.create({
       authorized: true,
+      achieve_datetime: moment().toDate(),
       RoutinizedHabitId: routinizedHabit.id
     })
+
     res.status(200).json(dailyAchieveHabit)
   } catch (error) {
     console.error(error)
@@ -136,7 +165,7 @@ router.post('/', isLoggedIn, async (req, res, next) => {
 // 루틴 내 습관 삭제하기
 /**
  * @swagger
- *  /routinizedHabit/{routinizedHabitId}
+ *  /routinizedHabit/{routinizedHabitId}:
  *    delete:
  *      tags:
  *      - routinizedHabit
@@ -154,12 +183,19 @@ router.post('/', isLoggedIn, async (req, res, next) => {
  *          description: Success
  */
 router.delete('/:routinizedHabitId', isLoggedIn, async (req, res, next) => {
+  const t = await sequelize.transaction();
   try {
+    await DailyAchieveHabit.destroy({
+      where:{RoutinizedHabitId:req.params.routinizedHabitId}
+    },{ transaction: t })
+
     await RoutinizedHabit.destroy({
       where: { id: req.params.routinizedHabitId}
-    })
+    },{ transaction: t })
+    await t.commit();
     res.status(200).json()
   } catch (error) {
+    await t.rollback();
     console.error(error)
     next(error)
   }

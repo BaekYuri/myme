@@ -4,5 +4,9 @@ const Wrapper = styled.div`
         border: white 1px solid;
         margin-bottom: 20px;
     }
+    .menu-text{
+        font-size: 1.5em;
+        font-weight: bold;
+    }
 `;
 export default Wrapper;

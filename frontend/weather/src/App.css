@@ -1,0 +1,21 @@
+.App {
+  background-color: black;
+  color: white;
+  height: 1080px;
+}
+
+body,
+html {
+  margin:0;
+  padding: 0;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-decoration: none;
+  font-family: 'SCDream4';
+}

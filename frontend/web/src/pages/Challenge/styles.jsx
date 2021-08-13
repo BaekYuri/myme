@@ -16,25 +16,35 @@
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
-
   width: auto;
-padding: 10px;
-hr {
-  border: white 1px solid;
-  margin-top: 20px;
-}
-  .daily-menu{
-    width:auto;
-}
-.grid{
+  padding: 10px;
+  hr {
+    border: white 1px solid;
+    margin-top: 10px;
+  }
+    .daily-menu{
+      width:auto;
+  }
+  .grid{
 
- & .CardContent{
-    margin-top: 30px;
+  & .CardContent{
+      margin-top: 30px;
+    }
+    & .TotalCard{
+      margin-bottom: 20px;
+    }
   }
-  & .TotalCard{
-    margin-bottom: 20px;
+  .term{
+    background-color: #66A091;
+    padding: 5px;
+    text-align: center;
+    color: white;
+    border-radius: 5px;
+    margin: 0% 2.5% 0% 2.5%;
   }
-}
+  .grid {
+    margin: 20px 0;
+  }
 `;
 
 export default Wrapper;

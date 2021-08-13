@@ -1,39 +1,49 @@
-import React,{useState} from 'react';
+import React,{useState,useCallback } from 'react';
 import Wrapper from './styles'
+import update from 'immutability-helper';
 import RoutineModalItem from '../RoutineModalItem/index'
-import ReactDragList from 'react-drag-list'
-import {connect, useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch} from 'react-redux';
+import {SET_ROUTINIZED_HABITS} from '../../../reducers/routine'
 
 function App(props){
   const { myRoutines } = useSelector((state) => state.routine) 
   const dispatch = useDispatch()
   const { num } = props
-    let routinizedHabit = myRoutines[num].RoutinizedHabits;
-    //순서 변경 함수
-    function changeOrder(e){
-        // let old = routinizedHabit[e.oldIndex]
-    }
+    let routinizedHabit = myRoutines[num].RoutinizedHabits
+
+    const moveCard = useCallback( 
+    (dragIndex, hoverIndex) => {
+      const dragRoutinizedHabit = routinizedHabit[dragIndex];
+    
+      dispatch({
+        type:SET_ROUTINIZED_HABITS,
+        num,
+        RoutinizedHabits:update(routinizedHabit, {
+            $splice: [
+              [dragIndex, 1], 
+              [hoverIndex, 0, dragRoutinizedHabit], // Add
+            ],
+          })
+      })
+    },
+    [routinizedHabit]
+  );
+
     return(
         <Wrapper>
             {
-                routinizedHabit.length?
-                <ReactDragList
-                dataSource={routinizedHabit}
-                row={(item, idx) => <RoutineModalItem rowKey={item.order} num={num} itemIdx={idx}/>}
-                handles = {false}
-                onUpdate = {changeOrder}
-                
-                />
-                :
+                routinizedHabit != undefined && routinizedHabit.length ?
+                <>
+                {
+                routinizedHabit.map((item, index) => (
+                    <RoutineModalItem key={item.id} index={index} id={item.id} moveCard={moveCard} num={num} itemIdx={index} nowItem={item}/>
+                  ))
+                }
+                </>:
                 <div className="default-box">루틴 일정을 추가해주세요.</div>
             }
         </Wrapper>
     );
 }
 
-const mapStateToProps = (state) =>{
-    return {
-        state
-    }
-  }
-export default connect(mapStateToProps)(App);
+export default App;

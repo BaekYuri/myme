@@ -1,12 +1,12 @@
 {
         "dayDiv" : {
                 "display": "inline-block",
-                "padding": "10px",
+                "padding": "3%",
                 "borderRadius": "25px",
-                "width": "40px",
-                "height": "40px",
+                "width": "calc(100%/8)",
+                "height": "calc(100%/8)",
                 "textAlign": "center",
-                "marginRight": "5px",
+                "marginRight": "1%",
                 "border": "1px solid #66A091"
         }
 }

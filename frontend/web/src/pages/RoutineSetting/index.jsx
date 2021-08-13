@@ -5,12 +5,20 @@ import RoutineItem from '../../components/Routine/RoutineItem/index'
 import AddRoutineButton from '../../components/Routine/AddRoutineButton/index'
 import Layout from '../../layout/';
 import Wrapper from './styles';
-import { LOAD_MY_ROUTINES_REQUEST } from '../../reducers/routine';
+import { OPEN_CREATE_ROUTINE_MODAL } from '../../reducers/modal';
+import { LOAD_MY_ROUTINES_REQUEST, SET_MODAL_INPUT } from '../../reducers/routine';
 import {LOAD_MY_HABITS_REQUEST} from '../../reducers/habit'
 
 function App (props) {
   const dispatch = useDispatch()
   const { myRoutines } = useSelector((state) => state.routine)
+
+  const openCreateRoutine = () => {
+    dispatch({
+      type: OPEN_CREATE_ROUTINE_MODAL
+    })
+    dispatch({type : SET_MODAL_INPUT, idx : -1})
+  }
 
   useEffect(() => {
     dispatch({
@@ -24,7 +32,7 @@ function App (props) {
   return(
     <Layout>
       <Wrapper>
-        <div className='menu daily-menu'><h1>Daily</h1><AddRoutineButton/></div>
+        <div className='menu daily-menu'><h2>My Routine List</h2><AddRoutineButton onClick={openCreateRoutine} title='루틴 생성'/></div>
         <hr/>
         {
             myRoutines.map((item, idx) => <RoutineItem num={idx} key={item?.id} />)

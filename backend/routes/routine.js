@@ -1,5 +1,8 @@
 const express = require('express')
-const { Routine, User, RoutinizedHabit, RoutineActiveDay, Habit } = require('../models')
+const moment = require('moment')
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
+const { Routine, User, RoutinizedHabit, RoutineActiveDay, Habit, DailyAchieveHabit, DailyAchieveRoutine } = require('../models')
 const { isLoggedIn } = require('./middlewares')
 
 const router = express.Router()
@@ -40,10 +43,110 @@ router.get('/', isLoggedIn, async (req, res, next) => { // GET /routine
         model: RoutinizedHabit,
         include: [{
           model: Habit,
-          attributes: ['name']
+        },{
+          model: DailyAchieveHabit,
+          required: false,
+          where:{
+            achieve_datetime:{
+              [Op.between]: [moment().startOf('day'), moment().endOf('day')],
+            }
+          }
         }]
       }, {
         model: RoutineActiveDay
+      },{
+        model: DailyAchieveRoutine,
+        required: false,
+        where:{
+          achieve_datetime:{
+            [Op.between]: [moment().startOf('day'), moment().endOf('day')],
+          }
+        }
+      }]
+    })
+    // console.log(routines)
+    res.status(200).json(routines)
+  } catch (error) {
+    console.error(error)
+    next(error)
+  }
+})
+
+// 오늘의 루틴 목록 가져오기
+/**
+ * @swagger
+ *  /routine/today:
+ *    get:
+ *      tags:
+ *        - routine
+ *      description: 오늘의 루틴 목록 가져오기
+ *      responses:
+ *        '200':
+ *          description: Success
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  id:
+ *                    type: integer
+ *                  name:
+ *                    type: string
+ *                  alarm:
+ *                    type: bool
+ *                  UserId:
+ *                    type: integer
+ */
+ router.get('/today', isLoggedIn, async (req, res, next) => { // GET /routine
+  try {
+    let today = moment().day()
+    today = today==0?7:today-1
+
+    const todayRoutines = await RoutineActiveDay.findAll({
+      where: {
+        day_of_week:today,
+        active:true
+      },
+      attributes: ['RoutineId']
+    })
+
+    console.log(todayRoutines)
+    let routineIds = []
+    for(let i=0;i<todayRoutines.length;i++){
+      routineIds.push(todayRoutines[i].RoutineId)
+    }
+    console.log(routineIds)
+    const routines = await Routine.findAll({
+      where: { 
+        UserId: req.user.id,
+        id: {[Op.in]:routineIds},
+      },
+      include: [{
+        model: User,
+        attributes: ['id', 'nickname']
+      }, {
+        model: RoutinizedHabit,
+        include: [{
+          model: Habit,
+        },{
+          model: DailyAchieveHabit,
+          required: false,
+          where:{
+            achieve_datetime:{
+              [Op.between]: [moment().startOf('day'), moment().endOf('day')],
+            }
+          }
+        }]
+      }, {
+        model: RoutineActiveDay,
+      },{
+        model: DailyAchieveRoutine,
+        required: false,
+        where:{
+          achieve_datetime:{
+            [Op.between]: [moment().startOf('day'), moment().endOf('day')],
+          }
+        }
       }]
     })
     // console.log(routines)
@@ -116,7 +219,28 @@ router.post('/', isLoggedIn, async (req, res, next) => { // POST /routine
         model: User,
         attributes: ['id', 'nickname']
       }, {
+        model: RoutinizedHabit,
+        include: [{
+          model: Habit,
+        },{
+          model: DailyAchieveHabit,
+          required: false,
+          where:{
+            achieve_datetime:{
+              [Op.between]: [moment().startOf('day'), moment().endOf('day')],
+            }
+          }
+        }]
+      }, {
         model: RoutineActiveDay
+      },{
+        model: DailyAchieveRoutine,
+        required: false,
+        where:{
+          achieve_datetime:{
+            [Op.between]: [moment().startOf('day'), moment().endOf('day')],
+          }
+        }
       }]
     })
     res.status(200).json(fullRoutine)
@@ -197,8 +321,27 @@ router.put('/:routineId', isLoggedIn, async (req, res, next) => { // PATCH /rout
         attributes: ['id', 'nickname']
       }, {
         model: RoutinizedHabit,
+        include: [{
+          model: Habit,
+        },{
+          model: DailyAchieveHabit,
+          required: false,
+          where:{
+            achieve_datetime:{
+              [Op.between]: [moment().startOf('day'), moment().endOf('day')],
+            }
+          }
+        }]
       }, {
         model: RoutineActiveDay
+      },{
+        model: DailyAchieveRoutine,
+        required: false,
+        where:{
+          achieve_datetime:{
+            [Op.between]: [moment().startOf('day'), moment().endOf('day')],
+          }
+        }
       }]
     })
     res.status(200).json(routine)
@@ -233,6 +376,55 @@ router.delete('/:routineId', isLoggedIn, async (req, res, next) => {
       where: { id: req.params.routineId }
     })
     res.status(200).json('Success')
+  } catch (error) {
+    console.error(error)
+    next(error)
+  }
+})
+
+// 루틴 완료 체크하기
+/**
+ * @swagger
+ *  /routine/complete:
+ *    post:
+ *      tags:
+ *      - routinizedHabit
+ *      description: 루틴 완료 체크하기
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                routineId:
+ *                  type: integer
+ *      responses:
+ *        '200':
+ *          description: Success
+ */
+ router.post('/complete', isLoggedIn, async (req, res, next) => {
+  try {
+    const existDailyAchiveRoutine = await DailyAchieveRoutine.findOne({
+      where:{
+        RoutineId: req.body.routineId,
+        achieve_datetime:{
+          [Op.between]: [moment().startOf('day'), moment().endOf('day')],
+        }
+      }
+    })
+    if(existDailyAchiveRoutine){
+      res.status(500).json(existDailyAchiveRoutine)
+      return
+    }
+
+    const dailyAchieveRoutine =await DailyAchieveRoutine.create({
+      authorized: true,
+      achieve_datetime: moment().toDate(),
+      RoutineId: req.body.routineId
+    })
+
+    res.status(200).json(dailyAchieveRoutine)
   } catch (error) {
     console.error(error)
     next(error)

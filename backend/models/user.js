@@ -74,6 +74,7 @@ module.exports = (sequelize, DataTypes) => {
     db.User.hasMany(db.Routine)
     db.User.hasMany(db.Challenge)
     db.User.hasMany(db.Comment)
+    db.User.hasMany(db.Schedule)
     db.User.hasMany(db.ChallengeParticipation)
   }
 

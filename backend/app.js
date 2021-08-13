@@ -20,6 +20,7 @@ const challengeParticipationRouter = require('./routes/challengeParticipation')
 const routineRouter = require('./routes/routine')
 const routinizedHabitRouter = require('./routes/routinizedHabit')
 const habitRouter = require('./routes/habit')
+const scheduleRouter = require('./routes/schedule')
 
 app.set('port', process.env.PORT || 3065)
 passportConfig()
@@ -68,6 +69,7 @@ app.use('/challengeParticipation', challengeParticipationRouter)
 app.use('/routine', routineRouter)
 app.use('/routinizedHabit', routinizedHabitRouter)
 app.use('/habit', habitRouter)
+app.use('/schedule',scheduleRouter)
 
 app.use((req, res, next) => {
   // req.data = 'wook비번' // middleware간 data 전송
@@ -113,7 +115,7 @@ app.use((req, res, next) => {
 
 app.use((err, req, res, next) => {
   console.error(err)
-  res.status(200).send('에러 발생!')
+  res.status(500).send('에러 발생!')
 })
 
 app.listen(app.get('port'), () => {

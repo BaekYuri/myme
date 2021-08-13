@@ -20,6 +20,8 @@ export default function TotalChallenge() {
     const handleClick = () => {
         console.info('주제선택');
       };
+
+      
   return (
     <div>
         <AppBar position="static" style={{background: '#66A091'}}>
@@ -31,7 +33,7 @@ export default function TotalChallenge() {
                 <Chip label="#취미" onClick={handleClick} />
                 <Chip label="#다이어트" onClick={handleClick} />
             </div>
-       </AppBar>
+        </AppBar>
             <div style={{height: '20px'}}></div>
       {/* <CardList></CardList> */}
     </div>

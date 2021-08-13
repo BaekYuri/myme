@@ -29,6 +29,7 @@ module.exports = (sequelize, DataTypes) => {
     db.Routine.belongsTo(db.User)
     db.Routine.hasMany(db.RoutinizedHabit)
     db.Routine.hasMany(db.RoutineActiveDay)
+    db.Routine.hasMany(db.DailyAchieveRoutine)
   }
 
   return Routine

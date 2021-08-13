@@ -125,8 +125,8 @@ const DrawerListGroup = (props) => {
               
               <ListItem
                 button
-                key={'Challenge'}
-                onClick={onClickRedirectPathHandler('/Challenge')}
+                key={'ChallengeHome'}
+                onClick={onClickRedirectPathHandler('/ChallengeHome')}
               >
                 <ListItemText primary={'챌린지'} disableTypography />
               </ListItem>
@@ -144,6 +144,13 @@ const DrawerListGroup = (props) => {
             onClick={onClickRedirectPathHandler('/MirrorSetting')}
           >
             <ListItemText primary={'스마트 미러 관리'} disableTypography />
+          </ListItem>
+          <ListItem
+            button
+            key={'HabitSetting'}
+            onClick={onClickRedirectPathHandler('/HabitSetting')}
+          >
+            <ListItemText primary={'습관 관리'} disableTypography />
           </ListItem>
           </Fragment>
         

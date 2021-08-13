@@ -11,6 +11,9 @@
    *            type: string
    *          icon_src:
    *            type: string
+   *          assist_link:
+   *            type: string
+   *            description: 해당 습관을 수행하면서 필요한 자료의 링크 Ex) 명상하기 - 명상 가이드 영상 링크
    *          content:
    *            type: text
    *          time_required:
@@ -33,6 +36,10 @@ module.exports = (sequelize, DataTypes) => {
     content: {
       type: DataTypes.TEXT,
       allowNull: true
+    },
+    assist_link: {
+      type: DataTypes.STRING(100),
+      allowNull: true,
     },
     time_required: {
       type: DataTypes.INTEGER,

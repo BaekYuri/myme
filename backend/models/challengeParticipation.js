@@ -38,7 +38,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     certification_count: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
+    },
+    total_number_of_certification: {
+      type: DataTypes.INTEGER,
+      allowNull: false
     }
   }, {
     charset: 'utf8',

@@ -9,10 +9,11 @@ const Wrapper = styled(Container)`
     .details{
         display: block;
     }
-
-    .modify-btn{
+    .btn{
         float: right;
-        width: 40px;
+    }
+    .modify-btn{
+        width: 25px;
         height: auto;
         color: darkgray;
         margin: 10px;

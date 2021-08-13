@@ -10,12 +10,6 @@
  *            type: integer
  *          order:
  *            type: integer
- *          assist_content:
- *            type: text
- *            description: 해당 습관을 수행하면서 필요한 것들 메모
- *          assist_link:
- *            type: string
- *            description: 해당 습관을 수행하면서 필요한 자료의 링크 Ex) 명상하기 - 명상 가이드 영상 링크
  *          RoutineId:
  *            type: integer
  *          HabitId:
@@ -27,14 +21,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    assist_content: {
-      type: DataTypes.TEXT,
-      allowNull: true,
-    },
-    assist_link: {
-      type: DataTypes.STRING(100),
-      allowNull: true,
-    }
   }, {
     charset: 'utf8mb4',
     collate: 'utf8mb4_general_ci'
