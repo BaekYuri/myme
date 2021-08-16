@@ -12,7 +12,8 @@ import {
    LinearProgress,
    Grid,
    List,
-   ListItem
+   ListItem,
+   Typography
   } from '@material-ui/core';
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -24,7 +25,7 @@ import "@fullcalendar/daygrid/main.css";
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import {LOAD_TODAY_ROUTINES_REQUEST} from '../../reducers/routine'
-
+import {LOAD_MY_CHALLENGES_REQUEST} from '../../reducers/challenge'
 //달력&일정
 import CustomCalendar from '../../components/Calendar/index';
 import TodayEvent from '../../components/TodayEvent/index';
@@ -52,6 +53,9 @@ const Main = props => {
   useEffect(()=>{
     dispatch({type:LOAD_TODAY_ROUTINES_REQUEST})
     dispatch({type: LOAD_EVENT_REQUEST})
+    dispatch({
+      type: LOAD_MY_CHALLENGES_REQUEST
+    })
   },[])
   const { events } = useSelector((state) => state.calendar)
   const todayEvent = events.filter((event)=>
@@ -73,18 +77,18 @@ const Main = props => {
                 <Weather/>
               </Grid>
               {/* 챌린지 */}
-              <Grid item xs={9}>
+              <Grid item xs={12}>
                 <ChallengeList/>
               </Grid>
               {/* 빈공간 */}
               <Grid item xs={3}></Grid>
                {/* 아래쪽으로 맞출 공간 */}
-              <Grid container item xs={12} spacing={0} style={{height:'104px'}}></Grid>
+              <Grid container item xs={12} spacing={0} style={{height:'44px'}}></Grid>
               {/* 루틴 */}
-              <Grid item xs={9} className="routine">
+              <Grid item xs={8} className="routine">
                 <RoutineRootComponent/>
               </Grid>
-              <Grid item xs={3} className="routine"></Grid>
+              <Grid item xs={4} className="routine"></Grid>
             </Grid>
 
             {/* 오른쪽 3 */}
@@ -95,22 +99,28 @@ const Main = props => {
                 <br></br>
               </Grid>
               <Grid item xs={12}  >
-              <List component="nav" aria-label="mailbox folders">           
-              {  
-                  todayEvent.length == 0 ?
-                  <ListItem>오늘의 일정이 없습니다</ListItem> :
-                  <>
-                  {
-                  todayEvent.map((event, idx) => {
-                    return <TodayEvent key={idx} event={event}/>  
-                  })
-                  }
-                  </>
-              }
-          </List>
+                <SettingButtons/>
               </Grid>
               {/* 아래쪽으로 맞출 공간 */}
               <Grid container item xs={12} spacing={0} style={{height:'104px'}}></Grid>
+              <Grid item xs={12}>
+                <Typography variant='h5'>오늘의 일정</Typography>
+                <List component="nav" aria-label="mailbox folders">           
+                {  
+                    todayEvent.length == 0 ?
+                    <ListItem>오늘의 일정이 없습니다</ListItem> :
+                    <>
+                    {
+                    todayEvent.map((event, idx) => {
+                      return <TodayEvent key={idx} event={event}/>  
+                    })
+                    }
+                    </>
+                }
+                </List>
+              </Grid>
+              {/* 아래쪽으로 맞출 공간 */}
+              <Grid container item xs={12} spacing={0} style={{height:'50px'}}></Grid>
               {/* 달력 */}
               <Grid item xs={12}>
                <CustomCalendar myEvent={events}/>

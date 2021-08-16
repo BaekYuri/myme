@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import Slider from 'react-slick';
 import PersonIcon from '@material-ui/icons/Person';
@@ -7,9 +7,9 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import { Box, Card, CardActionArea, CardContent, CardMedia, Grid } from '@material-ui/core';
 import { ColorButton } from '../../../common/Buttons';
 import { SHOW_CHALLENGE } from '../../../reducers/challenge';
-import { convertCertType } from '../../../config/config';
+import { categories, convertCertType } from '../../../config/config';
 
-const MoreCardList = ({props}) => {
+const MoreCardList = (props) => {
   const { challenges } = props
   const history = useHistory()
   const dispatch = useDispatch()
@@ -67,23 +67,23 @@ const MoreCardList = ({props}) => {
       {challenges ? challenges.map(challenge => {
         return (
           <Box key={challenge.id} >
-            <Card style={{ maxWidth: 270, marginRight: 5, marginLeft: 5 }} >
+            <Card style={{ maxWidth: 2000, marginRight: 5, marginLeft: 5 }} >
               <CardActionArea>
                 <CardMedia
-                  style={{ maxWidth: '270px', maxHeight: '100px' }}
+                  style={{ maxWidth: '2000px', maxHeight: '100px' }}
                   component="img"
                   alt="Contemplative Reptile"
                   image={challenge.img_addr}
                   title="Contemplative Reptile"
                 />
-                <CardContent style={{ padding: '15px', paddingBottom: '5px' }}>
+                <CardContent style={{ padding: '10px', paddingBottom: '3px' }}>
                   <Grid container >
                     <Grid item xs={12}>
                       <h3 style={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden', fontFamily: 'SCDream4' }}>
                         {challenge.name}
                       </h3>
                     </Grid>
-                    <Grid item xs={12} style={{ marginTop: '5px' }}>
+                    <Grid item xs={12} style={{ marginTop: '3px' }}>
                       <span style={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden', fontFamily: 'SCDream4', color: '#AAAAAA' }}>
                         {challenge.content}
                       </span>
@@ -91,23 +91,23 @@ const MoreCardList = ({props}) => {
                   </Grid>
                 </CardContent>
               </CardActionArea>
-              <Grid container style={{ padding: '5px' }}>
-                <Grid item xs={6} style={{ padding: '5px' }}>
-                  <div className="term" style={{ margin: 0 }}>{challenge.Categories[0]?.name}</div>
+              <Grid container style={{ padding: '3px' }}>
+                <Grid item xs={6} style={{ padding: '3px' }}>
+                  <div className="term" style={{ margin: 0 }}>{categories[challenge.category-1].label}</div>
                 </Grid>
-                <Grid item xs={6} style={{ padding: '5px' }}>
+                <Grid item xs={6} style={{ padding: '3px' }}>
                   <div className="term" style={{ margin: 0 }}>{convertCertType(challenge.certification_cycle)}</div>
                 </Grid>
-                <Grid item xs={12} style={{ padding: '5px', fontSize: 12 }}>
+                <Grid item xs={12} style={{ padding: '3px', fontSize: 14 }}>
                   <div className="term" style={{ margin: 0, color: 'black', backgroundColor: 'white' }}><span role="img">📅 </span>{challenge.start_date} ~ {challenge.end_date}</div>
                 </Grid>
-                <Grid item xs={6} style={{ padding: '5px', display: 'flex', justifyContent: 'center' }}>
+                <Grid item xs={6} style={{ padding: '3px', display: 'flex', justifyContent: 'center' }}>
                   <div style={{ margin: 0, display: 'flex', alignItems: 'center' }}>
                     <PersonIcon color='primary' /> {challenge.ChallengeParticipations.length}
                     <FavoriteIcon color='secondary' fontSize='small' /> {challenge.Likers.length}
                   </div>
                 </Grid>
-                <Grid item xs={6} style={{ padding: '5px' }}>
+                <Grid item xs={6} style={{ padding: '3px' }}>
                   <ColorButton fullWidth onClick={() => onChallengeDetail(challenge.id)} >
                     상세보기
                   </ColorButton>

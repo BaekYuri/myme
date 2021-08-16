@@ -1,20 +1,36 @@
 import React,{useState} from 'react';
 import Wrapper from './styles'
 import RoutinizedHabitItem from '../RoutinizedHabitItem'
-import {Typography, List} from '@material-ui/core'
+import {Typography, List,CardHeader, CardContent,CardActions} from '@material-ui/core'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import CustomCard from '../CustomCard'
 function App(props){
     let {routine, goBack} = props
     return(
         <Wrapper>
-            <Typography variant='h5' component='p' className='routine-title'><ArrowBackIosIcon onClick={goBack}/>{routine.name}</Typography>
-            <List>
-                {
-                    routine.RoutinizedHabits.map((item,idx)=>(
-                        <RoutinizedHabitItem idx={idx} key={idx} routinizedHabit={item} stopInterval={props.stopInterval} clearTime={props.clearTime}/>
-                    ))
-                }
-            </List>
+            <CardActions className='progress-header'>
+            <ArrowBackIosIcon onClick={goBack}/>
+            <Typography variant='h5'>{routine.name}</Typography>
+            </CardActions>
+                <CardContent className='content'>
+                <List>
+                    {
+                        routine.RoutinizedHabits.length!=0?
+                        <>
+                        {
+                            routine.RoutinizedHabits.map((item,idx)=>(
+                                <RoutinizedHabitItem idx={idx} key={idx} routinizedHabit={item} stopInterval={props.stopInterval} clearTime={props.clearTime}/>
+                            ))
+                        }
+                        </>
+                        :
+                        <CustomCard>
+                            루틴 내 습관이 없어요!<br/>
+                            웹사이트에서 습관을 설정해주세요.
+                        </CustomCard>
+                    }
+                </List>
+            </CardContent>
         </Wrapper>
     )
 }

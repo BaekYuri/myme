@@ -82,8 +82,10 @@ function App(props){
       };
     return(
         <Wrapper>
-            <CardHeader title={habit.name}/>
-            <CardContent>
+            <CardActions className='progress-header'>
+            <Typography variant='h5'>{habit.name}</Typography>
+            </CardActions>
+            <CardContent className='progress-article'>
                 <div className='video-container content-container' hidden={tabValue !== 0}>
                 <Typography className='content-typography'>{habit.content}</Typography>
                 </div>
@@ -97,7 +99,7 @@ function App(props){
                 
                 </div>
             </CardContent>
-            <CardActions>
+            <CardActions className='progress-footer'>
                 <Grid item xs={4}>
                     <Tabs
                         value={tabValue}

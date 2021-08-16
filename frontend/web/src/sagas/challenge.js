@@ -4,42 +4,83 @@ import {
   ADD_CHALLENGE_REQUEST,
   ADD_CHALLENGE_SUCCESS,
   ADD_CHALLENGE_FAILURE,
+  /*********************************************************** */
   LOAD_CHALLENGES_REQUEST,
   LOAD_CHALLENGES_SUCCESS,
   LOAD_CHALLENGES_FAILURE,
+  /*********************************************************** */
   LOAD_MY_CHALLENGES_REQUEST,
   LOAD_MY_CHALLENGES_SUCCESS,
   LOAD_MY_CHALLENGES_FAILURE,
+  /*********************************************************** */
   LOAD_MY_CREATE_CHALLENGES_REQUEST,
   LOAD_MY_CREATE_CHALLENGES_SUCCESS,
   LOAD_MY_CREATE_CHALLENGES_FAILURE,
+  /*********************************************************** */
   UPLOAD_CHALLENGE_IMAGE_REQUEST,
   UPLOAD_CHALLENGE_IMAGE_SUCCESS,
   UPLOAD_CHALLENGE_IMAGE_FAILURE,
+  /*********************************************************** */
   LOAD_NEW_CHALLENGES_REQUEST,
   LOAD_NEW_CHALLENGES_SUCCESS,
   LOAD_NEW_CHALLENGES_FAILURE,
+  /*********************************************************** */
   LOAD_REC_CHALLENGES_REQUEST,
   LOAD_REC_CHALLENGES_SUCCESS,
   LOAD_REC_CHALLENGES_FAILURE,
+  /*********************************************************** */
+  LOAD_WORKOUT_CHALLENGES_REQUEST,
+  LOAD_WORKOUT_CHALLENGES_SUCCESS,
+  LOAD_WORKOUT_CHALLENGES_FAILURE,
+  /*********************************************************** */
+  LOAD_STUDY_CHALLENGES_REQUEST,
+  LOAD_STUDY_CHALLENGES_SUCCESS,
+  LOAD_STUDY_CHALLENGES_FAILURE,
+  /*********************************************************** */
+  LOAD_LIFE_CHALLENGES_REQUEST,
+  LOAD_LIFE_CHALLENGES_SUCCESS,
+  LOAD_LIFE_CHALLENGES_FAILURE,
+  /*********************************************************** */
+  LOAD_MEAL_CHALLENGES_REQUEST,
+  LOAD_MEAL_CHALLENGES_SUCCESS,
+  LOAD_MEAL_CHALLENGES_FAILURE,
+  /*********************************************************** */
+  LOAD_ABILITY_CHALLENGES_REQUEST,
+  LOAD_ABILITY_CHALLENGES_SUCCESS,
+  LOAD_ABILITY_CHALLENGES_FAILURE,
+  /*********************************************************** */
+  LOAD_HOBBY_CHALLENGES_REQUEST,
+  LOAD_HOBBY_CHALLENGES_SUCCESS,
+  LOAD_HOBBY_CHALLENGES_FAILURE,
+  /*********************************************************** */
+  LOAD_ASSET_CHALLENGES_REQUEST,
+  LOAD_ASSET_CHALLENGES_SUCCESS,
+  LOAD_ASSET_CHALLENGES_FAILURE,
+  /*********************************************************** */
   LOAD_CHALLENGE_REQUEST,
   LOAD_CHALLENGE_SUCCESS,
   LOAD_CHALLENGE_FAILURE,
+  /*********************************************************** */
   PARTICIPATE_CHALLENGE_REQUEST,
   PARTICIPATE_CHALLENGE_SUCCESS,
   PARTICIPATE_CHALLENGE_FAILURE,
+  /*********************************************************** */
   CERTIFY_CHALLENGE_REQUEST,
   CERTIFY_CHALLENGE_SUCCESS,
   CERTIFY_CHALLENGE_FAILURE,
+  /*********************************************************** */
   LIKE_CHALLENGE_REQUEST,
   LIKE_CHALLENGE_SUCCESS,
   LIKE_CHALLENGE_FAILURE,
+  /*********************************************************** */
   UNLIKE_CHALLENGE_REQUEST,
   UNLIKE_CHALLENGE_SUCCESS,
   UNLIKE_CHALLENGE_FAILURE,
+  /*********************************************************** */
   SEARCH_CHALLENGE_REQUEST,
   SEARCH_CHALLENGE_SUCCESS,
   SEARCH_CHALLENGE_FAILURE,
+  /*********************************************************** */
   DELETE_CHALLENGE_PARTICIPATION_REQUEST,
   DELETE_CHALLENGE_PARTICIPATION_SUCCESS,
   DELETE_CHALLENGE_PARTICIPATION_FAILURE,
@@ -160,6 +201,146 @@ function* loadRecChallenges() {
   } catch (error) {
     yield put({
       type: LOAD_REC_CHALLENGES_FAILURE,
+      error: error.response.data
+    })
+  }
+}
+
+function loadWorkoutChallengesAPI() {
+  return axios.get('/challenge/workout')
+}
+
+function* loadWorkoutChallenges() {
+  try {
+    const result = yield call(loadWorkoutChallengesAPI)
+    console.log(result)
+    yield put({
+      type: LOAD_WORKOUT_CHALLENGES_SUCCESS,
+      data: result.data
+    })
+  } catch (error) {
+    yield put({
+      type: LOAD_WORKOUT_CHALLENGES_FAILURE,
+      error: error.response.data
+    })
+  }
+}
+
+function loadStudyChallengesAPI() {
+  return axios.get('/challenge/study')
+}
+
+function* loadStudyChallenges() {
+  try {
+    const result = yield call(loadStudyChallengesAPI)
+    console.log(result)
+    yield put({
+      type: LOAD_STUDY_CHALLENGES_SUCCESS,
+      data: result.data
+    })
+  } catch (error) {
+    yield put({
+      type: LOAD_STUDY_CHALLENGES_FAILURE,
+      error: error.response.data
+    })
+  }
+}
+
+function loadLifeChallengesAPI() {
+  return axios.get('/challenge/life')
+}
+
+function* loadLifeChallenges() {
+  try {
+    const result = yield call(loadLifeChallengesAPI)
+    console.log(result)
+    yield put({
+      type: LOAD_LIFE_CHALLENGES_SUCCESS,
+      data: result.data
+    })
+  } catch (error) {
+    yield put({
+      type: LOAD_LIFE_CHALLENGES_FAILURE,
+      error: error.response.data
+    })
+  }
+}
+
+function loadMealChallengesAPI() {
+  return axios.get('/challenge/meal')
+}
+
+function* loadMealChallenges() {
+  try {
+    const result = yield call(loadMealChallengesAPI)
+    console.log(result)
+    yield put({
+      type: LOAD_MEAL_CHALLENGES_SUCCESS,
+      data: result.data
+    })
+  } catch (error) {
+    yield put({
+      type: LOAD_MEAL_CHALLENGES_FAILURE,
+      error: error.response.data
+    })
+  }
+}
+
+function loadAbilityChallengesAPI() {
+  return axios.get('/challenge/ability')
+}
+
+function* loadAbilityChallenges() {
+  try {
+    const result = yield call(loadAbilityChallengesAPI)
+    console.log(result)
+    yield put({
+      type: LOAD_ABILITY_CHALLENGES_SUCCESS,
+      data: result.data
+    })
+  } catch (error) {
+    yield put({
+      type: LOAD_ABILITY_CHALLENGES_FAILURE,
+      error: error.response.data
+    })
+  }
+}
+
+function loadHobbyChallengesAPI() {
+  return axios.get('/challenge/hobby')
+}
+
+function* loadHobbyChallenges() {
+  try {
+    const result = yield call(loadHobbyChallengesAPI)
+    console.log(result)
+    yield put({
+      type: LOAD_HOBBY_CHALLENGES_SUCCESS,
+      data: result.data
+    })
+  } catch (error) {
+    yield put({
+      type: LOAD_HOBBY_CHALLENGES_FAILURE,
+      error: error.response.data
+    })
+  }
+}
+
+function loadAssetChallengesAPI() {
+  return axios.get('/challenge/asset')
+}
+
+function* loadAssetChallenges() {
+  try {
+    const result = yield call(loadAssetChallengesAPI)
+    console.log(result)
+    yield put({
+      type: LOAD_ASSET_CHALLENGES_SUCCESS,
+      data: result.data
+    })
+  } catch (error) {
+    yield put({
+      type: LOAD_ASSET_CHALLENGES_FAILURE,
       error: error.response.data
     })
   }
@@ -342,6 +523,34 @@ function* watchLoadRecChallenges() {
   yield takeLatest(LOAD_REC_CHALLENGES_REQUEST, loadRecChallenges)
 }
 
+function* watchLoadWorkoutChallenges() {
+  yield takeLatest(LOAD_WORKOUT_CHALLENGES_REQUEST, loadWorkoutChallenges)
+}
+
+function* watchLoadStudyChallenges() {
+  yield takeLatest(LOAD_STUDY_CHALLENGES_REQUEST, loadStudyChallenges)
+}
+
+function* watchLoadLifeChallenges() {
+  yield takeLatest(LOAD_LIFE_CHALLENGES_REQUEST, loadLifeChallenges)
+}
+
+function* watchLoadMealChallenges() {
+  yield takeLatest(LOAD_MEAL_CHALLENGES_REQUEST, loadMealChallenges)
+}
+
+function* watchLoadAbilityChallenges() {
+  yield takeLatest(LOAD_ABILITY_CHALLENGES_REQUEST, loadAbilityChallenges)
+}
+
+function* watchLoadHobbyChallenges() {
+  yield takeLatest(LOAD_HOBBY_CHALLENGES_REQUEST, loadHobbyChallenges)
+}
+
+function* watchLoadAssetChallenges() {
+  yield takeLatest(LOAD_ASSET_CHALLENGES_REQUEST, loadAssetChallenges)
+}
+
 function* watchLoadMyChallenges() {
   yield takeLatest(LOAD_MY_CHALLENGES_REQUEST, loadMyChallenges)
 }
@@ -382,6 +591,13 @@ export default function* challengeSaga() {
     fork(watchLoadChallenge),
     fork(watchLoadNewChallenges),
     fork(watchLoadRecChallenges),
+    fork(watchLoadWorkoutChallenges),
+    fork(watchLoadStudyChallenges),
+    fork(watchLoadLifeChallenges),
+    fork(watchLoadMealChallenges),
+    fork(watchLoadAbilityChallenges),
+    fork(watchLoadHobbyChallenges),
+    fork(watchLoadAssetChallenges),
     fork(watchLoadMyChallenges),
     fork(watchLoadMyCreateChallenges),
     fork(watchParticipateChallenge),

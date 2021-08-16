@@ -6,7 +6,6 @@ import {useDispatch} from 'react-redux'
 function App(props){
     const dispatch = useDispatch()
     let {routine, idx} = props
-
     function getDay(){
         let day = new Date()
         day = day.getDay()==0?6:day.getDay()-1
@@ -30,7 +29,7 @@ function App(props){
         <Wrapper onClick={setChoosedRoutine}>
             <Grid container>
                 <Grid item xs={6} lg={8}>
-                    <h3 className='text'>{routine.name}</h3>
+                    <h3 className={routine.DailyAchieveRoutines.length?'text achieve':'text no-achieve'}>{routine.name}</h3>
                 </Grid>
                 <Grid item xs={6} lg={4}>
                     <p className='text' style={{textAlign:'right'}}>{getTime(routine.RoutineActiveDays[getDay()].start_time)} 시작</p>

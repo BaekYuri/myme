@@ -13,7 +13,6 @@ import store from './store/configureStore'
 // page
 import Main from './pages/Main';
 import Auth from './pages/Auth'
-import CreateEventModal from './components/Calendar/CreateEvent/index'
 import PostCodeModal from './components/Auth/PostCodeModal';
 
 //fullcalendar example용
@@ -61,7 +60,6 @@ const App = () => {
           </Switch>
         </BrowserRouter>
       </MuiThemeProvider>
-      <CreateEventModal/>
       <PostCodeModal/>
     </Provider>
   );

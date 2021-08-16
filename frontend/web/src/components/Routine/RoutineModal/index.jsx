@@ -5,7 +5,7 @@ import {connect, useDispatch, useSelector} from 'react-redux';
 import { CLOSE_ROUTINE_MODAL, OPEN_ALERT_MODAL, OPEN_CONFIRM_MODAL, SET_ALERT_MODAL_FUNCTION } from '../../../reducers/modal';
 import { ADD_MY_HABIT_REQUEST} from '../../../reducers/habit';
 import { ADD_ROUTINIZED_HABIT_REQUEST, LOAD_MY_ROUTINES_REQUEST } from '../../../reducers/routine';
-import {Paper, Grid, TextField} from '@material-ui/core';
+import {Paper, Grid, TextField, Card, CardContent} from '@material-ui/core';
 import {Create, Event, Close} from '@material-ui/icons';
 import Habit from '../Habit/';
 function getModalStyle() {
@@ -222,9 +222,22 @@ function SimpleModal(props) {
         existHabit?
         <>
         <div >
-        {
-          myHabits.map((item, idx) =>(<Habit key ={idx} habit={item} clickedHabit={clickedHabit} idx={idx} onClick={()=>{setClickedHabit(idx)}}></Habit>))
-        }
+          {
+            myHabits.length!=0?
+            <>
+            {
+              myHabits.map((item, idx) =>(<Habit key ={idx} habit={item} clickedHabit={clickedHabit} idx={idx} onClick={()=>{setClickedHabit(idx)}}></Habit>))
+            }
+            </>:
+            <Card>
+            <CardContent>
+                <h4 className='text-title'>
+                    등록되어 있는 습관이 없어요.
+                </h4>
+            </CardContent>
+            </Card>
+          }
+        
         </div>
         <div className={classes.buttonDiv}>
             <button className={classes.buttonLeft} onClick={goBack}>뒤로가기</button>

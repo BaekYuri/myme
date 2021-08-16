@@ -11,7 +11,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import { ColorButton } from '../../common/Buttons';
 import { ColorChip } from '../../common/Chips'
 import { useDispatch, useSelector } from 'react-redux';
-import { categories, convertCertType, convertNumDay } from '../../config/config';
+import { categories, convertCertType, convertDaysWeek, convertNumDay } from '../../config/config';
 import { CLEAR_LOAD_CHALLENGE_DONE, CLEAR_PARTICIPATE_CHALLENGE, LIKE_CHALLENGE_REQUEST, PARTICIPATE_CHALLENGE_REQUEST, UNLIKE_CHALLENGE_REQUEST } from '../../reducers/challenge';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
@@ -61,11 +61,6 @@ const ChallengeDetail = ({match}) => {
       message: '챌린지에 참여하시겠습니까?'
     })
   }, [dispatch])
-
-  // useEffect(() => {
-  //   console.log(singleChallenge)
-  //   // console.log(categories[singleChallenge.Categories[0].id].label)
-  // }, [singleChallenge])
 
   // loadChallengeDone이 true면 뒤로가기 해도 다시 이 페이지로 돌아온다.
   // 이 페이지가 렌더링 되면 바로 loadChallengeDone을 false로 바꿔준다.
@@ -120,10 +115,10 @@ const ChallengeDetail = ({match}) => {
             <Paper>
               <Grid container item xs={12}>
                 <Grid item xs={3} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <ColorChip className="term" style={{ marginLeft: 0 }} label={singleChallenge ? categories[singleChallenge?.Categories[0]?.id]?.label : '분류'}/>
+                  <ColorChip className="term" style={{ marginLeft: 0 }} label={singleChallenge ? categories[singleChallenge?.category-1]?.label : '분류'}/>
                 </Grid>
                 <Grid item xs={3} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <ColorChip className="term" style={{ margin: 0, padding: '5px 0' }} label={singleChallenge.period % 7 === 0 ? convertNumDay(singleChallenge.period) : `${singleChallenge.period}일`} />
+                  <ColorChip className="term" style={{ margin: 0, padding: '5px 0' }} label={singleChallenge.period % 7 === 0 ? convertDaysWeek(singleChallenge.period) : `${singleChallenge.period}일`} />
                 </Grid>
                 <Grid item xs={3} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <ColorChip className="term" style={{ margin: 0, padding: '5px 0' }} label={convertCertType(singleChallenge.certification_cycle)}  />

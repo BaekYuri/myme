@@ -6,7 +6,7 @@ const router = express.Router()
 // GET / 라우터
 router.get('/',isLoggedIn,  async (req, res, next) => {
     try {
-        const response = await axios.get('https://maps.googleapis.com/maps/api/geocode/json?language=ko&address='+encodeURI(req.user.address)+'&key='+process.env.GEOCODING_KEY);
+        const response = await axios.get('https://maps.googleapis.com/maps/api/geocode/json?language=ko&address='+encodeURI(req.user.main_address)+'&key='+process.env.GEOCODING_KEY);
         const location = response.data.results[0].geometry.location
         const adr = response.data.results[0].address_components
         let dong = ''

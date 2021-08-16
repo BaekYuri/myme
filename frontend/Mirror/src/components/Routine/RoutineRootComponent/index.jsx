@@ -41,7 +41,7 @@ function App(){
         <Grid container spacing={3}>
             <Grid item xs={6}>
                 {
-                    choosedRoutine==-1?
+                    choosedRoutine==-1 || myRoutines.length<choosedRoutine?
                     <RoutineList myRoutines={myRoutines}/>
                     :
                     <RoutinizedHabitList routine={myRoutines[choosedRoutine]} goBack={goBack} stopInterval={stopInterval} clearTime={clearTime}/>

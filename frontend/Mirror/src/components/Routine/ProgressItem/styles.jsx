@@ -30,6 +30,17 @@ const Wrapper = styled(CustomCard)`
     .content-typography{
         margin: 10px;
     }
-
+    .progress-header{
+        border-bottom: 2px solid #666666;
+        padding-left: 20px;
+        height:49px;
+        line-height:49px;
+    }
+    .progress-footer{
+        border-top: 2px solid #666666;
+    }
+    .progress-article{
+        background-color:#050505;
+    }
 `;
 export default Wrapper;

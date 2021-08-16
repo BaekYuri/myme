@@ -2,7 +2,8 @@ import {Card} from '@material-ui/core'
 import { withStyles } from '@material-ui/styles'
 const styles ={
     root:{
-        backgroundColor:'#292929',
+        border:'2px solid #666666',
+        backgroundColor:'black',
         color:'white'
     }
 }

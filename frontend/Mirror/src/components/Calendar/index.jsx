@@ -4,14 +4,14 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
-
+import Wrapper from './styles'
 
 const Calendar = (props) => {
   const dispatch = useDispatch()
   const {events} = useSelector((state) => state.calendar)
  
     return(
-        <div className='demo-app'>
+        <Wrapper className='demo-app'>
             <div>
            
             </div>
@@ -25,22 +25,22 @@ const Calendar = (props) => {
                     center: 'title',
                     right: 'today next'
                 }}
+               
                 initialView='dayGridMonth'
                 locale='ko'
                 dayCellContent={(info)=>{return info.date.getDate()}}
                 buttonText={{today:'오늘'}}
-                editable={true}
+                // editable={true}
                 selectMirror={true}
-                selectable={true}
+                // selectable={true}
                 height='500px'
                 dayMaxEvents={true}
                 events={events}
-
                 // eventClick={openModifyEventModal}
                 />
                
             </div>
-        </div>
+        </Wrapper>
     )
   }
 

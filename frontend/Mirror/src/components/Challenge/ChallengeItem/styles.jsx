@@ -6,7 +6,7 @@ const Wrapper = styled.div`
     border-radius : 4px;
     height: max-content;
     margin:5px;
-    background-color:#292929;
+    border:2px solid #666666;
     text-align-last: center;
     text-align: -webkit-center;
     .title {

@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Grid, Container, Paper } from '@material-ui/core/';
+import { Grid, Container, Paper, Button } from '@material-ui/core/';
 import { teal } from '@material-ui/core/colors';
 import {  MenuItem} from '@material-ui/core/';
 import { useSelector, useDispatch } from 'react-redux';
 import CssTextField from './CssTextField';
 import AddRoutineButton from '../Routine/AddRoutineButton/index'
 import { LOAD_MY_INFO_REQUEST, UPDATE_MY_INFO_REQUEST } from '../../reducers/user';
-import {OPEN_ALERT_MODAL, SET_ALERT_MODAL_FUNCTION} from '../../reducers/modal'
+import {OPEN_ALERT_MODAL, SET_ALERT_MODAL_FUNCTION, OPEN_ADDRESS_MODAL} from '../../reducers/modal'
 import Wrapper from './styles'
 
 
@@ -118,10 +118,11 @@ import Wrapper from './styles'
 //   );
 // }
 
+
 const Profile = () => {
   const dispatch = useDispatch()
   const { me } = useSelector((state) => state.user)
-
+  const { addressInfo } = useSelector((state) => state.modal)
   const genders = ['남', '여', '기타'];
 
   const [nickname, setNickname] = useState(me?me.nickname:'')
@@ -144,12 +145,34 @@ const Profile = () => {
     setAge(e.target.value)
   }, [])
 
+  const [postCode, setPostCode] = useState(me?me.post_code:'')
+  const onChangePostCode = useCallback((e) => {
+    setPostCode(e.target.value)
+  }, [])
+
+  const [mainAddress, setMainAddress] = useState(me?me.main_address:'')
+  const onChangeMainAddress = useCallback((e) => {
+    setMainAddress(e.target.value)
+  }, [])
+  const [subAddress, setSubAddress] = useState(me?me.sub_address:'')
+  const onChangeSubAddress = useCallback((e) => {
+    setSubAddress(e.target.value)
+  }, [])
+
   const [address, setAddress] = useState(me?me.address:'')
   const onChangeAddress = useCallback((e) => {
     setAddress(e.target.value)
   }, [])
   
+  useEffect(()=>{
+    setPostCode(addressInfo.sigunguCode)
+    setMainAddress(addressInfo.address)
+  },[addressInfo])
 
+  function openAddressModal(){
+    dispatch({type:OPEN_ADDRESS_MODAL})
+  }
+  
   function updateInfo(){
     dispatch({
       type: UPDATE_MY_INFO_REQUEST,
@@ -157,7 +180,9 @@ const Profile = () => {
         nickname,
         gender,
         age,
-        address,
+        "post_code":postCode,
+        "main_address": mainAddress,
+        "sub_address": subAddress,
         phone_number:phoneNumber,
       }
     })
@@ -226,8 +251,31 @@ const Profile = () => {
                         ))}
               </CssTextField>
             </Grid>
+            <Grid item xs={6}>
+            <CssTextField
+              required
+              id="outlined-required"
+              label="우편번호"
+              value={postCode}
+              defaultValue={postCode}
+              variant="outlined"
+              fullWidth={true}
+              onChange={onChangePostCode}
+              InputProps={{
+                readOnly: true,
+              }}
+            />
+            </Grid>
+            <Grid item xs={6}>
+              <Button fullWidth color='primary' onClick={openAddressModal}>검색</Button>
+            </Grid>
             <Grid item xs={12}>
-              <CssTextField /*value={address}*/ defaultValue={address} variant="outlined" label="주소" fullWidth={true} onChange={onChangeAddress} />
+              <CssTextField value={mainAddress} defaultValue={mainAddress} variant="outlined" label="주소" fullWidth={true} onChange={onChangeMainAddress} InputProps={{
+                readOnly: true,
+              }}/>
+            </Grid>
+            <Grid item xs={12}>
+              <CssTextField /*value={address}*/ defaultValue={subAddress} variant="outlined" label="상세 주소" fullWidth={true} onChange={onChangeSubAddress}/>
             </Grid>
             <Grid item xs={0} md={3}></Grid>
             <Grid item xs={12} md={6} className='button-div'>

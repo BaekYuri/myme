@@ -10,7 +10,18 @@ import SearchIcon from '@material-ui/icons/Search';
 import { Link, useHistory } from 'react-router-dom';
 import Layout from '../../layout/index';
 import { useDispatch, useSelector } from 'react-redux';
-import { CLEAR_CHALLENGE, LOAD_CHALLENGES_REQUEST, LOAD_NEW_CHALLENGES_REQUEST, LOAD_REC_CHALLENGES_REQUEST } from '../../reducers/challenge';
+import {
+  LOAD_ABILITY_CHALLENGES_REQUEST,
+  LOAD_ASSET_CHALLENGES_REQUEST,
+  LOAD_CHALLENGES_REQUEST,
+  LOAD_HOBBY_CHALLENGES_REQUEST,
+  LOAD_LIFE_CHALLENGES_REQUEST,
+  LOAD_MEAL_CHALLENGES_REQUEST,
+  LOAD_NEW_CHALLENGES_REQUEST,
+  LOAD_REC_CHALLENGES_REQUEST,
+  LOAD_STUDY_CHALLENGES_REQUEST,
+  LOAD_WORKOUT_CHALLENGES_REQUEST
+} from '../../reducers/challenge';
 import ChallengeCategory from '../../components/Challenge/ChallengeCategory';
 
 const chipStyles = makeStyles((theme) => ({
@@ -29,11 +40,29 @@ const ChallengeHome = () => {
   const dispatch = useDispatch()
   const history = useHistory();
   const chipClasses = chipStyles();
-  const handleClick = () => {
-    console.info('You clicked the Chip.');
-  };
 
-  const { challenges, newChallenges, recChallenges, loadChallengesDone } = useSelector((state) => state.challenge)
+  const {
+    challenges,
+    newChallenges,
+    recChallenges,
+    workoutChallenges,
+    studyChallenges,
+    lifeChallenges,
+    mealChallenges,
+    abilityChallenges,
+    hobbyChallenges,
+    assetChallenges,
+    loadChallengesDone,
+    loadNewChallengesDone,
+    loadRecChallengesDone,
+    loadWorkoutChallengesDone,
+    loadStudyChallengesDone,
+    loadLifeChallengesDone,
+    loadMealChallengesDone,
+    loadAbilityChallengesDone,
+    loadHobbyChallengesDone,
+    loadAssetChallengesDone,
+  } = useSelector((state) => state.challenge)
 
   useEffect(() => {
     dispatch({
@@ -45,6 +74,27 @@ const ChallengeHome = () => {
     dispatch({
       type: LOAD_REC_CHALLENGES_REQUEST
     })
+    dispatch({
+      type: LOAD_WORKOUT_CHALLENGES_REQUEST
+    })
+    dispatch({
+      type: LOAD_STUDY_CHALLENGES_REQUEST
+    })
+    dispatch({
+      type: LOAD_LIFE_CHALLENGES_REQUEST
+    })
+    dispatch({
+      type: LOAD_MEAL_CHALLENGES_REQUEST
+    })
+    dispatch({
+      type: LOAD_ABILITY_CHALLENGES_REQUEST
+    })
+    dispatch({
+      type: LOAD_HOBBY_CHALLENGES_REQUEST
+    })
+    dispatch({
+      type: LOAD_ASSET_CHALLENGES_REQUEST
+    })
   }, [])
 
   return (  
@@ -52,7 +102,16 @@ const ChallengeHome = () => {
       <Layout>
         <Grid container >
           {
-            loadChallengesDone ?
+            loadChallengesDone &&
+            loadNewChallengesDone &&
+            loadRecChallengesDone &&
+            loadWorkoutChallengesDone &&
+            loadStudyChallengesDone &&
+            loadLifeChallengesDone &&
+            loadMealChallengesDone &&
+            loadAbilityChallengesDone &&
+            loadHobbyChallengesDone &&
+            loadAssetChallengesDone ?
               <>
                 <Grid item xs={6}>
                   <Button
@@ -77,6 +136,7 @@ const ChallengeHome = () => {
                 <Grid container className="grid">
                   <h3>신규 챌린지</h3>
                   <Grid item xs={12}><hr/></Grid>
+                  <Link to="/ChallengeMore/new" style={{ textDecoration: 'none', color: 'GrayText', cursor: 'pointer' }}>더보기</Link>
                   <Grid item xs={12} className="CardContent">
                     <CardList challenges={newChallenges} />
                   </Grid>
@@ -84,6 +144,7 @@ const ChallengeHome = () => {
                 <Grid container className="grid">
                   <h3>추천 챌린지</h3>
                   <Grid item xs={12}><hr/></Grid>
+                  <Link to="/ChallengeHome" style={{ textDecoration: 'none', color: 'GrayText', cursor: 'pointer' }}>더보기</Link>
                   <Grid item xs={12} className="CardContent">
                     <Typography>서비스 준비중입니다!</Typography>
                   </Grid>

@@ -12,7 +12,7 @@ const Wrapper = styled.div`
   }
   .grid {
     & .CardContent {
-      margin-top: 30px;
+      margin-top: 10px;
     }
     & .TotalCard {
       margin-bottom: 20px;

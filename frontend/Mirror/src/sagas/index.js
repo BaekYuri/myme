@@ -9,6 +9,7 @@ import {
   import userSaga from './user'
   import weatherSaga from './weather'
   import routineSaga from './routine'
+  import challengeSaga from './challenge'
   import { backUrl } from '../config/config'
   
   axios.defaults.baseURL = backUrl
@@ -21,6 +22,7 @@ import {
         fork(userSaga),
         fork(weatherSaga),
         fork(routineSaga),
+        fork(challengeSaga),
 
     ])
   }

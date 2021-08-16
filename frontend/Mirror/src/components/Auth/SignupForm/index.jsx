@@ -8,6 +8,7 @@ import {
   Checkbox,
   Container,
   FormControlLabel,
+  MenuItem,
 } from '@material-ui/core';
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 import styled from 'styled-components'
@@ -15,6 +16,7 @@ import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux';
 import { SIGN_UP_REQUEST, CHANGE_SIGN_UP_MODE } from '../../../reducers/user';
 import { OPEN_ADDRESS_MODAL } from '../../../reducers/modal';
+import CssTextField from '../../Etc/CssTextField';
 const ErrorMessage = styled.div`
     color: red;
 `
@@ -35,6 +37,18 @@ const SignupForm = () => {
   const [name, setName] = useState('')
   const onChangeName = useCallback((e) => {
     setName(e.target.value)
+  }, [])
+
+  const genders = ['남', '여', '기타'];
+
+  const [gender, setGender] = useState('기타');
+  const onChangeGender = useCallback((e) => {
+    setGender(e.target.value)
+  }, [])
+
+  const [age, setAge] = useState(0)
+  const onChangeAge = useCallback((e) => {
+    setAge(e.target.value)
   }, [])
 
   const [email, setEmail] = useState('')
@@ -118,10 +132,12 @@ const SignupForm = () => {
       data: { name, email, nickname,
          'phone_number': phoneNumber,
           password,
+          gender,
+          age,
           "post_code":postCode,
           "main_address": mainAddress,
           "sub_address": subAddress,
-          }
+        }
     })
     dispatch({
       type: CHANGE_SIGN_UP_MODE
@@ -147,6 +163,7 @@ const SignupForm = () => {
   function openAddressModal(){
     dispatch({type:OPEN_ADDRESS_MODAL})
   }
+
   return (
     <Container maxWidth="sm" style={{margin: '0 20px', padding: '20px', background: '#ffffff', border: 'solid 1px #eeeeee', borderRadius: '10px', boxShadow: '2px 2px 2px #eeeeee'}}>
       <Grid
@@ -163,23 +180,8 @@ const SignupForm = () => {
         <Grid item xs={11}>
           <Typography >회원가입</Typography>
         </Grid>
-
-        <Grid item xs={12} className="sign-up-grid-item1">
-          <TextField
-            required
-            id="outlined-required"
-            label="이름"
-            value={name}
-            className="text-field"
-            variant="outlined"
-            style={{background: 'white'}}
-            placeholder="이름"
-            fullWidth={true}
-            onChange={onChangeName}
-          />
-        </Grid>
         <Grid item xs={12} className="sign-up-grid">
-          <TextField
+          <CssTextField
             required
             id="outlined-required"
             label="이메일"
@@ -193,22 +195,9 @@ const SignupForm = () => {
             onChange={onChangeEmail}
           />
         </Grid>
-        <Grid item xs={12} className="sign-up-grid-item1">
-          <TextField
-            required
-            id="outlined-required"
-            label="닉네임"
-            value={nickname}
-            className="text-field"
-            variant="outlined"
-            style={{background: 'white'}}
-            placeholder="닉네임"
-            fullWidth={true}
-            onChange={onChangeNickname}
-          />
-        </Grid>
+
         <Grid item xs={12} className="sign-up-grid-item2">
-          <TextField
+          <CssTextField
             required
             id="outlined-password-input"
             label="비밀번호"
@@ -224,7 +213,7 @@ const SignupForm = () => {
           />
         </Grid>
         <Grid item xs={12} className="sign-up-grid-item2">
-          <TextField
+          <CssTextField
             required
             id="outlined-password-input"
             label="비밀번호 확인"
@@ -240,8 +229,36 @@ const SignupForm = () => {
           />
         </Grid>
         {passwordError && <ErrorMessage>비밀번호가 일치하지 않습니다.</ErrorMessage>}
+        <Grid item xs={6} className="sign-up-grid-item1">
+          <CssTextField
+            required
+            id="outlined-required"
+            label="이름"
+            value={name}
+            className="text-field"
+            variant="outlined"
+            style={{background: 'white'}}
+            placeholder="이름"
+            fullWidth={true}
+            onChange={onChangeName}
+          />
+        </Grid>
+        <Grid item xs={6} className="sign-up-grid-item1">
+          <CssTextField
+            required
+            id="outlined-required"
+            label="닉네임"
+            value={nickname}
+            className="text-field"
+            variant="outlined"
+            style={{background: 'white'}}
+            placeholder="닉네임"
+            fullWidth={true}
+            onChange={onChangeNickname}
+          />
+        </Grid>
         <Grid item xs={12} className="sign-up-grid-item1">
-          <TextField
+          <CssTextField
             required
             id="outlined-required"
             label="전화번호"
@@ -254,9 +271,8 @@ const SignupForm = () => {
             onChange={onChangePhoneNumber}
           />
         </Grid>
-        <Grid container item xs={12} className="sign-up-grid-item1">
           <Grid item xs={6}>
-            <TextField
+            <CssTextField
               required
               id="outlined-required"
               label="우편번호"
@@ -276,7 +292,7 @@ const SignupForm = () => {
             <Button fullWidth color='primary' onClick={openAddressModal}>검색</Button>
           </Grid>
           <Grid item xs={12}>
-            <TextField
+            <CssTextField
               required
               id="outlined-required"
               label="주소"
@@ -293,7 +309,7 @@ const SignupForm = () => {
             />
           </Grid>
           <Grid item xs={12}>
-            <TextField
+            <CssTextField
               required
               id="outlined-required"
               label="상세 주소"
@@ -306,7 +322,24 @@ const SignupForm = () => {
               onChange={onChangeSubAddress}
             />
           </Grid>
-        </Grid>
+          <Grid item xs={6}>
+              <CssTextField select defaultValue={gender} label="성별" fullWidth={true} onChange={onChangeGender} variant="outlined">
+                      {genders.map((option, i) => (
+                        <MenuItem key={i} value={option} >
+                          {option}
+                        </MenuItem>
+                      ))}
+              </CssTextField>
+            </Grid>
+            <Grid item xs={6}>
+              <CssTextField select defaultValue={age} fullWidth={true} label="나이" onChange={onChangeAge} variant="outlined" >
+                        {[...Array(100).keys()].map(x => ++x).map((age, i) => (
+                          <MenuItem key={i} value={age} >
+                            {age}
+                          </MenuItem>
+                        ))}
+              </CssTextField>
+            </Grid>
         <Grid item xs={12}>
           <FormControlLabel
             control={<Checkbox checked={term} onChange={onChangeTerm} />}

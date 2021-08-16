@@ -6,6 +6,13 @@ const initialState = {
   singleChallenge: null,  // 챌린지 하나
   newChallenges: [],      // 신규 챌린지 목록
   recChallenges: [],      // 추천 챌린지 목록
+  workoutChallenges: [],
+  studyChallenges: [],
+  lifeChallenges: [],
+  mealChallenges: [],
+  abilityChallenges: [],
+  hobbyChallenges: [],
+  assetChallenges: [],
   myChallenges: [],       // 내가 참여하는 챌린지 목록
   myChallenge: null,      // 내가 참여하는 챌린지 하나
   myCreateChallenges: [], // 내가 생성한 챌린지 목록
@@ -35,6 +42,41 @@ const initialState = {
   loadRecChallengesLoading: false,
   loadRecChallengesDone: false,
   loadRecChallengesError: null,
+  /*********************************************************** */
+  // 운동
+  loadWorkoutChallengesLoading: false,
+  loadWorkoutChallengesDone: false,
+  loadWorkoutChallengesError: null,
+  /*********************************************************** */
+  // 공부
+  loadStudyChallengesLoading: false,
+  loadStudyChallengesDone: false,
+  loadStudyChallengesError: null,
+  /*********************************************************** */
+  // 생활
+  loadLifeChallengesLoading: false,
+  loadLifeChallengesDone: false,
+  loadLifeChallengesError: null,
+  /*********************************************************** */
+  // 식사
+  loadMealChallengesLoading: false,
+  loadMealChallengesDone: false,
+  loadMealChallengesError: null,
+  /*********************************************************** */
+  // 역량
+  loadAbilityChallengesLoading: false,
+  loadAbilityChallengesDone: false,
+  loadAbilityChallengesError: null,
+  /*********************************************************** */
+  // 취미
+  loadHobbyChallengesLoading: false,
+  loadHobbyChallengesDone: false,
+  loadHobbyChallengesError: null,
+  /*********************************************************** */
+  // 자산
+  loadAssetChallengesLoading: false,
+  loadAssetChallengesDone: false,
+  loadAssetChallengesError: null,
   /*********************************************************** */
   loadMyChallengesLoading: false,
   loadMyChallengesDone: false,
@@ -96,6 +138,41 @@ export const LOAD_NEW_CHALLENGES_FAILURE = 'LOAD_NEW_CHALLENGES_FAILURE'
 export const LOAD_REC_CHALLENGES_REQUEST = 'LOAD_REC_CHALLENGES_REQUEST'
 export const LOAD_REC_CHALLENGES_SUCCESS = 'LOAD_REC_CHALLENGES_SUCCESS'
 export const LOAD_REC_CHALLENGES_FAILURE = 'LOAD_REC_CHALLENGES_FAILURE'
+
+// 운동 챌린지 불러오기
+export const LOAD_WORKOUT_CHALLENGES_REQUEST = 'LOAD_WORKOUT_CHALLENGES_REQUEST'
+export const LOAD_WORKOUT_CHALLENGES_SUCCESS = 'LOAD_WORKOUT_CHALLENGES_SUCCESS'
+export const LOAD_WORKOUT_CHALLENGES_FAILURE = 'LOAD_WORKOUT_CHALLENGES_FAILURE'
+
+// 공부 챌린지 불러오기
+export const LOAD_STUDY_CHALLENGES_REQUEST = 'LOAD_STUDY_CHALLENGES_REQUEST'
+export const LOAD_STUDY_CHALLENGES_SUCCESS = 'LOAD_STUDY_CHALLENGES_SUCCESS'
+export const LOAD_STUDY_CHALLENGES_FAILURE = 'LOAD_STUDY_CHALLENGES_FAILURE'
+
+// 생활 챌린지 불러오기
+export const LOAD_LIFE_CHALLENGES_REQUEST = 'LOAD_LIFE_CHALLENGES_REQUEST'
+export const LOAD_LIFE_CHALLENGES_SUCCESS = 'LOAD_LIFE_CHALLENGES_SUCCESS'
+export const LOAD_LIFE_CHALLENGES_FAILURE = 'LOAD_LIFE_CHALLENGES_FAILURE'
+
+// 식사 챌린지 불러오기
+export const LOAD_MEAL_CHALLENGES_REQUEST = 'LOAD_MEAL_CHALLENGES_REQUEST'
+export const LOAD_MEAL_CHALLENGES_SUCCESS = 'LOAD_MEAL_CHALLENGES_SUCCESS'
+export const LOAD_MEAL_CHALLENGES_FAILURE = 'LOAD_MEAL_CHALLENGES_FAILURE'
+
+// 역량 챌린지 불러오기
+export const LOAD_ABILITY_CHALLENGES_REQUEST = 'LOAD_ABILITY_CHALLENGES_REQUEST'
+export const LOAD_ABILITY_CHALLENGES_SUCCESS = 'LOAD_ABILITY_CHALLENGES_SUCCESS'
+export const LOAD_ABILITY_CHALLENGES_FAILURE = 'LOAD_ABILITY_CHALLENGES_FAILURE'
+
+// 취미 챌린지 불러오기
+export const LOAD_HOBBY_CHALLENGES_REQUEST = 'LOAD_HOBBY_CHALLENGES_REQUEST'
+export const LOAD_HOBBY_CHALLENGES_SUCCESS = 'LOAD_HOBBY_CHALLENGES_SUCCESS'
+export const LOAD_HOBBY_CHALLENGES_FAILURE = 'LOAD_HOBBY_CHALLENGES_FAILURE'
+
+// 자산 챌린지 불러오기
+export const LOAD_ASSET_CHALLENGES_REQUEST = 'LOAD_ASSET_CHALLENGES_REQUEST'
+export const LOAD_ASSET_CHALLENGES_SUCCESS = 'LOAD_ASSET_CHALLENGES_SUCCESS'
+export const LOAD_ASSET_CHALLENGES_FAILURE = 'LOAD_ASSET_CHALLENGES_FAILURE'
 
 // 내가 참여하고 있는 챌린지 불러오기
 export const LOAD_MY_CHALLENGES_REQUEST = 'LOAD_MY_CHALLENGES_REQUEST'
@@ -270,6 +347,118 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
     case LOAD_REC_CHALLENGES_FAILURE:
       draft.loadRecChallengesLoading = false
       draft.loadRecChallengesError = action.error
+      break
+    /*********************************************************** */
+    case LOAD_WORKOUT_CHALLENGES_REQUEST:
+      draft.loadWorkoutChallengesLoading = true
+      draft.loadWorkoutChallengesDone = false
+      draft.loadWorkoutChallengesError = null
+      break
+    case LOAD_WORKOUT_CHALLENGES_SUCCESS:
+      draft.loadWorkoutChallengesLoading = false
+      draft.loadWorkoutChallengesDone = true
+      draft.workoutChallenges = []
+      draft.workoutChallenges = draft.workoutChallenges.concat(action.data)
+      break
+    case LOAD_WORKOUT_CHALLENGES_FAILURE:
+      draft.loadWorkoutChallengesLoading = false
+      draft.loadWorkoutChallengesError = action.error
+      break
+    /*********************************************************** */
+    case LOAD_STUDY_CHALLENGES_REQUEST:
+      draft.loadStudyChallengesLoading = true
+      draft.loadStudyChallengesDone = false
+      draft.loadStudyChallengesError = null
+      break
+    case LOAD_STUDY_CHALLENGES_SUCCESS:
+      draft.loadStudyChallengesLoading = false
+      draft.loadStudyChallengesDone = true
+      draft.studyChallenges = []
+      draft.studyChallenges = draft.studyChallenges.concat(action.data)
+      break
+    case LOAD_STUDY_CHALLENGES_FAILURE:
+      draft.loadStudyChallengesLoading = false
+      draft.loadStudyChallengesError = action.error
+      break
+    /*********************************************************** */
+    case LOAD_LIFE_CHALLENGES_REQUEST:
+      draft.loadLifeChallengesLoading = true
+      draft.loadLifeChallengesDone = false
+      draft.loadLifeChallengesError = null
+      break
+    case LOAD_LIFE_CHALLENGES_SUCCESS:
+      draft.loadLifeChallengesLoading = false
+      draft.loadLifeChallengesDone = true
+      draft.lifeChallenges = []
+      draft.lifeChallenges = draft.lifeChallenges.concat(action.data)
+      break
+    case LOAD_LIFE_CHALLENGES_FAILURE:
+      draft.loadLifeChallengesLoading = false
+      draft.loadLifeChallengesError = action.error
+      break
+    /*********************************************************** */
+    case LOAD_MEAL_CHALLENGES_REQUEST:
+      draft.loadMealChallengesLoading = true
+      draft.loadMealChallengesDone = false
+      draft.loadMealChallengesError = null
+      break
+    case LOAD_MEAL_CHALLENGES_SUCCESS:
+      draft.loadMealChallengesLoading = false
+      draft.loadMealChallengesDone = true
+      draft.mealChallenges = []
+      draft.mealChallenges = draft.mealChallenges.concat(action.data)
+      break
+    case LOAD_MEAL_CHALLENGES_FAILURE:
+      draft.loadMealChallengesLoading = false
+      draft.loadMealChallengesError = action.error
+      break
+    /*********************************************************** */
+    case LOAD_ABILITY_CHALLENGES_REQUEST:
+      draft.loadAbilityChallengesLoading = true
+      draft.loadAbilityChallengesDone = false
+      draft.loadAbilityChallengesError = null
+      break
+    case LOAD_ABILITY_CHALLENGES_SUCCESS:
+      draft.loadAbilityChallengesLoading = false
+      draft.loadAbilityChallengesDone = true
+      draft.abilityChallenges = []
+      draft.abilityChallenges = draft.abilityChallenges.concat(action.data)
+      break
+    case LOAD_ABILITY_CHALLENGES_FAILURE:
+      draft.loadAbilityChallengesLoading = false
+      draft.loadAbilityChallengesError = action.error
+      break
+    /*********************************************************** */
+    case LOAD_HOBBY_CHALLENGES_REQUEST:
+      draft.loadHobbyChallengesLoading = true
+      draft.loadHobbyChallengesDone = false
+      draft.loadHobbyChallengesError = null
+      break
+    case LOAD_HOBBY_CHALLENGES_SUCCESS:
+      draft.loadHobbyChallengesLoading = false
+      draft.loadHobbyChallengesDone = true
+      draft.hobbyChallenges = []
+      draft.hobbyChallenges = draft.hobbyChallenges.concat(action.data)
+      break
+    case LOAD_HOBBY_CHALLENGES_FAILURE:
+      draft.loadHobbyChallengesLoading = false
+      draft.loadHobbyChallengesError = action.error
+      break
+    /*********************************************************** */
+    case LOAD_ASSET_CHALLENGES_REQUEST:
+      draft.loadAssetChallengesLoading = true
+      draft.loadAssetChallengesDone = false
+      draft.loadAssetChallengesError = null
+      break
+    case LOAD_ASSET_CHALLENGES_SUCCESS:
+      draft.loadAssetChallengesLoading = false
+      draft.loadAssetChallengesDone = true
+      draft.assetChallenges = []
+      draft.assetChallenges = draft.assetChallenges.concat(action.data)
+      break
+    case LOAD_ASSET_CHALLENGES_FAILURE:
+      draft.loadAssetChallengesLoading = false
+      draft.loadAssetChallengesError = action.error
       break
     /*********************************************************** */
     case LOAD_MY_CHALLENGES_REQUEST:

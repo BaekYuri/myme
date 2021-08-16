@@ -20,7 +20,7 @@ import { useHistory } from 'react-router-dom';
 import { ColorButton } from '../../../common/Buttons';
 import { LOAD_CHALLENGE_REQUEST, SHOW_CHALLENGE } from '../../../reducers/challenge';
 import { OPEN_CONFIRM_MODAL } from '../../../reducers/modal';
-import { convertCertType } from '../../../config/config';
+import { categories, convertCertType } from '../../../config/config';
 import './style.css'
 
 const CardList = (props) => {
@@ -119,7 +119,7 @@ const CardList = (props) => {
                   </CardActionArea>
                   <Grid container style={{ padding: '5px' }}>
                     <Grid item xs={6} style={{ padding: '5px' }}>
-                      <div className="term" style={{ margin: 0 }}>{challenge.Categories[0]?.name}</div>
+                      <div className="term" style={{ margin: 0 }}>{categories[challenge.category-1].label}</div>
                     </Grid>
                     <Grid item xs={6} style={{ padding: '5px' }}>
                       <div className="term" style={{ margin: 0 }}>{convertCertType(challenge.certification_cycle)}</div>

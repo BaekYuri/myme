@@ -6,5 +6,7 @@ const Wrapper = styled.div`
     .fc-toolbar-chunk:nth-child(2) >*{
         display: inline-block;
     }
+
+    .fc-prev-button { background: '#0000ff'}
 `;
 export default Wrapper;

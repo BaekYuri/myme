@@ -25,7 +25,6 @@ const enhancer = process.env.NODE_ENV === 'production'
   : composeWithDevTools(applyMiddleware(...middlewares))
 const store = createStore(persistedReducer, enhancer)
 export const persistor = persistStore(store)
-persistor.purge();
 
 store.sagaTask = sagaMiddleware.run(rootSaga)
 

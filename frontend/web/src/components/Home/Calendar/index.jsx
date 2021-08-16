@@ -27,8 +27,8 @@ const App = (props) => {
     return(
         <Wrapper className='demo-app'>
                 <FullCalendar
-                height='auto'
-                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin ]}
+                // height='auto'
+                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, googleCalendarPlugin ]}
                 headerToolbar={{
                     left: 'prev',
                     center: 'title',
@@ -42,9 +42,11 @@ const App = (props) => {
                 buttonText={{today:'오늘'}}
                 editable={true}
                 selectable={true}
-                // height='600px'
+                height='600px'
                 dayMaxEvents={true}
                 events={events}
+                
+
                 eventClick={openModifyEventModal}
                 dayCellContent={(info)=>{return info.date.getDate()}}
                 />

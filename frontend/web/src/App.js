@@ -19,6 +19,7 @@ import ChallengeDetail from './pages/Challenge/[id]';
 import ChallengeDashboard from './pages/Challenge/ChallengeDashboard/[id]';
 import CreateChallenge from './pages/Challenge/CreateChallenge';
 import SearchChallenge from './pages/Challenge/SearchChallenge';
+import MoreChallenges from './pages/Challenge/ChallengeMore';
 import Profile from './pages/Profile/';
 import MirrorSetting from './pages/MirrorSetting/';
 import Auth from './pages/Auth/';
@@ -31,6 +32,7 @@ import ConfirmModal from './components/Etc/ConfirmModal/index';
 import CreateEventModal from './components/Home/Calendar/CreateEvent/index';
 import ModifyEventModal from './components/Home/Calendar/ModifyEvent/index';
 import PostCodeModal from './components/Auth/PostCodeModal';
+
 // css
 import './index.css';
 import ScrollToTop from './common/ScrollToTop';
@@ -51,6 +53,7 @@ const App = () => {
                 <Route path="/ChallengeHome" component={ChallengeHome} />
                 <Route path="/CreateChallenge" component={CreateChallenge} />
                 <Route path="/SearchChallenge" component={SearchChallenge} />
+                <Route path="/ChallengeMore/:category" component={MoreChallenges} />
                 <Route path="/Profile" component={Profile} />
                 <Route path="/MirrorSetting" component={MirrorSetting} />
                 <Route path="/Challenge/:challengeId" component={ChallengeDetail} />

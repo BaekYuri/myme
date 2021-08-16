@@ -9,7 +9,7 @@ import { CLEAR_DELETE_CHALLENGE_PARTICIPATION, DELETE_CHALLENGE_PARTICIPATION_RE
 import { OPEN_ALERT_MODAL, OPEN_CONFIRM_MODAL, SET_ALERT_MODAL_FUNCTION } from '../../../reducers/modal';
 import { useHistory } from 'react-router-dom';
 import ShowCertModal from '../../../components/Challenge/ShowCertModal';
-import { advice, convertCertType, convertDaysWeek } from '../../../config/config';
+import { advice, categories, convertCertType, convertDaysWeek } from '../../../config/config';
 import './style.css'
 
 const ChallengeDashboard = ({match}) => {
@@ -100,7 +100,7 @@ const ChallengeDashboard = ({match}) => {
                 <Paper style={{ marginTop: '10px', padding: '10px' }}>
                   <Grid container item xs={12} style={{ marginBottom: '10px' }} >
                     <Grid item xs={4}>
-                      <div className="term">{myChallenge.Challenge.Categories[0].name}</div>
+                      <div className="term">{categories[myChallenge.Challenge.category-1].label}</div>
                     </Grid>
                     <Grid item xs={4}>
                       <div className="term">{myChallenge.Challenge.period % 7 ? myChallenge.Challenge.period : convertDaysWeek(myChallenge.Challenge.period)}일</div>
