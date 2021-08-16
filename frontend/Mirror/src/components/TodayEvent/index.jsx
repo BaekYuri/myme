@@ -1,8 +1,8 @@
 import React from 'react'
 import moment from 'moment';
 // @material-ui/icons
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+import {ListItem, ListItemText, Checkbox }from '@material-ui/core/';
+
 import Divider from '@material-ui/core/Divider';
 import CheckIcon from '@material-ui/icons/Check';
 
@@ -15,21 +15,22 @@ const TodayEvent = (props) => {
     const eventEndDate = moment(eventEndDay).format('YYYY-MM-DD')
     const eventStartTime = moment(eventStartDay).format('HH:mm')
     const bool = props.event.allDay
+    const [checked, setChecked] = React.useState(true);
 
-    function check(){
-        console.log("check= "+props.event)
-    }
+    const handleChange = (event) => {
+      setChecked(event.target.checked);
+    };
     return(
         <div className='demo-app'>
             <ListItem style={{whiteSpace: 'nowrap'}}>
-               {/* <Checkbox
+               <Checkbox
                    checked={checked}
-                   onChange={handleToggle}
+                   onChange={handleChange}
                    inputProps={{ 'aria-label': 'primary checkbox' }}
                    style={{marginRight: '10px'}}
-                   /> */}
+                   />
                    
-                   <CheckIcon style={{marginRight: '20px'}} onClick={check}/>   
+                   {/* <CheckIcon style={{marginRight: '20px'}}/>    */}
                {
                    bool ? <ListItemText style={{width:'30px'}}>종일</ListItemText> : <ListItemText>{eventStartTime}</ListItemText> 
                }

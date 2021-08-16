@@ -57,7 +57,15 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(5),
       allowNull: true,
     },
-    address: {
+    post_code:{
+      type: DataTypes.STRING(10),
+      allowNull: true,
+    },
+    main_address: {
+      type: DataTypes.STRING(50),
+      allowNull: true,
+    },
+    sub_address: {
       type: DataTypes.STRING(50),
       allowNull: true,
     },

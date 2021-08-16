@@ -64,6 +64,10 @@ module.exports = (sequelize, DataTypes) => {
     total_number_of_certification: {
       type: DataTypes.INTEGER,
       allowNull: false,
+    },
+    category:{
+      type: DataTypes.INTEGER,
+      allowNull:false,
     }
   }, {
     charset: 'utf8mb4',
@@ -76,9 +80,6 @@ module.exports = (sequelize, DataTypes) => {
     db.Challenge.hasMany(db.ChallengeParticipation)
     db.Challenge.hasMany(db.ChallengeCertificationTime)
     db.Challenge.hasMany(db.ChallengeCertificationDay)
-    db.Challenge.belongsToMany(db.Category, {
-      through: 'ChallengeCategory'
-    })
     db.Challenge.belongsToMany(db.User, {
       through: 'Like',
       as: 'Likers'  // 챌린지에 좋아요를 누른 사람들

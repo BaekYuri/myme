@@ -12,15 +12,15 @@ function App(props){
       <Wrapper>
         <Card className={props.clickedHabit==props.idx?'clicked':' '} onClick={props.onClick}>
             <CardContent>
-                <Typography variant="h5" component="h2">
+                <h2 className='text-title'>
                     {props.habit.name}
-                </Typography>
-                <Typography color="textSecondary">
+                </h2>
+                <h3 style={{color:'darkgray'}}>
                     {props.habit.time_required}분
-                </Typography>
-                <Typography variant="body2" component="p">
+                </h3>
+                <p className='text-content'>
                     {props.habit.content}
-                </Typography>
+                </p>
             </CardContent>
         </Card>
       </Wrapper>

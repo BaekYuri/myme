@@ -27,5 +27,16 @@ const Wrapper = styled.div`
     .accordian-detail-list{
         width:100%;
     }
+    .name-title{
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .MuiAccordionSummary-content{
+        min-width: 0px;
+    }
+    .time-title{
+        text-align:right;
+    }
 `;
 export default Wrapper;

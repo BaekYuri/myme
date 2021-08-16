@@ -35,13 +35,13 @@ const MyChallengeHome = () => {
     };
   }
 
-  const workoutChallenges = myChallenges.filter((challenge) => challenge.Challenge.Categories[0]?.id === 1)
-  const studyChallenges = myChallenges.filter((challenge) => challenge.Challenge.Categories[0]?.id === 2)
-  const lifeChallenges = myChallenges.filter((challenge) => challenge.Challenge.Categories[0]?.id === 3)
-  const mealChallenges = myChallenges.filter((challenge) => challenge.Challenge.Categories[0]?.id === 4)
-  const abilityChallenges = myChallenges.filter((challenge) => challenge.Challenge.Categories[0]?.id === 5)
-  const hobbyChallenges = myChallenges.filter((challenge) => challenge.Challenge.Categories[0]?.id === 6)
-  const assetChallenges = myChallenges.filter((challenge) => challenge.Challenge.Categories[0]?.id === 7)
+  const workoutChallenges = myChallenges.filter((challenge) => challenge.Challenge.category=== 1)
+  const studyChallenges = myChallenges.filter((challenge) => challenge.Challenge.category=== 2)
+  const lifeChallenges = myChallenges.filter((challenge) => challenge.Challenge.category=== 3)
+  const mealChallenges = myChallenges.filter((challenge) => challenge.Challenge.category === 4)
+  const abilityChallenges = myChallenges.filter((challenge) => challenge.Challenge.category === 5)
+  const hobbyChallenges = myChallenges.filter((challenge) => challenge.Challenge.category === 6)
+  const assetChallenges = myChallenges.filter((challenge) => challenge.Challenge.category === 7)
 
   // console.log(workoutChallenges.length)
   // console.log(studyChallenges)

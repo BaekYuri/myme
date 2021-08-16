@@ -38,10 +38,10 @@ const MirrorSetting = () => {
                 <Container>
                     <Card className='mirror-card'>
                         <CardActions>
-                            <div class='left-title'>
+                            <div className='left-title'>
                                 <h3>코로나19</h3>
                             </div>
-                            <div class='right-setting'>
+                            <div className='right-setting'>
                                 <TealSwitch/>
                             </div>
                         </CardActions>
@@ -49,20 +49,20 @@ const MirrorSetting = () => {
 
                     <Card className='mirror-card'>
                         <CardActions>
-                            <div class='left-title'>
+                            <div className='left-title'>
                                 <h3>나의 주식</h3>
                             </div>
-                            <div class='right-setting'>
+                            <div className='right-setting'>
                                 <TealSwitch/>
                             </div>
                         </CardActions>
                     </Card>
                     <Card className='mirror-card'>
                         <CardActions>
-                            <div class='left-title'>
+                            <div className='left-title'>
                                 <h3>오늘의 뉴스</h3>
                             </div>
-                            <div class='right-setting'>
+                            <div className='right-setting'>
                             <Autocomplete
                                 multiple
                                 id="tags-standard"

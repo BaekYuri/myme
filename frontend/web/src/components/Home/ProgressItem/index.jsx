@@ -4,13 +4,13 @@ import Wrapper from './styles'
 import {Grid, Card, CardActions,CardContent, IconButton, Button} from '@material-ui/core';
 import PlayIcon from '@material-ui/icons/PlayArrow'
 import PauseIcon from '@material-ui/icons/Pause'
-import CheckIcon from '@material-ui/icons/CheckCircleOutline'
+import CheckIcon from '@material-ui/icons/CheckCircle';
 import NextIcon from '@material-ui/icons/SkipNext'
 import {useDispatch} from 'react-redux';
 function App(props){
     const history = useHistory()
     const habit = props.habit.Habit
-
+    console.log(habit)
     let min = Math.floor(props.time/60)
     let sec = props.time%60
 
@@ -28,7 +28,7 @@ function App(props){
                         <CardActions className='play-btns'>
                         
                         {
-                            !props.timeInterval?<IconButton color="primary" onClick={props.run}><PlayIcon className="btn progress-btn"></PlayIcon></IconButton>:<IconButton color="primary"  onClick={props.stop}><PauseIcon className="progress-btn"></PauseIcon></IconButton>
+                            !props.timeInterval?<IconButton color="primary" onClick={props.run}><PlayIcon className="btn progress-btn"></PlayIcon></IconButton>:<IconButton color="primary"  onClick={props.stop}><PauseIcon className="btn progress-btn"></PauseIcon></IconButton>
                         }
                             <IconButton color="primary" onClick={props.checkRoutinizedHabit} >
                             <CheckIcon className={props.isAlreadyComplete||props.checked?"btn progress-btn complete-btn":"btn progress-btn"} ></CheckIcon>
@@ -41,12 +41,7 @@ function App(props){
                             </span>
                         </CardActions>
                         <div className='text-area'>
-                        <textarea
-                        id="outlined-read-only-input"
-                        label="내용"
-                        defaultValue={habit.content}
-                        readOnly
-                        />
+                            {habit.content}
                         </div>
                         </Card>
                     </Grid>

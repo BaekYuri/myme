@@ -30,5 +30,6 @@ const Wrapper = styled(CustomCard)`
     .content-typography{
         margin: 10px;
     }
+
 `;
 export default Wrapper;

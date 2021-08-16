@@ -26,7 +26,8 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2, 4, 3),
     borderRadius:'10px',
     maxWidth:'90%',
-    maxHeight:'90%'
+    maxHeight:'90%',
+    overflow: "auto",
   },
   routineItemList:{
     marginBottom:'60px',
@@ -74,7 +75,7 @@ const useStyles = makeStyles((theme) => ({
   habitBtn:{
     textAlign : 'center',
     margin: '10px',
-    padding: '20px'
+    padding: '10px'
   },
   habitIcon:{
     width: '100%',
@@ -94,7 +95,7 @@ function SimpleModal(props) {
   let [title,setTitle] = useState('');
   let [content,setContent] = useState('');
   let [link,setLink] = useState('');
-  let [time,setTime] = useState();
+  let [time,setTime] = useState(1);
 
   let [newHabit, setNewHabit] = useState(false);
   let [existHabit, setExistHabit] = useState(false);
@@ -206,10 +207,10 @@ function SimpleModal(props) {
       {
         newHabit?
         <>
-        <input onChange={(e)=>{setTitle(e.target.value)}} placeholder='제목' className={classes.input}></input>
-        <textarea onChange ={(e)=>{setContent(e.target.value)}} className={classes.textArea+' '+classes.input} placeholder='내용'></textarea>
+        <input onChange={(e)=>{setTitle(e.target.value)}} placeholder='제목' className={classes.input} maxLength='50'></input>
+        <textarea onChange ={(e)=>{setContent(e.target.value)}} className={classes.textArea+' '+classes.input} placeholder='내용' maxLength='100'></textarea>
         <input className={classes.input} type="number" onChange ={(e)=>{setTime(e.target.value)}} placeholder='분' defaultValue={time} min='1' max='50'/>
-        <textarea onChange ={(e)=>{setLink(e.target.value)}} className={classes.textArea+' '+classes.input} placeholder='유튜브 링크'></textarea>
+        <textarea onChange ={(e)=>{setLink(e.target.value)}} className={classes.textArea+' '+classes.input} placeholder='유튜브 링크' maxLength='50'></textarea>
         <div className={classes.buttonDiv}>
             <button className={classes.buttonLeft} onClick={goBack}>뒤로가기</button>
             <button className={classes.buttonRight} onClick={setAddHabit}>저장</button>
@@ -220,8 +221,7 @@ function SimpleModal(props) {
       {
         existHabit?
         <>
-        <div style={{overflowY: "scroll",
-    height: "480px"}}>
+        <div >
         {
           myHabits.map((item, idx) =>(<Habit key ={idx} habit={item} clickedHabit={clickedHabit} idx={idx} onClick={()=>{setClickedHabit(idx)}}></Habit>))
         }

@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { Box, Grid, Paper, Tab, Tabs, Typography } from '@material-ui/core';
 import { categories } from '../../../config/config';
 import { useSelector } from 'react-redux';
 import CardList from '../CardList';
+import { useHistory } from 'react-router-dom';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -25,6 +26,7 @@ function TabPanel(props) {
 }
 
 const ChallengeCategory = () => {
+  const history = useHistory()
   const { challenges } = useSelector((state) => state.challenge)
   const [value, setValue] = useState(0);
 
@@ -42,6 +44,16 @@ const ChallengeCategory = () => {
   const abilityChallenges = challenges?.filter((challenge) => challenge.Categories[0]?.id === 5)
   const hobbyChallenges = challenges?.filter((challenge) => challenge.Categories[0]?.id === 6)
   const assetChallenges = challenges?.filter((challenge) => challenge.Categories[0]?.id === 7)
+
+  // const [category, setCategory] = useState(0)
+  // const onSetCategory = useCallback((i) => {
+  //   setCategory(i)
+  //   console.log(i)
+  // }, [])
+
+  // const onChallengeMore = useCallback(() => {
+  //   history.push(`/ChallengeMore/${category}`)
+  // }, [history, category])
 
   const handleChange = (event, newValue) => {
     setValue(newValue)
@@ -64,7 +76,7 @@ const ChallengeCategory = () => {
               <Tab label="전체" {...a11yProps(0)} />
               {
                 categories.map((subject, i) => {
-                  return <Tab key={subject.name} label={subject.label} {...a11yProps(i+1)}/>
+                  return <Tab key={subject.name} label={subject.label} {...a11yProps(i+1)} />
                 })
               }
             </Tabs>

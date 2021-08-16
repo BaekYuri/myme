@@ -4,7 +4,7 @@ const Wrapper = styled.div`
     .progress-btn{
         width: 30px;
         height: auto;
-        color: #776D61;
+        color: white;
     }
     .assist{
         background-color:#776D61;
@@ -21,7 +21,7 @@ const Wrapper = styled.div`
     }
 
     .complete-btn{
-        color:green;
+        background-color:gray;
     }
     .video-container {
         position: relative;
@@ -59,6 +59,7 @@ const Wrapper = styled.div`
         border-top: none;
         border-bottom-left-radius: 5px;
         border-bottom-right-radius: 5px;
+        margin: 10px;
     }
     .text-area > textarea{
         width:100%;
@@ -67,6 +68,10 @@ const Wrapper = styled.div`
         border:none;
         resize:none;
         border-radius: inherit;
+    }
+    
+    .btn{
+        margin-left:0px;
     }
 `;
 export default Wrapper;

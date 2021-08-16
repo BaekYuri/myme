@@ -5,8 +5,9 @@ import moment from 'moment';
 import {Close} from '@material-ui/icons';
 import {connect, useDispatch, useSelector} from 'react-redux';
 import { CLOSE_CREATE_EVENT_MODAL, OPEN_CONFIRM_MODAL, SET_ALERT_MODAL_FUNCTION, OPEN_ALERT_MODAL } from '../../../../reducers/modal';
+import { CREATE_EVENT_REQUEST, DELETE_EVENT_REQUEST, MODIFY_EVENT_REQUEST,
+  SET_CHOOSED_EVENT_TITLE, SET_CHOOSED_EVENT_START, SET_CHOOSED_EVENT_END, SET_CHOOSED_EVENT_ALLDAY, SET_CHOOSED_EVENT_COLOR } from '../../../../reducers/calendar';
 
-import { CREATE_EVENT_REQUEST } from '../../../../reducers/calendar';
 import { Button, TextField } from '@material-ui/core'
 import { CirclePicker } from 'react-color';
 
@@ -125,12 +126,15 @@ function CreateCalendar(props) {
   const dispatch = useDispatch()
   const classes = useStyles();
   const [modalStyle] = React.useState(getModalStyle);
-
-    const { createEventModal } = useSelector((state) => state.modal)
+  const {eventInfo} = useSelector((state) => state.calendar)
+  const { createEventModal } = useSelector((state) => state.modal)
 
 //모달 닫는 함수
 function handleClose() {
   dispatch({type:CLOSE_CREATE_EVENT_MODAL});
+  setTitle('');
+  setAllDay(true);
+  setColor('#e91e63');
 };
   //캘린더에 일정 추가
   const today = new Date().toISOString().replace(/T.*$/, '');
@@ -164,11 +168,11 @@ function handleClose() {
   const onChangeClose = () => {
       setClick(false);
   }
+
   const [color, setColor] = useState('#e91e63')
   const onChangeColor = (color)=>{
     setColor(color.hex);
   }
-  const [todo, setTodo] = useState(false)
 
   function addEvent(){
     dispatch({
@@ -176,12 +180,13 @@ function handleClose() {
       data:{
         title,
         color,
-        start : startDate,
-        end : endDate,
+        start: startDate,
+        end: endDate,
         allDay,
       }
     })
     handleClose()
+    
   }
 
   const validate=() =>{
@@ -214,7 +219,7 @@ function handleClose() {
            <h2 id="simple-modal-title" style={{marginBottom: "10px", float:'left'}}>일정 추가</h2><Close onClick={handleClose} style={{float:'right'}}></Close>
            </div>
            <div>
-           <input type="text" placeholder="일정 입력" className={classes.inputDiv}  value={title} onChange={onChangeTitle}></input>
+           <input type="text" placeholder="일정 입력" className={classes.inputDiv} onChange={onChangeTitle}></input>
  
             <div className={classes.inputDiv}>
               <div className={classes.inputDiv} style={{border:'none'}}>

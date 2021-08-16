@@ -1,5 +1,5 @@
 const express = require('express')
-const { ChallengeParticipation, User, Challenge, ChallengeCertificationDay, ChallengeCertificationTime, DailyCertifyChallenge, Category } = require('../models')
+const { ChallengeParticipation, User, Challenge, ChallengeCertificationDay, ChallengeCertificationTime, DailyCertifyChallenge } = require('../models')
 const { isLoggedIn } = require('./middlewares')
 
 const router = express.Router()
@@ -48,8 +48,6 @@ const router = express.Router()
           model: User,
           as: 'Likers',
           attributes: ['id']
-        }, {
-          model: Category
         }]
       }, {
         model: DailyCertifyChallenge
@@ -125,8 +123,6 @@ router.post('/', isLoggedIn, async (req, res, next) => { // POST /challengeParti
           model: ChallengeCertificationDay
         }, {
           model: ChallengeParticipation
-        }, {
-          model: Category
         }]
       }, {
         model: DailyCertifyChallenge

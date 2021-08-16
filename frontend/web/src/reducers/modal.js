@@ -9,6 +9,9 @@ const initialState = {
   alertModalMessage : '',
   createEventModal: false,
   modifyEventModal: false,
+  addressModal: false,
+
+  addressInfo:{},
   alertModalFunction : ()=>{}
 }
 
@@ -42,6 +45,12 @@ export const TOGGLE_CREATE_EVENT_MODAL = 'TOGGLE_CREATE_EVENT_MODAL'
 export const OPEN_MODIFY_EVENT_MODAL = 'OPEN_MODIFY_EVENT_MODAL'
 export const CLOSE_MODIFY_EVENT_MODAL = 'CLOSE_MODIFY_EVENT_MODAL'
 export const TOGGLE_MODIFY_EVENT_MODAL = 'TOGGLE_MODIFY_EVENT_MODAL'
+
+export const OPEN_ADDRESS_MODAL = 'OPEN_ADDRESS_MODAL'
+export const CLOSE_ADDRESS_MODAL = 'CLOSE_ADDRESS_MODAL'
+export const TOGGLE_ADDRESS_MODAL = 'TOGGLE_ADDRESS_MODAL'
+
+export const SET_ADDRESS_INFO = 'SET_ADDRESS_INFO'
 
 const reducer = (state = initialState, action) => produce(state, (draft) => {
   switch(action.type) {
@@ -107,21 +116,37 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
       break
     case CLOSE_CREATE_EVENT_MODAL:
       draft.createEventModal = false
+      break
 
     case OPEN_MODIFY_EVENT_MODAL:
-      draft.modifyEventModal = false
+      draft.modifyEventModal = true
       break
     case TOGGLE_MODIFY_EVENT_MODAL:
       draft.modifyEventModal = !draft.modifyEventModal
       break
     case CLOSE_MODIFY_EVENT_MODAL:
       draft.modifyEventModal = false
+      break
 
     case SET_ALERT_MODAL_FUNCTION:
       draft.alertModalFunction = action.alertModalFunction
       break
     case SET_ALERT_MODAL_MESSAGE:
       draft.alertModalMessage = action.message
+      break
+    case OPEN_ADDRESS_MODAL:
+      draft.addressModal=true
+      break
+    case TOGGLE_ADDRESS_MODAL:
+      draft.addressModal=!draft.addressModal
+      break
+    case CLOSE_ADDRESS_MODAL:
+      draft.addressModal=false
+      break
+    case SET_ADDRESS_INFO:
+      draft.addressInfo = action.data
+      draft.addressModal=false
+      break
   }
 })
 

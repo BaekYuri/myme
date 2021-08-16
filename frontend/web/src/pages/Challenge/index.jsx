@@ -7,7 +7,7 @@ import CardList from '../../components/Challenge/CardList'
 import Wrapper from './styles';
 import AddIcon from '@material-ui/icons/Add';
 import SearchIcon from '@material-ui/icons/Search';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import Layout from '../../layout/index';
 import { useDispatch, useSelector } from 'react-redux';
 import { CLEAR_CHALLENGE, LOAD_CHALLENGES_REQUEST, LOAD_NEW_CHALLENGES_REQUEST, LOAD_REC_CHALLENGES_REQUEST } from '../../reducers/challenge';

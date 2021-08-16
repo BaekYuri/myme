@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState, useEffect} from 'react';
 import Wrapper from './styles'
 import {Typography, Card, CardContent, CardHeader, CardActions, Tabs, Tab, IconButton, Grid} from '@material-ui/core'
 import YouTubeIcon from '@material-ui/icons/YouTube';
@@ -7,21 +7,94 @@ import PlayIcon from '@material-ui/icons/PlayArrow'
 import PauseIcon from '@material-ui/icons/Pause'
 import CheckIcon from '@material-ui/icons/CheckCircleOutline'
 import NextIcon from '@material-ui/icons/SkipNext'
-function App(){
+import {SET_CHOOSED_ROUTINIZED_HABIT, CHECK_ROUTINIZED_HABIT_REQUEST} from '../../../reducers/routine'
+import { useSelector, useDispatch } from 'react-redux';
+function App(props){
+    const dispatch = useDispatch()
     let [tabValue, setTabValue] = useState(0)
+    let {choosedRoutine, choosedRoutinizedHabit} = props
+    let {myRoutines} = useSelector((state)=>{return state.routine})
+    const routinizedHabit = myRoutines[choosedRoutine].RoutinizedHabits[choosedRoutinizedHabit]
+    const habit = routinizedHabit.Habit
+    const dailyAchieveHabits = routinizedHabit.DailyAchieveHabits
+    let {time,timeInterval} = props
+    let min = Math.floor(time/60)
+    let sec = time%60
+
+    let requiredTime = habit.time_required*60
+
+    let requiredMin = Math.floor(requiredTime/60)
+    let requiredSec = requiredTime%60
+    function isChecked(){
+        if(dailyAchieveHabits!= undefined && dailyAchieveHabits.length){
+        return true
+        }
+        return false
+    }
+
+    function run(){
+        if(isChecked()){
+            alert('오늘 이미 완료한 습관입니다.')
+            return
+        }else if(isChecked() || isAlreadyComplete()){
+            alert('이미 필요 시간을 충족하였습니다.')
+            return
+        }
+        props.runInterval()
+        
+    }
+  
+    function stop(){
+      props.stopInterval()
+    }
+  
+    function checkRoutinizedHabit(){
+        if(isChecked()){
+            alert('오늘 이미 완료한 습관입니다.')
+            return
+        }
+        checkHabit()
+    }
+  
+    function checkHabit(){
+      dispatch({
+        type:CHECK_ROUTINIZED_HABIT_REQUEST, 
+        routineId: routinizedHabit.RoutineId, 
+        habitId: routinizedHabit.HabitId, 
+        routineIdx: choosedRoutine,
+        routinizedHabitIdx: choosedRoutinizedHabit
+      })
+      props.stopInterval()
+    }
+  
+    function isAlreadyComplete(){
+        if(time< requiredTime) return false
+        return true
+    }
+    function openNext(){
+        props.stopInterval()
+        props.clearTime()
+        dispatch({type: SET_CHOOSED_ROUTINIZED_HABIT, idx:choosedRoutinizedHabit+1})
+    }
 
     const handleChange = (event, newValue) => {
         setTabValue(newValue);
       };
     return(
         <Wrapper>
-            <CardHeader title ='하루 10분 명상'/>
+            <CardHeader title={habit.name}/>
             <CardContent>
                 <div className='video-container content-container' hidden={tabValue !== 0}>
-                <Typography className='content-typography'>안녕하세요</Typography>
+                <Typography className='content-typography'>{habit.content}</Typography>
                 </div>
                 <div className='video-container' hidden={tabValue !== 1}>
-                <iframe src="https://www.youtube.com/embed/1pLXrnBrZ7Y" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"  allowfullscreen="allowfullscreen" mozallowfullscreen="mozallowfullscreen" msallowfullscreen="msallowfullscreen" oallowfullscreen="oallowfullscreen" webkitallowfullscreen="webkitallowfullscreen"></iframe>
+                    {
+                        habit.assist_link?
+                        <iframe src={"https://www.youtube.com/embed/"+habit.assist_link} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"  allowfullscreen="allowfullscreen" mozallowfullscreen="mozallowfullscreen" msallowfullscreen="msallowfullscreen" oallowfullscreen="oallowfullscreen" webkitallowfullscreen="webkitallowfullscreen"></iframe>
+                        :
+                        <Typography className='content-typography'>웹사이트에서 유튜브 링크를 습관에 등록해주세요.</Typography>
+                    }
+                
                 </div>
             </CardContent>
             <CardActions>
@@ -36,18 +109,21 @@ function App(){
                     </Tabs>
                 </Grid>
                 <Grid item xs={3}>
-                    00:00/01:00
+                    {(min<10?'0'+min:min)+':'+(sec<10?'0'+sec:sec)} / {(requiredMin<10?'0'+requiredMin:requiredMin)+':'+(requiredSec<10?'0'+requiredSec:requiredSec)}
                 </Grid>
                 <Grid item xs={5}>
                     {
-                            true?<IconButton color="primary"><PlayIcon className="btn progress-btn"></PlayIcon></IconButton>:<IconButton color="primary" ><PauseIcon className="progress-btn"></PauseIcon></IconButton>
+                        !timeInterval?
+                        <IconButton color="primary" onClick={run}><PlayIcon className="btn progress-btn"></PlayIcon></IconButton>
+                        :
+                        <IconButton color="primary" onClick={stop}><PauseIcon className="progress-btn"></PauseIcon></IconButton>
                     }
-                    <IconButton color="primary" >
-                            <CheckIcon className={true?"btn progress-btn complete-btn":"btn progress-btn"} ></CheckIcon>
-                            </IconButton>
-                            <IconButton color="primary" >
-                            <NextIcon className="btn progress-btn"></NextIcon>
-                            </IconButton>
+                    <IconButton color="primary" onClick={checkRoutinizedHabit}>
+                        <CheckIcon className={true?"btn progress-btn complete-btn":"btn progress-btn"}></CheckIcon>
+                    </IconButton>
+                    <IconButton color="primary" onClick={openNext}>
+                        <NextIcon className="btn progress-btn"></NextIcon>
+                    </IconButton>
                 </Grid>
             </CardActions>
         </Wrapper>

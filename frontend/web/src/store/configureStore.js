@@ -2,7 +2,6 @@ import { applyMiddleware, compose, createStore } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { persistReducer, persistStore } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
-import storageSession from 'redux-persist/lib/storage/session'
 import createSagaMiddleware from '@redux-saga/core'
 
 import reducer from '../reducers'
@@ -26,6 +25,7 @@ const enhancer = process.env.NODE_ENV === 'production'
   : composeWithDevTools(applyMiddleware(...middlewares))
 const store = createStore(persistedReducer, enhancer)
 export const persistor = persistStore(store)
+persistor.purge();
 
 store.sagaTask = sagaMiddleware.run(rootSaga)
 

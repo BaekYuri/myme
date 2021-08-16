@@ -4,7 +4,7 @@ const path = require('path')
 const multerS3 = require('multer-s3')
 const AWS = require('aws-sdk')
 
-const { Challenge, User, Comment, ChallengeParticipation, ChallengeCertificationTime, ChallengeCertificationDay, Sequelize, Category } = require('../models')
+const { Challenge, User, Comment, ChallengeParticipation, ChallengeCertificationTime, ChallengeCertificationDay, Sequelize } = require('../models')
 const { isLoggedIn } = require('./middlewares')
 const router = express.Router()
 
@@ -21,6 +21,8 @@ const upload = multer({
     s3: new AWS.S3(),
     bucket: 'ssafymyme',
     key (req, file, cb) {
+      console.log(file.originalname)
+      console.log(file.mimetype)
       cb(null, `original/${Date.now()}_${path.basename(file.originalname).replace(/ /g, "_")}`)
     },
   }),
@@ -89,8 +91,6 @@ router.get('/', async (req, res, next) => { // GET /challenge
         model: ChallengeCertificationDay
       }, {
         model: ChallengeParticipation
-      }, {
-        model: Category
       }]
     })
     res.status(200).json(challenges)
@@ -159,8 +159,6 @@ router.get('/', async (req, res, next) => { // GET /challenge
         model: ChallengeCertificationDay
       }, {
         model: ChallengeParticipation
-      }, {
-        model: Category
       }, {
         model: User,
         as: 'Likers',
@@ -236,8 +234,6 @@ router.get('/', async (req, res, next) => { // GET /challenge
         model: ChallengeCertificationDay
       }, {
         model: ChallengeParticipation
-      }, {
-        model: Category
       }]
     })
     res.status(200).json(challenges)
@@ -319,9 +315,7 @@ router.get('/', async (req, res, next) => { // GET /challenge
         model: ChallengeCertificationDay
       }, {
         model: ChallengeParticipation
-      }, {
-        model: Category
-      }]
+      }, ]
     })
     res.status(200).json(challenges)
   } catch (error) {
@@ -391,9 +385,7 @@ router.get('/mychallenge', isLoggedIn, async (req, res, next) => { // GET /mycha
         model: ChallengeCertificationDay
       }, {
         model: ChallengeParticipation
-      }, {
-        model: Category
-      }]
+      }, ]
     })
     res.status(200).json(myChallenges)
   } catch (error) {
@@ -426,7 +418,7 @@ router.post('/', isLoggedIn, upload.none(), async (req, res, next) => { // POST 
       certification_cycle: req.body.certification_cycle,
       total_number_of_certification: req.body.total_number_of_certification,
       UserId: req.user.id,
-      CategoryId: req.body.CategoryId
+      category: req.body.CategoryId
     })
     // 챌린지 인증 가능 시간 생성
     await ChallengeCertificationTime.create({
@@ -443,7 +435,6 @@ router.post('/', isLoggedIn, upload.none(), async (req, res, next) => { // POST 
         ChallengeId: challenge.id
       })
     }
-    await challenge.addCategories(req.body.CategoryId)
     // 내가 생성한 챌린지는 자동으로 참여하기! 챌린지 참여 생성
     await ChallengeParticipation.create({
       start_date: req.body.start_date,
@@ -466,8 +457,6 @@ router.post('/', isLoggedIn, upload.none(), async (req, res, next) => { // POST 
         model: ChallengeCertificationDay
       }, {
         model: ChallengeParticipation
-      }, {
-        model: Category
       }]
     })
     res.status(200).json(fullChallenge)
@@ -559,9 +548,7 @@ router.post('/image', isLoggedIn, upload.single('image'), async (req, res, next)
         model: ChallengeCertificationDay
       }, {
         model: ChallengeParticipation
-      }, {
-        model: Category
-      }]
+      },]
     })
     res.status(200).json(challenge)
   } catch (error) {

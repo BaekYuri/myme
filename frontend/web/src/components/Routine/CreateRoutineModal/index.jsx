@@ -168,7 +168,7 @@ function SimpleModal(props) {
            <h2 id="simple-modal-title" style={{marginBottom: "10px", float:'left'}}>루틴 {choosedRoutine==-1?'생성':'수정'}</h2><Close onClick={handleClose} style={{float:'right'}}></Close>
            </div>
            <div>
-           <input type="text" placeholder="루틴 이름 입력" className={classes.inputDiv} onChange={changeName} defaultValue={createRoutineInfo.name}></input>
+           <input type="text" placeholder="루틴 이름 입력" className={classes.inputDiv} onChange={changeName} defaultValue={createRoutineInfo.name} maxLength='50'></input>
             <div className={classes.day}>
                 {
                   dayName.map((str, idx) => (

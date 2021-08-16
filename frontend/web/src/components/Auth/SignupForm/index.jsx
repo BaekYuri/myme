@@ -12,8 +12,9 @@ import {
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 import styled from 'styled-components'
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { SIGN_UP_REQUEST, CHANGE_SIGN_UP_MODE } from '../../../reducers/user';
+import { OPEN_ADDRESS_MODAL } from '../../../reducers/modal';
 
 const ErrorMessage = styled.div`
     color: red;
@@ -25,8 +26,13 @@ const regExpPN = /(\d{3}).*(\d{3}).*(\d{4})/
 
 const SignupForm = () => {
   const dispatch = useDispatch()
+  const { addressInfo } = useSelector((state) => state.modal)
   const [disabled, setDisabled] = useState(true);
 
+  useEffect(()=>{
+    setPostCode(addressInfo.sigunguCode)
+    setMainAddress(addressInfo.address)
+  },[addressInfo])
   const [name, setName] = useState('')
   const onChangeName = useCallback((e) => {
     setName(e.target.value)
@@ -59,9 +65,18 @@ const SignupForm = () => {
     setPhoneNumber(e.target.value)
   }, [])
 
-  const [address, setAddress] = useState('')
-  const onChangeAddress = useCallback((e) => {
-    setAddress(e.target.value)
+  const [postCode, setPostCode] = useState('')
+  const onChangePostCode = useCallback((e) => {
+    setPostCode(e.target.value)
+  }, [])
+
+  const [mainAddress, setMainAddress] = useState('')
+  const onChangeMainAddress = useCallback((e) => {
+    setMainAddress(e.target.value)
+  }, [])
+  const [subAddress, setSubAddress] = useState('')
+  const onChangeSubAddress = useCallback((e) => {
+    setSubAddress(e.target.value)
   }, [])
 
   const [term, setTerm] = useState(false)
@@ -94,14 +109,20 @@ const SignupForm = () => {
       return
     }
 
-    if (address.length >= 51) {
+    if (subAddress.length >= 51) {
       alert('주소는 50자 이하로 기입해주세요')
       return
     }
 
     dispatch({
       type: SIGN_UP_REQUEST,
-      data: { name, email, nickname, 'phone_number': phoneNumber, password, address }
+      data: { name, email, nickname,
+         'phone_number': phoneNumber,
+          password,
+          "post_code":postCode,
+          "main_address": mainAddress,
+          "sub_address": subAddress,
+        }
     })
     dispatch({
       type: CHANGE_SIGN_UP_MODE
@@ -115,14 +136,18 @@ const SignupForm = () => {
   }, [])
 
   useEffect(() => {
-    if (name !== '' && email !== '' && nickname !== '' && password !== '' && passwordCheck !== '' && phoneNumber !== '' && address !== '' && term === true) {
+    if (name !== '' && email !== '' && nickname !== '' && password !== '' && passwordCheck !== '' && phoneNumber !== '' && mainAddress!==''&& subAddress !== '' && term === true) {
       setDisabled(false);
     }
 
-    if (name === '' || email === '' || nickname === '' || password === '' || passwordCheck === '' || phoneNumber === '' || address === '' || term === false) {
+    if (name === '' || email === '' || nickname === '' || password === '' || passwordCheck === '' || phoneNumber === '' || mainAddress === '' ||subAddress === '' || term === false) {
       setDisabled(true);
     }
-  }, [name, email, nickname, password, passwordCheck, phoneNumber, address, term]);
+  }, [name, email, nickname, password, passwordCheck, phoneNumber, mainAddress, subAddress, term]);
+
+  function openAddressModal(){
+    dispatch({type:OPEN_ADDRESS_MODAL})
+  }
 
   return (
     <Container maxWidth="sm" style={{margin: '0 20px', padding: '20px', background: '#ffffff', border: 'solid 1px #eeeeee', borderRadius: '10px', boxShadow: '2px 2px 2px #eeeeee'}}>
@@ -231,19 +256,58 @@ const SignupForm = () => {
             onChange={onChangePhoneNumber}
           />
         </Grid>
-        <Grid item xs={12} className="sign-up-grid-item1">
-          <TextField
-            required
-            id="outlined-required"
-            label="주소"
-            value={address}
-            className="text-field"
-            variant="outlined"
-            style={{background: 'white'}}
-            placeholder="주소"
-            fullWidth={true}
-            onChange={onChangeAddress}
-          />
+        <Grid container item xs={12} className="sign-up-grid-item1">
+          <Grid item xs={6}>
+            <TextField
+              required
+              id="outlined-required"
+              label="우편번호"
+              value={postCode}
+              className="text-field"
+              variant="outlined"
+              style={{background: 'white'}}
+              placeholder="우편번호"
+              fullWidth={true}
+              onChange={onChangePostCode}
+              InputProps={{
+                readOnly: true,
+              }}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Button fullWidth color='primary' onClick={openAddressModal}>검색</Button>
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              required
+              id="outlined-required"
+              label="주소"
+              value={mainAddress}
+              className="text-field"
+              variant="outlined"
+              style={{background: 'white'}}
+              placeholder="주소"
+              fullWidth={true}
+              onChange={onChangeMainAddress}
+              InputProps={{
+                readOnly: true,
+              }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              required
+              id="outlined-required"
+              label="상세 주소"
+              value={subAddress}
+              className="text-field"
+              variant="outlined"
+              style={{background: 'white'}}
+              placeholder="상세 주소"
+              fullWidth={true}
+              onChange={onChangeSubAddress}
+            />
+          </Grid>
         </Grid>
         <Grid item xs={12}>
           <FormControlLabel

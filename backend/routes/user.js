@@ -62,7 +62,9 @@ router.post('/join', isNotLoggedIn, async (req, res, next) => { // POST /user/jo
     password,
     gender,
     age,
-    address,
+    post_code,
+    main_address,
+    sub_address,
     phone_number
   } = req.body
 
@@ -79,7 +81,9 @@ router.post('/join', isNotLoggedIn, async (req, res, next) => { // POST /user/jo
       password: hashedPassword,
       gender,
       age,
-      address,
+      post_code,
+      main_address,
+      sub_address,
       phone_number
     })
     return res.status(201).send('ok')
@@ -216,7 +220,9 @@ router.put('/profile', isLoggedIn, async (req, res, next) => {
       nickname: req.body.nickname,
       gender: req.body.gender,
       age: req.body.age,
-      address: req.body.address,
+      post_code: req.body.post_code,
+      main_address: req.body.main_address,
+      sub_address: req.body.sub_address,
       phone_number: req.body.phone_number
     }, {
       where: { id: req.user.id }

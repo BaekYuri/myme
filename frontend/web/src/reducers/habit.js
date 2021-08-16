@@ -29,7 +29,7 @@ const initialState = {
     id: -1,
     content: "",
     name: "",
-    time_required: 0,
+    time_required: 1,
     assist_link:"",
   }
 }
@@ -153,7 +153,8 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
           id: -1,
           content: "",
           name: "",
-          time_required: 0
+          time_required: 1,
+          assist_link:"",
         }
       }
       

@@ -72,7 +72,9 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
       draft.me.gender = action.data.gender
       draft.me.nickname = action.data.nickname
       draft.me.phone_number = action.data.phone_number
-      draft.me.address = action.data.address
+      draft.me.post_code = action.data.post_code
+      draft.me.main_address = action.data.main_address
+      draft.me.sub_address = action.data.sub_address
       break
     case UPDATE_MY_INFO_FAILURE:
       draft.updateMyInfoLoading = false

@@ -57,7 +57,7 @@ function* deleteEvent(action){
         yield call(deleteEventAPI, action.id)
         yield put({
             type: DELETE_EVENT_SUCCESS,
-            idx: action.idx
+            id: action.id
         })
         yield put({
             type:OPEN_CONFIRM_MODAL,

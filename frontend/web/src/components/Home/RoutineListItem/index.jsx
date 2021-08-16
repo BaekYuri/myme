@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import Wrapper from './styles'
 
 import {
@@ -7,10 +7,10 @@ import {
     AccordionDetails,
     List,
     ListItem,
-    Paper
+    Paper,
+    Grid
   } from '@material-ui/core';
 import RoutineItemCheck from '../RoutineItemCheck/index';
-import moment from 'moment'
 import { useSelector, useDispatch } from 'react-redux';
 import { SET_CHOOSED_ROUTINE } from '../../../reducers/routine';
 
@@ -18,16 +18,19 @@ const App = (props) => {
   const dispatch = useDispatch()
   const { routine, routineIdx } = props
   const { choosedRoutine } = useSelector((state) => state.routine)
-  function getDay(){
-    let day = moment()
-    return day.day()
-  }
 
+  function getDay(){
+    let day = new Date()
+    day = day.getDay()==0?6:day.getDay()-1
+    return day
+  }
+  
   function getTime(time){
     let timeArr = time.split(':')
     
     let am= Math.floor(timeArr[0]/12)==0?'오전':'오후'
     let hour= timeArr[0]%12==0?12:timeArr[0]%12
+    hour = hour<10?`0${hour}`:hour
     return am+' '+hour+':'+timeArr[1]
   }
 
@@ -41,8 +44,17 @@ const App = (props) => {
           className={routine.DailyAchieveRoutines.length?"panel-summary panel-summary-success":"panel-summary"}
           aria-controls="panel1a-content"
           id="panel1a-header"
+          
         >
-          <h3 className="title">{routine.name} | {getTime(routine.RoutineActiveDays[getDay()].start_time)} 시작</h3>
+          
+          <Grid container>
+            <Grid item xs={6} md={9} lg={10}>
+            <h3 className="title name-title"  >{routine.name}</h3>
+            </Grid>
+            <Grid item xs={6} md={3} lg={2}>
+              <h3 className="title time-title">{getTime(routine.RoutineActiveDays[getDay()].start_time)} 시작</h3>
+            </Grid>
+          </Grid>
         </AccordionSummary>
         <AccordionDetails className='routine-list-item-detail'>
           <List className='accordian-detail-list'>

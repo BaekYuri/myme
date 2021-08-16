@@ -1,11 +1,10 @@
 import styled from 'styled-components';
 const Wrapper = styled.div`
-    position: absolute;
-    top: 30px;
-    left: 1520px;
-    & > *{
+    .fc .fc-toolbar-title{
+        font-size:1.2em;
+    }
+    .fc-toolbar-chunk:nth-child(2) >*{
         display: inline-block;
-        padding:10px;
     }
 `;
 export default Wrapper;

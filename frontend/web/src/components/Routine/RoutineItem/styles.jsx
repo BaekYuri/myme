@@ -9,9 +9,6 @@ const Wrapper = styled(Container)`
     .details{
         display: block;
     }
-    .btn{
-        float: right;
-    }
     .modify-btn{
         width: 25px;
         height: auto;
@@ -29,6 +26,17 @@ const Wrapper = styled(Container)`
 
     #save-btn{
         color:#6F93A1;
+    }
+    .MuiAccordionSummary-content{
+       min-width:0px;
+    }
+    .title{
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .button-div{
+        text-align: center;
     }
 `;
 export default Wrapper;

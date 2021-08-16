@@ -182,9 +182,9 @@ function SimpleModal(props) {
         <Close style={{ float:'right'}} onClick={closeModal}></Close>
         </div>
         <input placeholder='제목' className={classes.input} onChange={changeName} defaultValue={habitInfo.name}></input>
-        <textarea className={classes.textArea+' '+classes.input} placeholder='내용' onChange={changeContent} defaultValue={habitInfo.content}></textarea>
+        <textarea className={classes.textArea+' '+classes.input} placeholder='내용' onChange={changeContent} defaultValue={habitInfo.content} maxLength='100'></textarea>
         <input className={classes.input} type="number" onChange={changeTimeRequired} placeholder='분' defaultValue={habitInfo.time_required} min='1' max='50'/>
-        <textarea onChange ={changeLink} className={classes.textArea+' '+classes.input} placeholder='유튜브 링크' defaultValue={habitInfo.assist_link?'https://www.youtube.com/embed/'+habitInfo.assist_link:''}></textarea>
+        <textarea onChange ={changeLink} className={classes.textArea+' '+classes.input} placeholder='유튜브 링크' maxLength='50' defaultValue={habitInfo.assist_link?'https://www.youtube.com/embed/'+habitInfo.assist_link:''}></textarea>
         
         <div className={classes.buttonDiv}>
             <button className={classes.buttonRight} onClick={setModifyHabit}>저장</button>

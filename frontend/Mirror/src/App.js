@@ -14,6 +14,7 @@ import store from './store/configureStore'
 import Main from './pages/Main';
 import Auth from './pages/Auth'
 import CreateEventModal from './components/Calendar/CreateEvent/index'
+import PostCodeModal from './components/Auth/PostCodeModal';
 
 //fullcalendar example용
 // import { createStore, applyMiddleware } from 'redux'
@@ -61,6 +62,7 @@ const App = () => {
         </BrowserRouter>
       </MuiThemeProvider>
       <CreateEventModal/>
+      <PostCodeModal/>
     </Provider>
   );
 };

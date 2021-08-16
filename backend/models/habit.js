@@ -53,9 +53,6 @@ module.exports = (sequelize, DataTypes) => {
   Habit.associate = (db) => {
     db.Habit.belongsTo(db.User)
     db.Habit.hasMany(db.RoutinizedHabit)
-    db.Habit.belongsToMany(db.Category, {
-      through: 'HabitCategory'
-    })
   }
 
   return Habit
