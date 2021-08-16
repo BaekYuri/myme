@@ -1,27 +1,31 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
+import clsx from 'clsx';
 import {
   Button,
   Grid,
-  IconButton,
   Typography,
   Divider,
   TextField,
-  Box,
   Container,
+  InputAdornment,
+  IconButton,
+  OutlinedInput,
+  InputLabel,
+  FormControl,
 } from '@material-ui/core';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { CHANGE_SIGN_UP_MODE, loginRequestAction } from '../../../reducers/user';
+import { OPEN_CONFIRM_MODAL } from '../../../reducers/modal';
+import { Visibility, VisibilityOff } from '@material-ui/icons';
 
 const regExpEm = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 const regExpPw = /(?=.*\d{1,50})(?=.*[~`!@#$%\^&*()-+=]{1,50})(?=.*[a-zA-Z]{2,50}).{8,50}$/;
 
 const LoginForm = () => {
-  let history = useHistory()
   const dispatch = useDispatch()
-  const { isSignUp } = useSelector((state) => state.user)
+  const { logInDone, logInError } = useSelector((state) => state.user)
 
   const [email, setEmail] = useState('')
   const onChangeEmail = useCallback((e) => {
@@ -33,34 +37,50 @@ const LoginForm = () => {
     setPassword(e.target.value)
   }, [password])
 
+  const [showPassword, setShowPassword] = useState(false)
+  const onChangeShowPassword = useCallback(() => {
+    setShowPassword((prev) => !prev)
+  }, [])
+
+  const handleMouseDownPassword = useCallback((e) => {
+    e.preventDefault();
+  }, []);
+
   const [disabled, setDisabled] = useState(true)
 
   const onLogin = useCallback(() => {
     if (!password || !email) {
-      alert('You need both email and password.');
+      dispatch({
+        type: OPEN_CONFIRM_MODAL,
+        message: '이메일 또는 비밀번호를 입력해주세요.'
+      })
       return;
     }
 
     if (!regExpEm.test(email)) {
-      alert('이메일 형식이 맞지 않습니다.');
+      dispatch({
+        type: OPEN_CONFIRM_MODAL,
+        message: '이메일 형식에 맞게 입력해주세요.'
+      })
       return;
     }
 
     if (!regExpPw.test(password)) {
-      alert('비밀번호는 숫자, 특문 각 1회 이상, 영문은 2개 이상 사용하여 8자리 이상 입력하세요.')
+      dispatch({
+        type: OPEN_CONFIRM_MODAL,
+        message: '비밀번호는 숫자, 특문 각 1회 이상, 영문은 2개 이상 사용하여 8자리 이상 입력하세요.'
+      })
       return
     }
 
     dispatch(loginRequestAction({email, password}))
   }, [email, password])
 
-
   const onChangeSignupMode = useCallback(() => {
     dispatch({
       type: CHANGE_SIGN_UP_MODE
     })
   }, []) 
-
 
   useEffect(() => {
     if (email !== '' && password !== '') {
@@ -72,18 +92,26 @@ const LoginForm = () => {
     }
   }, [email, password]);
 
+  useEffect(() => {
+    if (logInError) {
+      dispatch({
+        type: OPEN_CONFIRM_MODAL,
+        message: logInError
+      })
+    }
+  }, [logInDone, logInError])
+
   return (
-    <Container maxWidth="sm" style={{margin: '0 20px', padding: '20px', background: '#ffffff', border: 'solid 1px #eeeeee', borderRadius: '10px', boxShadow: '2px 2px 2px #eeeeee'}}>
+    <Container maxWidth="xs" style={{margin: '0 20px', padding: '20px', background: '#ffffff', border: 'solid 1px #eeeeee', borderRadius: '10px', boxShadow: '2px 2px 2px #eeeeee'}}>
       <Grid
         container
-        direction="row"
         justifyContent="center"
         alignItems="center"
         spacing={2}
         className="grid"
       >
-        <Grid>
-          <AccountBoxIcon fontSize="large" style={{ color: '#89DDBF' }} />
+        <Grid item xs={1} >
+          <AccountBoxIcon style={{ color: '#89DDBF' }} />
         </Grid>
         <Grid item xs={11}>
           <Typography>
@@ -92,37 +120,41 @@ const LoginForm = () => {
         </Grid>
         <Grid item xs={12}>
           <TextField
-            required
             id="outlined-required"
             label="이메일"
             className="text-field"
             defaultValue={email}
             variant="outlined"
-            style={{background: 'white'}}
-            fullWidth={true}
+            fullWidth
             onChange={onChangeEmail}
-            // onFocus={event => {
-            //   setIsShowKeyborad(true);
-            // }}
           />
         </Grid>
         <Grid item xs={12}>
-          <TextField
-            required
-            id="outlined-password-input"
-            label="비밀번호"
-            className="text-field"
-            type="password"
-            autoComplete="current-password"
-            defaultValue={password}
-            variant="outlined"
-            style={{background: 'white'}}
-            fullWidth={true}
-            onChange={onChangePassword}
-            // onFocus={event => {
-            //   setIsShowKeyborad(true);
-            // }}
-          />
+          <FormControl fullWidth variant="outlined">
+            <InputLabel htmlFor="outlined-adornment-password">비밀번호</InputLabel>
+            <OutlinedInput
+              id="outlined-adornment-password"
+              label="비밀번호"
+              type={showPassword ? 'text' : 'password'}
+              autoComplete="current-password"
+              defaultValue={password}
+              variant="outlined"
+              fullWidth
+              onChange={onChangePassword}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={onChangeShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              }
+            />
+          </FormControl>
         </Grid>
         <Grid item xs={12} className="grid-item">
           <Button

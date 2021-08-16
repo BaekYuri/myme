@@ -8,6 +8,7 @@ const initialState = {
   confirmModal : false,
   alertModalMessage : '',
   createEventModal: false,
+  modifyEventModal: false,
   alertModalFunction : ()=>{}
 }
 
@@ -37,6 +38,10 @@ export const SET_ALERT_MODAL_MESSAGE = 'SET_ALERT_MODAL_MESSAGE'
 export const OPEN_CREATE_EVENT_MODAL = 'OPEN_CREATE_EVENT_MODAL'
 export const CLOSE_CREATE_EVENT_MODAL = 'CLOSE_CREATE_EVENT_MODAL'
 export const TOGGLE_CREATE_EVENT_MODAL = 'TOGGLE_CREATE_EVENT_MODAL'
+
+export const OPEN_MODIFY_EVENT_MODAL = 'OPEN_MODIFY_EVENT_MODAL'
+export const CLOSE_MODIFY_EVENT_MODAL = 'CLOSE_MODIFY_EVENT_MODAL'
+export const TOGGLE_MODIFY_EVENT_MODAL = 'TOGGLE_MODIFY_EVENT_MODAL'
 
 const reducer = (state = initialState, action) => produce(state, (draft) => {
   switch(action.type) {
@@ -102,6 +107,15 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
       break
     case CLOSE_CREATE_EVENT_MODAL:
       draft.createEventModal = false
+
+    case OPEN_MODIFY_EVENT_MODAL:
+      draft.modifyEventModal = false
+      break
+    case TOGGLE_MODIFY_EVENT_MODAL:
+      draft.modifyEventModal = !draft.modifyEventModal
+      break
+    case CLOSE_MODIFY_EVENT_MODAL:
+      draft.modifyEventModal = false
 
     case SET_ALERT_MODAL_FUNCTION:
       draft.alertModalFunction = action.alertModalFunction

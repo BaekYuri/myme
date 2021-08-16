@@ -32,7 +32,7 @@ function App (props) {
   return(
     <Layout>
       <Wrapper>
-        <div className='menu daily-menu'><h2>My Routine List</h2><AddRoutineButton onClick={openCreateRoutine} title='루틴 생성'/></div>
+        <div className='menu daily-menu'><h3>루틴 설정</h3><AddRoutineButton onClick={openCreateRoutine} title='루틴 생성'/></div>
         <hr/>
         {
             myRoutines.map((item, idx) => <RoutineItem num={idx} key={item?.id} />)

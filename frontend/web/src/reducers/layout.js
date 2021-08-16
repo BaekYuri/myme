@@ -15,6 +15,8 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
     case CLOSE_DRAWER:
       draft.drawerOpen = false
       break
+    default:
+      break
   }
 })
 

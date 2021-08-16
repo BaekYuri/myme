@@ -185,7 +185,7 @@ router.post('/logout', isLoggedIn, (req, res) => {
 /**
  * @swagger
  *  /user/profile:
- *    patch:
+ *    put:
  *      tags:
  *        - user
  *      description: 사용자 개인정보 변경
@@ -210,7 +210,7 @@ router.post('/logout', isLoggedIn, (req, res) => {
  *        '200':
  *          description: Success
  */
-router.patch('/profile', isLoggedIn, async (req, res, next) => {
+router.put('/profile', isLoggedIn, async (req, res, next) => {
   try {
     const user = await User.update({
       nickname: req.body.nickname,

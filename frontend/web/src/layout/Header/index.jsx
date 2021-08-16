@@ -16,6 +16,7 @@ import {
 } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import Wrapper from './styles';
+import './index.css';
 
 const Header = (state) => {
   let history = useHistory();
@@ -24,10 +25,6 @@ const Header = (state) => {
 
   const dispatch = useDispatch()
   const { drawerOpen } = useSelector((state) => state.layout)
-
-  const handleSignInDialogOpen = () => {
-    history.push('/Auth');
-  };
 
   const onClickRedirectPathHandler = name => e => {
     window.scrollTo(0, 0);
@@ -75,15 +72,16 @@ const Header = (state) => {
               <Typography
                 variant="h6"
                 className="logo"
+                style={{ fontFamily: 'BAUHS93' }}
                 onClick={onClickRedirectPathHandler('/')}
               >
-                Logo
+                MYME
               </Typography>
             </Grid>
 
 
             <Grid item>
-              <Grid container alignItems="center">
+              <Grid container alignItems="center" style={{visibility: "hidden"}}>
                 <Grid item>
                   <IconButton
                     aria-label="delete"

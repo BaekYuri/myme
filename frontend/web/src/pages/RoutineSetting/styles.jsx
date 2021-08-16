@@ -2,7 +2,7 @@ import styled from 'styled-components';
 const Wrapper = styled.div`
     hr{
         border: white 1px solid;
-        margin-bottom: 20px;
+        margin-bottom: 11px;
     }
     .daily-menu{
         width:auto;
@@ -12,6 +12,12 @@ const Wrapper = styled.div`
     }
     .MuiContainer-root {
         margin-bottom: 10px;
+    }
+    .tab{
+        margin-bottom:10px;
+    }
+    .btn-container>*{
+        float: right;
     }
 `;
 export default Wrapper;

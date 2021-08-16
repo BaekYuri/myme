@@ -1,23 +1,24 @@
 import produce from 'immer'
+import { PURGE } from 'redux-persist/es/constants'
 
 const initialState = {
-  updateMyInfoLoading: false, // 유저 정보 가져오기 시도 중
+  updateMyInfoLoading: false, 
   updateMyInfoDone: false,
   updateMyInfoError: null,
-  loadMyInfoLoading: false, // 유저 정보 가져오기 시도 중
+  loadMyInfoLoading: false,
   loadMyInfoDone: false,
   loadMyInfoError: null,
-  logInLoading: false, // 로그인 시도 중
+  logInLoading: false,
   logInDone: false,
   logInError: null,
-  logOutLoading: false, // 로그아웃 시도중
+  logOutLoading: false,
   logOutDone: false,
   logOutError: null,
-  signUpLoading: false, // 회원가입 시도중
+  signUpLoading: false,
   signUpDone: false,
   signUpError: null,
-  me: null,
-  isSignUp: false,
+  me: null,             // 현재 로그인한 유저 정보
+  isSignUp: false,      // 로그인 폼 <-> 회원가입 폼
 }
 
 export const UPDATE_MY_INFO_REQUEST = 'UPDATE_MY_INFO_REQUEST'
@@ -57,6 +58,8 @@ export const logoutRequestAction = () => {
 
 const reducer = (state = initialState, action) => produce(state, (draft) => {
   switch (action.type) {
+    case PURGE:
+      return { ...initialState }
     case UPDATE_MY_INFO_REQUEST:
       draft.updateMyInfoLoading = true
       draft.updateMyInfoDone = false
@@ -65,7 +68,11 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
     case UPDATE_MY_INFO_SUCCESS:
       draft.updateMyInfoLoading = false
       draft.updateMyInfoDone = true
-      draft.me = action.data
+      draft.me.age = action.data.age
+      draft.me.gender = action.data.gender
+      draft.me.nickname = action.data.nickname
+      draft.me.phone_number = action.data.phone_number
+      draft.me.address = action.data.address
       break
     case UPDATE_MY_INFO_FAILURE:
       draft.updateMyInfoLoading = false
@@ -108,6 +115,7 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
       draft.logOutLoading = false
       draft.logOutDone = true
       draft.me = null
+      // storage.removeItem('persist:root')
       break
     case LOG_OUT_FAILURE:
       draft.logOutLoading = false

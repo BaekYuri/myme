@@ -31,6 +31,18 @@ import {
   CERTIFY_CHALLENGE_REQUEST,
   CERTIFY_CHALLENGE_SUCCESS,
   CERTIFY_CHALLENGE_FAILURE,
+  LIKE_CHALLENGE_REQUEST,
+  LIKE_CHALLENGE_SUCCESS,
+  LIKE_CHALLENGE_FAILURE,
+  UNLIKE_CHALLENGE_REQUEST,
+  UNLIKE_CHALLENGE_SUCCESS,
+  UNLIKE_CHALLENGE_FAILURE,
+  SEARCH_CHALLENGE_REQUEST,
+  SEARCH_CHALLENGE_SUCCESS,
+  SEARCH_CHALLENGE_FAILURE,
+  DELETE_CHALLENGE_PARTICIPATION_REQUEST,
+  DELETE_CHALLENGE_PARTICIPATION_SUCCESS,
+  DELETE_CHALLENGE_PARTICIPATION_FAILURE,
 } from '../reducers/challenge'
 
 function uploadChallengeImageAPI(data) {
@@ -230,6 +242,82 @@ function* certifyChallenge(action) {
   }
 }
 
+function likeChallengeAPI(data) {
+  return axios.patch(`/challenge/${data}/like`)
+}
+
+function* likeChallenge(action) {
+  try {
+    const result = yield call(likeChallengeAPI, action.data)
+    yield put({
+      type: LIKE_CHALLENGE_SUCCESS,
+      data: result.data
+    })
+  } catch (error) {
+    yield put({
+      type: LIKE_CHALLENGE_FAILURE,
+      error: error.response.data
+    })
+  }
+}
+
+function unlikeChallengeAPI(data) {
+  return axios.delete(`/challenge/${data}/like`)
+}
+
+function* unlikeChallenge(action) {
+  try {
+    const result = yield call(unlikeChallengeAPI, action.data)
+    yield put({
+      type: UNLIKE_CHALLENGE_SUCCESS,
+      data: result.data
+    })
+  } catch (error) {
+    yield put({
+      type: UNLIKE_CHALLENGE_FAILURE,
+      error: error.response.data
+    })
+  }
+}
+
+function searchChallengeAPI(data) {
+  return axios.post(`/challenge/search/${data}`)
+}
+
+function* searchChallenge(action) {
+  try {
+    const result = yield call(searchChallengeAPI, action.data)
+    yield put({
+      type: SEARCH_CHALLENGE_SUCCESS,
+      data: result.data
+    })
+  } catch (error) {
+    yield put({
+      type: SEARCH_CHALLENGE_FAILURE,
+      error: error.response.data
+    })
+  }
+}
+
+function deleteChallengeParticipationAPI(data) {
+  return axios.delete(`/challengeParticipation/${data}`)
+}
+
+function* deleteChallengeParticipation(action) {
+  try {
+    const result = yield call(deleteChallengeParticipationAPI, action.data)
+    yield put({
+      type: DELETE_CHALLENGE_PARTICIPATION_SUCCESS,
+      data: result.data
+    })
+  } catch (error) {
+    yield put({
+      type: DELETE_CHALLENGE_PARTICIPATION_FAILURE,
+      error: error.response.data
+    })
+  }
+}
+
 function* watchUploadChallengeImage() {
   yield takeLatest(UPLOAD_CHALLENGE_IMAGE_REQUEST, uploadChallengeImage)
 }
@@ -270,6 +358,22 @@ function* watchCertifyChallenge() {
   yield takeLatest(CERTIFY_CHALLENGE_REQUEST, certifyChallenge)
 }
 
+function* watchLikeChallenge() {
+  yield takeLatest(LIKE_CHALLENGE_REQUEST, likeChallenge)
+}
+
+function* watchUnlikeChallenge() {
+  yield takeLatest(UNLIKE_CHALLENGE_REQUEST, unlikeChallenge)
+}
+
+function* watchSearchChallenge() {
+  yield takeLatest(SEARCH_CHALLENGE_REQUEST, searchChallenge)
+}
+
+function* watchDeleteChallengeParticipation() {
+  yield takeLatest(DELETE_CHALLENGE_PARTICIPATION_REQUEST, deleteChallengeParticipation)
+}
+
 export default function* challengeSaga() {
   yield all([
     fork(watchUploadChallengeImage),
@@ -281,6 +385,10 @@ export default function* challengeSaga() {
     fork(watchLoadMyChallenges),
     fork(watchLoadMyCreateChallenges),
     fork(watchParticipateChallenge),
-    fork(watchCertifyChallenge)
+    fork(watchCertifyChallenge),
+    fork(watchLikeChallenge),
+    fork(watchUnlikeChallenge),
+    fork(watchSearchChallenge),
+    fork(watchDeleteChallengeParticipation),
   ])
 }

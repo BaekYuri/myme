@@ -4,7 +4,7 @@ function App(props){
   
   return(
       <Wrapper onClick={props.onClick}>
-          + {props.title}
+          {props.title}
       </Wrapper>
   );
 }

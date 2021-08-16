@@ -1,37 +1,50 @@
-import React, {useState, useCallback} from 'react'
-import { connect, useDispatch, useSelector } from 'react-redux'
-import Moment from 'react-moment';
-
-import Modal from '@material-ui/core/Modal';
-import { makeStyles } from '@material-ui/core/styles';
-import Backdrop from '@material-ui/core/Backdrop';
-import Fade from '@material-ui/core/Fade';
-
+import React from 'react'
+import moment from 'moment';
+// @material-ui/icons
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Divider from '@material-ui/core/Divider';
+import CheckIcon from '@material-ui/icons/Check';
 
 const TodayEvent = (props) => {
 
-
-var today = new Date();
-var year = today.getFullYear();
-var month = ('0' + (today.getMonth() + 1)).slice(-2);
-var day = ('0' + today.getDate()).slice(-2);  
-var dateString = year + '-' + month  + '-' + day;
-
-var eventDay = props.event.start 
-var eeday = <Moment format="YYYY-MM-DD">{eventDay}</Moment>
+    const eventStartDay = props.event.start 
+    const eventEndDay = props.event.end
+    const todayDate = moment().format('YYYY-MM-DD');
+    const eventStartDate = moment(eventStartDay).format('YYYY-MM-DD')
+    const eventEndDate = moment(eventEndDay).format('YYYY-MM-DD')
+    const eventStartTime = moment(eventStartDay).format('HH:mm')
+    const bool = props.event.allDay
     return(
         <div className='demo-app'>
-            <h4>{eeday} :  {props.event.title}</h4>
-           {/* {
-               eeday == { dateString } ?
-               <h4>- {props.event.title}</h4>
-               : <h4>없음</h4>
-           } */}
-       
-
+           
+           {
+               moment(eventStartDate).isSame(moment(todayDate)) || moment(eventEndDate).isSame(moment(todayDate)) || moment(todayDate).isBetween(moment(eventStartDate),moment(eventEndDate))?
+         
+               <>
+                    <ListItem style={{whiteSpace: 'nowrap'}}>
+                        {/* <Checkbox
+                            checked={checked}
+                            onChange={handleToggle}
+                            inputProps={{ 'aria-label': 'primary checkbox' }}
+                            style={{marginRight: '10px'}}
+                            /> */}
+                            <CheckIcon style={{marginRight: '20px'}}/>
+                        {
+                            bool ? <ListItemText style={{width:'30px'}}>종일</ListItemText> : <ListItemText>{eventStartTime}</ListItemText> 
+                        }
+                        
+                        <ListItemText whiteSpace= 'nowrap' style={{width:'30px', whiteSpace:'nowrap', overflow:'hidden', marginRight:'0'}}>{props.event.title}</ListItemText>
+                        
+                    </ListItem>
+                    <Divider component="li" />
+                    </>
+                    
+               : null
+           } 
         </div>
     )
-  }
- 
+}
+
 
 export default TodayEvent

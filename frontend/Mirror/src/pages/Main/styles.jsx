@@ -1,8 +1,11 @@
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
+  color:white;
+  background-color:black;
+  padding:30px;
  & .date {
-   font-size: 15px;
+   font-size: 20px;
  }
   & .clock {  
     font-size: 80px;

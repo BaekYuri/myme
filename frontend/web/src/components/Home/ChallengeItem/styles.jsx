@@ -10,7 +10,7 @@ const Wrapper = styled(Paper)`
     background-color:white;
     .title {
         margin:0px;
-        padding: 5px;
+        padding: 0px;
         text-align: center;
     }
     & > div {

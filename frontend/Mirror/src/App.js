@@ -12,6 +12,7 @@ import store from './store/configureStore'
 
 // page
 import Main from './pages/Main';
+import Auth from './pages/Auth'
 import CreateEventModal from './components/Calendar/CreateEvent/index'
 
 //fullcalendar example용
@@ -21,7 +22,7 @@ import CreateEventModal from './components/Calendar/CreateEvent/index'
 // let store = createStore(rootReducer, applyMiddleware(thunk))
 
 // css
-// import './index.css';
+import './index.css';
 
 /// theme
 const theme = createTheme({
@@ -38,7 +39,8 @@ const theme = createTheme({
     MuiCssBaseline: {
       '@global': {
         body: {
-          backgroundColor: 'white',
+          backgroundColor: 'black',
+          color:'white'
         },
       },
     },
@@ -53,7 +55,8 @@ const App = () => {
       <MuiThemeProvider theme={theme}>
         <BrowserRouter>
           <Switch>
-            <Route exact path="/" component={Main} />
+            <Route exact path="/" component={Auth} />
+            <Route exact path="/Home" component={Main} />
           </Switch>
         </BrowserRouter>
       </MuiThemeProvider>

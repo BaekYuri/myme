@@ -45,6 +45,7 @@ const initialState = {
   setOrderError:null,
 
   choosedRoutine : -1,
+  choosedRoutinizedHabit : -1,
   createRoutineInfo : {
       "id" : -1,
       "name" : '',
@@ -96,6 +97,7 @@ export const SET_ORDER_SUCCESS = 'SET_ORDER_SUCCESS';
 export const SET_ORDER_FAILURE = 'SET_ORDER_FAILURE';
 
 export const SET_ROUTINIZED_HABITS = 'SET_ROUTINIZED_HABITS'
+export const SET_CHOOSED_ROUTINIZED_HABIT='SET_CHOOSED_ROUTINIZED_HABIT';
 export const SET_CHOOSED_ROUTINE='routine/setChoosedRoutine';
 export const DELETE_ROUTINE_ITEM='routine/deleteRoutineItem';
 export const SET_MODAL_INPUT='routine/setModalInput';
@@ -276,6 +278,10 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
       break
     case SET_CHOOSED_ROUTINE:
       draft.choosedRoutine = action.idx
+      draft.choosedRoutinizedHabit = -1
+      break
+    case SET_CHOOSED_ROUTINIZED_HABIT:
+      draft.choosedRoutinizedHabit = action.idx
       break
     case DELETE_ROUTINE_ITEM:
       draft.myRoutines[action.routineIdx].RoutinizedHabits.splice(action.habitIdx, 1)
@@ -309,6 +315,8 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
       break
     case SET_ROUTINIZED_HABITS:
       draft.myRoutines[action.num].RoutinizedHabits = action.RoutinizedHabits
+      break
+    default:
       break
   }
 })

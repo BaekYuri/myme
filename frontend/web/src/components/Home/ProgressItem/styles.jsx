@@ -39,7 +39,7 @@ const Wrapper = styled.div`
         width: 100%;
         height: 100%;
     }
-    .content{
+    .progress-content{
         height: 100%;
         min-height: 200px;
         padding: 0px;

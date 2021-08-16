@@ -25,7 +25,7 @@ function App (props) {
   return(
     <Layout>
       <Wrapper>
-      <div className='menu daily-menu'><h2>Habit</h2><AddRoutineButton onClick={openModal} title='습관 생성'/></div>
+      <div className='menu daily-menu'><h3>습관 관리</h3><AddRoutineButton onClick={openModal} title='습관 생성'/></div>
         <hr/>
         <Grid container spacing={2}>
           {

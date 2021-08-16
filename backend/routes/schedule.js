@@ -42,11 +42,8 @@ const router = express.Router()
 router.get('/', isLoggedIn, async (req, res, next) => { // GET /routine
   try {
     const schedule = await Schedule.findAll({
-      where: { UserId: req.user.id,
-    //     [Op.or]:[{start:{[Op.between]:[moment(req.params.year+'-'+req.params.month+'-01','YYYY-MM-DD').startOf('month'),moment(req.params.year+'-'+req.params.month+'-01','YYYY-MM-DD').endOf('month')]}},
-    //     {end:{[Op.between]:[moment(req.params.year+'-'+req.params.month+'-01','YYYY-MM-DD').startOf('month'),moment(req.params.year+'-'+req.params.month+'-01','YYYY-MM-DD').endOf('month')]}}
-    // ]
-     },
+      where: { UserId: req.user.id,},
+      order: [['start']]
     })
     res.status(200).json(schedule)
   } catch (error) {
@@ -111,6 +108,7 @@ router.post('/', isLoggedIn, async (req, res, next) => { // POST /routine
         start: req.body.start,
         end: req.body.end,
         allDay: req.body.allDay,
+        todo: req.body.todo,
         UserId: req.user.id,
     })
 
@@ -182,7 +180,7 @@ router.put('/:scheduleId', isLoggedIn, async (req, res, next) => { // PATCH /rou
       color: req.body.color,
       start: req.body.start,
       end : req.body.end,
-      allDay: req.body.allDay
+      allDay: req.body.allDay,
     },{
       where: { id: req.params.scheduleId,
         UserId: req.user.id,
@@ -220,6 +218,7 @@ router.put('/:scheduleId', isLoggedIn, async (req, res, next) => { // PATCH /rou
  *          description: Success
  */
 router.delete('/:scheduleId', isLoggedIn, async (req, res, next) => {
+  
   try {
     await Schedule.destroy({
       where: { id: req.params.scheduleId, UserId: req.user.id, }

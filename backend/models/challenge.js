@@ -79,6 +79,10 @@ module.exports = (sequelize, DataTypes) => {
     db.Challenge.belongsToMany(db.Category, {
       through: 'ChallengeCategory'
     })
+    db.Challenge.belongsToMany(db.User, {
+      through: 'Like',
+      as: 'Likers'  // 챌린지에 좋아요를 누른 사람들
+    })
   }
 
   return Challenge

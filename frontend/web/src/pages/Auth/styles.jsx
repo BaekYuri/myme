@@ -7,16 +7,11 @@ const Wrapper = styled.div`
 }
 .box2{
     height: 130px;
-
 }
-.LoginCard{ 
+.LoginCard { 
     display: flex;
     justify-content: center;
-
-   // margin-top: 100px;
-    //flex: 1;
 }
-
 `;
 
 export default Wrapper;

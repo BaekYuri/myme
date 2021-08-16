@@ -20,7 +20,7 @@ function App(props){
       dispatch({type: OPEN_ALERT_MODAL, message:'습관을 삭제하시겠습니까? 이미 루틴에 등록된 습관이 있다면 같이 삭제됩니다.'})
   }
   return(
-      <Grid item lg={3} sm={4} md={6} xs={12} className='habits'>
+      <Grid item lg={3} md={6} xs={12} className='habits'>
       <Wrapper>
         <Card>
             <CardContent>

@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
     padding: '5px',
     borderRadius: '20px',
     height:'40px',
-    backgroundColor: '#776D61',
+    backgroundColor: '#89DDBF',
     color:'white',
     fontWeight:'bold'
   },
@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
     padding: '5px',
     borderRadius: '20px',
     height:'40px',
-    backgroundColor: '#89DDBF',
+    backgroundColor: '#776D61',
     color:'white',
     fontWeight:'bold'
   },

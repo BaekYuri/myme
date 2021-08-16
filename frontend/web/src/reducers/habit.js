@@ -1,4 +1,5 @@
 import produce from 'immer'
+import { PURGE } from 'redux-persist/es/constants'
 
 const initialState = {
   myHabits: [],
@@ -62,6 +63,8 @@ export const SET_MODIFY_HABIT_ASSIST_LINK ='SET_MODIFY_HABIT_ASSIST_LINK'
 
 const reducer = (state = initialState, action) => produce(state, (draft) => {
   switch (action.type) {
+    case PURGE:
+      return { ...initialState }
     case ADD_MY_HABIT_REQUEST:
       draft.addMyHabitLoading = true
       draft.addMyHabitDone = false

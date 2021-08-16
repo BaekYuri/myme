@@ -1,29 +1,34 @@
-import React, { useCallback, useEffect, useRef } from 'react'
-import { Grid, IconButton } from '@material-ui/core'
+import React, { forwardRef, useCallback, useEffect, useState, useRef } from 'react'
+import { Grid, IconButton, TextField } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
 import { ColorButton } from '../../../common/Buttons'
 import { convertNumDay } from '../../../config/config'
 import { CERTIFY_CHALLENGE_REQUEST, UPLOAD_CHALLENGE_IMAGE_REQUEST } from '../../../reducers/challenge'
 import CloseIcon from '@material-ui/icons/Close';
+import { OPEN_CONFIRM_MODAL } from '../../../reducers/modal'
 
-const CertModal = (props) => {
+// forwardRef를 써서 warning을 없애긴 했는데 어떤 문제인지 정확히는 모르겠다...
+const CertModal = forwardRef((props, ref) => {
   const { challenge, closeCertModal } = props
   const dispatch = useDispatch()
   const imageInput = useRef()
-
-  const { challengeImagePath } = useSelector((state) => state.challenge)
+  const { challengeImagePath, certifyChallengeError, certifyChallengeDone } = useSelector((state) => state.challenge)
   const activeDays = challenge.Challenge.ChallengeCertificationDays.filter((day) => day.certification_available === true)
   const activeTime = {
     startTime: challenge.Challenge.ChallengeCertificationTimes[0].certification_available_start_time.substring(0, 5),
     endTime: challenge.Challenge.ChallengeCertificationTimes[0].certification_available_end_time.substring(0, 5)
   }
+  const [content, setContent] = useState('')
+  const onChangeContent = useCallback((e) => {
+    setContent(e.target.value)
+  }, [])
 
   const onClickImageUpload = useCallback(() => {
     imageInput.current.click()
-  }, [imageInput.current])
+  }, [])
 
   const onUploadImage = useCallback((e) => {
-    console.log('image', e.target.files[0])
+    // console.log('image', e.target.files[0])
 
     const imageFormData = new FormData()
     imageFormData.append('image', e.target.files[0])
@@ -33,29 +38,53 @@ const CertModal = (props) => {
       data: imageFormData
     })
 
-  }, [])
+  }, [dispatch])
 
   const certifyChallenge = useCallback(() => {
     if (challengeImagePath === '') {
-      alert('인증샷을 첨부해주세요!')
+      dispatch({
+        type: OPEN_CONFIRM_MODAL,
+        message: '인증샷을 첨부해주세요!'
+      })
       return
     }
+
+    const nowDate = new Date()
+    const y = nowDate.getFullYear()
+    const m = nowDate.getMonth()+1
+    const d = nowDate.getDate()
 
     dispatch({
       type: CERTIFY_CHALLENGE_REQUEST,
       data: {
         img_addr: challengeImagePath,
-        content: '인증합니다!',
-        certification_datetime: Date.now(),
+        content: content.length === 0 ? '인증합니다!' : content,
+        certification_datetime: y+'-'+m+'-'+d,
         challengeId: challenge.id // challengeParticipation id...
       }
     })
-    closeCertModal()
-  }, [challengeImagePath])
+  }, [challengeImagePath, content, challenge.id, closeCertModal, dispatch])
+
+  useEffect(() => {
+    if (certifyChallengeDone) {
+      dispatch({
+        type: OPEN_CONFIRM_MODAL,
+        message: '인증되었습니다!'
+      })
+      closeCertModal()
+    }
+    if (certifyChallengeError) {
+      dispatch({
+        type: OPEN_CONFIRM_MODAL,
+        message: certifyChallengeError
+      })
+    }
+  }, [certifyChallengeDone, certifyChallengeError])
 
   const checkCertAvailable = () => {
     const now = new Date()
-    const day = now.getDay()
+    // 이건 이후에 최적화 시키자... 일요일을 0번으로!
+    const day = ( now.getDay() === 0 ? 6 : now.getDay()-1 )
     const hour = now.getHours()
     const minute = now.getMinutes()
 
@@ -114,8 +143,20 @@ const CertModal = (props) => {
       </IconButton>
       <Grid container spacing={3}>
         <Grid item xs={12} style={{ textAlign: 'center' }} >
-          <img src={challengeImagePath ? challengeImagePath : "/images/camera.png"} style={{ maxWidth: 200, maxHeight: 200 }} />
-          <input type="file" name="image" hidden ref={imageInput} onChange={onUploadImage} />
+          <img alt={challenge.Challenge.name} src={challengeImagePath ? challengeImagePath : "/images/camera.png"} style={{ maxWidth: 200, maxHeight: 200 }} />
+          <input accept="image/*" type="file" name="image" hidden ref={imageInput} onChange={onUploadImage} />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            label="인증 메모"
+            multiline
+            rows={3}
+            value={content}
+            placeholder="인증 메모를 남겨보세요!"
+            variant="outlined"
+            onChange={onChangeContent}
+            fullWidth
+          />
         </Grid>
         <Grid item xs={12} >
         {
@@ -139,6 +180,6 @@ const CertModal = (props) => {
       </Grid>
     </div>
   )
-}
+})
 
 export default CertModal

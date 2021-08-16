@@ -99,8 +99,14 @@ router.get('/', isLoggedIn, async (req, res, next) => { // GET /routine
  */
  router.get('/today', isLoggedIn, async (req, res, next) => { // GET /routine
   try {
+    /*
+    월 화 수 목 금 토 일
+    0  1  2  3  4  5  6 ->DB
+    1  2  3  4  5  6  0 -> 모멘트
+    */
+
     let today = moment().day()
-    today = today==0?7:today-1
+    today = today==0?6:today-1
 
     const todayRoutines = await RoutineActiveDay.findAll({
       where: {
@@ -110,12 +116,10 @@ router.get('/', isLoggedIn, async (req, res, next) => { // GET /routine
       attributes: ['RoutineId']
     })
 
-    console.log(todayRoutines)
     let routineIds = []
     for(let i=0;i<todayRoutines.length;i++){
       routineIds.push(todayRoutines[i].RoutineId)
     }
-    console.log(routineIds)
     const routines = await Routine.findAll({
       where: { 
         UserId: req.user.id,

@@ -7,13 +7,17 @@ import {
   DELETE_EVENT_REQUEST,
   DELETE_EVENT_SUCCESS,
   DELETE_EVENT_FAILURE,
-  UPDATE_EVENT_REQUEST,
-  UPDATE_EVENT_SUCCESS,
-  UPDATE_EVENT_FAILURE,
+  MODIFY_EVENT_REQUEST,
+  MODIFY_EVENT_SUCCESS,
+  MODIFY_EVENT_FAILURE,
   LOAD_EVENT_REQUEST,
   LOAD_EVENT_SUCCESS,
   LOAD_EVENT_FAILURE,
 } from '../reducers/calendar'
+
+  import {
+    OPEN_CONFIRM_MODAL
+  } from '../reducers/modal'
 
 function createEventAPI(data){
     console.log('create event요청!')
@@ -27,11 +31,19 @@ function* createEvent(action){
             type: CREATE_EVENT_SUCCESS,
             data: result.data
         })
+        yield put({
+            type:OPEN_CONFIRM_MODAL,
+            message:'일정이 추가되었습니다.'
+          })
     }catch(error){
         yield put({
             type: CREATE_EVENT_FAILURE,
             error: error.response.data
         })
+        yield put({
+            type:OPEN_CONFIRM_MODAL,
+            message:'등록에 실패했습니다. 다시 시도해주세요.'
+          })
     }
 
 }
@@ -42,35 +54,51 @@ function deleteEventAPI(id){
 }
 function* deleteEvent(action){
     try{
-        const result = yield call(deleteEventAPI, action.id)
+        yield call(deleteEventAPI, action.id)
         yield put({
             type: DELETE_EVENT_SUCCESS,
             idx: action.idx
         })
+        yield put({
+            type:OPEN_CONFIRM_MODAL,
+            message:'삭제되었습니다.'
+          })
     } catch(error){
         yield put({
             type: DELETE_EVENT_FAILURE,
             error: error.response.data
         })
+        yield put({
+            type:OPEN_CONFIRM_MODAL,
+            message:'삭제에 실패했습니다. 다시 시도해주세요.'
+          })
     }
 }
 
-function updateEventAPI(data,id){
-    console.log('update event 요청!')
+function modifyEventAPI(data,id){
+    console.log('modify event 요청!')
     return axios.put('/schedule/'+id, data)
 }
-function* updateEvent(action){
+function* modifyEvent(action){
     try{
-        const result = yield call(updateEventAPI, action.data, action.id)
+        const result = yield call(modifyEventAPI, action.data, action.id)
         yield put({
-            type: UPDATE_EVENT_SUCCESS,
+            type: MODIFY_EVENT_SUCCESS,
             data: result.data
         })
+        yield put({
+            type:OPEN_CONFIRM_MODAL,
+            message:'수정이 완료되었습니다.'
+          })
     } catch(error){
         yield put({
-            type: UPDATE_EVENT_FAILURE,
-            error: error.response.data
+            type: MODIFY_EVENT_FAILURE,
+            error: error
         })
+        yield put({
+            type:OPEN_CONFIRM_MODAL,
+            message:'수정에 실패했습니다. 다시 시도해주세요.'
+          })
     }
 }
 
@@ -101,8 +129,8 @@ function* watchDeleteEvent(){
   yield takeLatest(DELETE_EVENT_REQUEST, deleteEvent)
 }
 
-function* watchUpdateEvent(){
-  yield takeLatest(UPDATE_EVENT_REQUEST, updateEvent)
+function* watchModifyEvent(){
+  yield takeLatest(MODIFY_EVENT_REQUEST, modifyEvent)
 }
 
 function* watchLoadEvent(){
@@ -112,7 +140,7 @@ export default function* challengeSaga() {
     yield all([
       fork(watchCreateEvent),
       fork(watchDeleteEvent),
-      fork(watchUpdateEvent),
+      fork(watchModifyEvent),
       fork(watchLoadEvent)
     ])
   }

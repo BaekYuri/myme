@@ -10,15 +10,17 @@ import {
     Paper
   } from '@material-ui/core';
 import RoutineItemCheck from '../RoutineItemCheck/index';
-// import { useSelector } from 'react-redux';
+import moment from 'moment'
+import { useSelector, useDispatch } from 'react-redux';
+import { SET_CHOOSED_ROUTINE } from '../../../reducers/routine';
 
 const App = (props) => {
+  const dispatch = useDispatch()
   const { routine, routineIdx } = props
-
+  const { choosedRoutine } = useSelector((state) => state.routine)
   function getDay(){
-    let day = new Date()
-    day = day.getDay()
-    return day
+    let day = moment()
+    return day.day()
   }
 
   function getTime(time){
@@ -28,15 +30,19 @@ const App = (props) => {
     let hour= timeArr[0]%12==0?12:timeArr[0]%12
     return am+' '+hour+':'+timeArr[1]
   }
+
+  function handleChange(e, isExpanded){
+    dispatch({type: SET_CHOOSED_ROUTINE, idx:isExpanded?routineIdx:-1})
+  }
   return(
     <Wrapper>
-      <Accordion className="panel" className='routine-list-item'>
+      <Accordion className="panel" className='routine-list-item' expanded={choosedRoutine === routineIdx} onChange={handleChange}>
         <AccordionSummary
           className={routine.DailyAchieveRoutines.length?"panel-summary panel-summary-success":"panel-summary"}
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <h3 className="title">{routine.name}  | {getTime(routine.RoutineActiveDays[getDay()].start_time)} 시작</h3>
+          <h3 className="title">{routine.name} | {getTime(routine.RoutineActiveDays[getDay()].start_time)} 시작</h3>
         </AccordionSummary>
         <AccordionDetails className='routine-list-item-detail'>
           <List className='accordian-detail-list'>

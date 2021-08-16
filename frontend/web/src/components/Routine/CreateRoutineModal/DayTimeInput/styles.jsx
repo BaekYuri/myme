@@ -3,7 +3,7 @@ const Wrapper = styled.div`
     display: flow-root;
     background-color: white;
     padding: 10px;
-    border-radius: 20px;
+    border-radius: 10px;
     margin-bottom: 10px;
     border: #66A091 1px solid;
     .float-right{

@@ -1,8 +1,9 @@
 import React from 'react';
-import { makeStyles, Grid, Container, withStyles, Switch, Typography, TextField } from '@material-ui/core/';
+import { makeStyles, Grid, Container, withStyles, Switch, Typography, TextField, CardActions, Card } from '@material-ui/core/';
 import { teal } from '@material-ui/core/colors';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import Wrapper from './styles';
+import {Paper} from '@material-ui/core'
 
 const TealSwitch = withStyles({
     switchBase: {
@@ -31,77 +32,57 @@ const TealSwitch = withStyles({
 const MirrorSetting = () => {
 
     return(
-        <Container maxWidth="lg">
             <Wrapper>
-            <Grid container xs={12} className="grid" style={{padding: '20px', margin: '10px'}}>
-                <Grid item xs={12} className="titleGrid">
-                    <h1>미러 관리</h1>
-                </Grid>
-                <Grid item xs={12} className="BottomTitle"><hr/></Grid>
-                
-                <Grid
-                    container
-                    direction="row"
-                    justify="center"
-                    alignItems="center"
-                    spacing={2}
-                    style={{background: '#fff', height: '50px'}}
-                >
-                    <Grid item xs={1}></Grid>
-                    <Grid item xs={9} className="title"><Typography>   코로나19</Typography></Grid>
-                    <Grid item xs={2}><TealSwitch/></Grid>
-                    
-                </Grid>
-                <Grid item xs={12} style={{height: '50px'}}></Grid>
-                <Grid
-                    container
-                    direction="row"
-                    justify="center"
-                    alignItems="center"
-                    spacing={2}
-                    style={{background: '#fff', height: '50px'}}
-                >
-                    <Grid item xs={1}></Grid>
-                    <Grid item xs={9} className="title"><Typography>나의 주식</Typography></Grid>
-                    <Grid item xs={2}><TealSwitch/></Grid>
-                    
-                </Grid>
-                <Grid item xs={12} style={{height: '50px'}}></Grid>
-                <Grid
-                    container
-                    direction="row"
-                    justify="center"
-                    alignItems="center"
-                    spacing={2}
-                    style={{background: '#fff', height: '50px'}}
-                >
-                    
-                    <Grid item xs={1}></Grid>
-                    <Grid item xs={4}><Typography>오늘의 뉴스</Typography></Grid>
-                    <Grid item xs={6}>   
-                    <Autocomplete
-                        multiple
-                        id="tags-standard"
-                        style={{color: 'teal'}}
-                        options={category}
-                        getOptionLabel={(option) => option.title}
-                        // defaultValue={[category[0]]}
-                        renderInput={(params) => (
-                        <TextField
-                            {...params}
-                            variant="standard"
-                        
-                        />
-                        )}
-                    />
-                    </Grid>   
-                    <Grid item xs={1}></Grid>
-                   
-                </Grid>
-                
-            </Grid>
+                <div className='menu daily-menu'><h3>스마트 미러 관리</h3></div>
+                <hr/>
+                <Container>
+                    <Card className='mirror-card'>
+                        <CardActions>
+                            <div class='left-title'>
+                                <h3>코로나19</h3>
+                            </div>
+                            <div class='right-setting'>
+                                <TealSwitch/>
+                            </div>
+                        </CardActions>
+                    </Card>
+
+                    <Card className='mirror-card'>
+                        <CardActions>
+                            <div class='left-title'>
+                                <h3>나의 주식</h3>
+                            </div>
+                            <div class='right-setting'>
+                                <TealSwitch/>
+                            </div>
+                        </CardActions>
+                    </Card>
+                    <Card className='mirror-card'>
+                        <CardActions>
+                            <div class='left-title'>
+                                <h3>오늘의 뉴스</h3>
+                            </div>
+                            <div class='right-setting'>
+                            <Autocomplete
+                                multiple
+                                id="tags-standard"
+                                style={{color: 'teal'}}
+                                options={category}
+                                getOptionLabel={(option) => option.title}
+                                // defaultValue={[category[0]]}
+                                renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    variant="standard"
+                                
+                                />
+                                )}
+                            />
+                            </div>
+                        </CardActions>
+                    </Card>
+                </Container>
         </Wrapper>
-        </Container>
     );
 }
 

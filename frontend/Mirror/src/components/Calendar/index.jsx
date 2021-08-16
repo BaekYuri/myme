@@ -264,9 +264,4 @@ function reportNetworkError() {
 function reportNetworkError() {
   alert('에러발생')
 }
-const mapStateToProps = (state) =>{
-  return {
-      state
-  }
-}
-export default connect(mapStateToProps)(Calendar)
+export default Calendar

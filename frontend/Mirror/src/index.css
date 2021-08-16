@@ -17,9 +17,3 @@ html::-webkit-scrollbar {
   list-style: none;
   text-decoration: none;
 }
-#root{
-  background-color:#E5E5E5;
-}
-.menu{
-  margin:20px;
-}

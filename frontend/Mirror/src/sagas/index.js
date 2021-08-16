@@ -6,6 +6,9 @@ import {
   
   // import postSaga from "./post"
   import calendarSaga from "./calendar"
+  import userSaga from './user'
+  import weatherSaga from './weather'
+  import routineSaga from './routine'
   import { backUrl } from '../config/config'
   
   axios.defaults.baseURL = backUrl
@@ -15,6 +18,9 @@ import {
     yield all([
         // fork(postSaga),
         fork(calendarSaga),
+        fork(userSaga),
+        fork(weatherSaga),
+        fork(routineSaga),
 
     ])
   }
