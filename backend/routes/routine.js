@@ -1,5 +1,7 @@
 const express = require('express')
-const moment = require('moment')
+let moment = require('moment')
+require('moment-timezone');
+moment.tz.setDefault("Asia/Seoul");
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 const { Routine, User, RoutinizedHabit, RoutineActiveDay, Habit, DailyAchieveHabit, DailyAchieveRoutine } = require('../models')

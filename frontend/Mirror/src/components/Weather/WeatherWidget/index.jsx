@@ -27,9 +27,9 @@ function App() {
           <Typography  id='now-temp' className='text' style={{fontSize:'40px'}}>{Math.ceil(nowWeather.nowTemp)}°</Typography>
           <Typography variant='h4' className='text' style={{fontSize:'30px',width: "100px", textAlign: "center"}}>{weatherToKorean(nowWeather.weather.id)}</Typography>
           <div id='min-max-temp' className='text'>
-            <Typography variant='h6' style={{color:'blue'}}>{Math.ceil(nowWeather.minTemp)}°</Typography>
+            <Typography variant='h6' style={{color:'deepskyblue'}}>{Math.ceil(nowWeather.minTemp)}°</Typography>
             <Typography variant='h6' >/</Typography>
-            <Typography variant='h6' style={{color:'red'}}>{Math.ceil(nowWeather.maxTemp)}°</Typography>
+            <Typography variant='h6' style={{color:'lightcoral'}}>{Math.ceil(nowWeather.maxTemp)}°</Typography>
           </div>
           <Typography id='dong' className='text'>{weatherDong}</Typography>
         </CardActions>

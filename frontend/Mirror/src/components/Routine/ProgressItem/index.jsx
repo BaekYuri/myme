@@ -7,12 +7,14 @@ import PlayIcon from '@material-ui/icons/PlayArrow'
 import PauseIcon from '@material-ui/icons/Pause'
 import CheckIcon from '@material-ui/icons/CheckCircleOutline'
 import NextIcon from '@material-ui/icons/SkipNext'
+import ZoomInIcon from '@material-ui/icons/ZoomIn';
+import ZoomOutIcon from '@material-ui/icons/ZoomOut';
 import {SET_CHOOSED_ROUTINIZED_HABIT, CHECK_ROUTINIZED_HABIT_REQUEST} from '../../../reducers/routine'
 import { useSelector, useDispatch } from 'react-redux';
 function App(props){
     const dispatch = useDispatch()
     let [tabValue, setTabValue] = useState(0)
-    let {choosedRoutine, choosedRoutinizedHabit} = props
+    let {choosedRoutine, choosedRoutinizedHabit, zoomIn, changeZoomIn, changeZoomOut} = props
     let {myRoutines} = useSelector((state)=>{return state.routine})
     const routinizedHabit = myRoutines[choosedRoutine].RoutinizedHabits[choosedRoutinizedHabit]
     const habit = routinizedHabit.Habit
@@ -84,6 +86,7 @@ function App(props){
         <Wrapper>
             <CardActions className='progress-header'>
             <Typography variant='h5'>{habit.name}</Typography>
+            {zoomIn?<ZoomOutIcon onClick={changeZoomOut} className='btn'/>:<ZoomInIcon onClick={changeZoomIn} className='btn'/>}
             </CardActions>
             <CardContent className='progress-article'>
                 <div className='video-container content-container' hidden={tabValue !== 0}>

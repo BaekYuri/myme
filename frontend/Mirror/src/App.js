@@ -14,7 +14,7 @@ import store from './store/configureStore'
 import Main from './pages/Main';
 import Auth from './pages/Auth'
 import PostCodeModal from './components/Auth/PostCodeModal';
-
+import KeyBoard from './components/Keyboard/index';
 //fullcalendar example용
 // import { createStore, applyMiddleware } from 'redux'
 // import thunk from 'redux-thunk'
@@ -61,6 +61,7 @@ const App = () => {
         </BrowserRouter>
       </MuiThemeProvider>
       <PostCodeModal/>
+      {/* <KeyBoard/> */}
     </Provider>
   );
 };

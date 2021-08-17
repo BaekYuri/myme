@@ -9,7 +9,7 @@ function App(props){
     return(
         <Wrapper>
             <CardActions className='progress-header'>
-            <ArrowBackIosIcon onClick={goBack}/>
+            <ArrowBackIosIcon className='btn' onClick={goBack}/>
             <Typography variant='h5'>{routine.name}</Typography>
             </CardActions>
                 <CardContent className='content'>

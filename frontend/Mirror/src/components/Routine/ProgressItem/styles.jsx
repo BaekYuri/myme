@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import CustomCard from '../CustomCard';
 const Wrapper = styled(CustomCard)`
+
     .video-container {
         position: relative;
         padding-bottom: 56.25%;
@@ -21,26 +22,33 @@ const Wrapper = styled(CustomCard)`
         min-width:50px
     }
     .active-tab{
-        color:#c2bdac;
+        color:lightcoral;
     }
     .no-active-tab{
-        color:#2b3856;
+        color:white;
     }
 
     .content-typography{
         margin: 10px;
     }
     .progress-header{
-        border-bottom: 2px solid #666666;
+        border-bottom: 2px solid #ffffff;
         padding-left: 20px;
         height:49px;
         line-height:49px;
     }
     .progress-footer{
-        border-top: 2px solid #666666;
+        border-top: 2px solid #ffffff;
     }
     .progress-article{
         background-color:#050505;
+    }
+
+    .progress-btn{
+        color:white;
+    }
+    .progress-btn:hover{
+        color:deepskyblue;
     }
 `;
 export default Wrapper;

@@ -13,7 +13,7 @@ import {
   InputLabel,
   FormControl,
 } from '@material-ui/core';
-import AccountBoxIcon from '@material-ui/icons/AccountBox';
+import AccountBoxRoundedIcon from '@material-ui/icons/AccountBoxRounded';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { CHANGE_SIGN_UP_MODE, loginRequestAction } from '../../../reducers/user';
@@ -110,28 +110,30 @@ const LoginForm = () => {
         spacing={2}
         className="grid"
       >
+ 
         <Grid item xs={1} >
-          <AccountBoxIcon style={{ color: '#89DDBF' }} />
+          <AccountBoxRoundedIcon color="action" fontSize='large' style={{marginTop:'6px'}} />
         </Grid>
         <Grid item xs={11}>
-          <Typography>
+          <h3 style={{marginLeft:'10px'}}>
             로그인
-          </Typography>
+          </h3>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12}style={{fontFamily: 'SCDream4'}}>
           <TextField
             id="outlined-required"
             label="이메일"
             className="text-field"
             defaultValue={email}
             variant="outlined"
+            InputLabelProps={{ style:{fontFamily: 'SCDream4'}}}
             fullWidth
             onChange={onChangeEmail}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} style={{fontFamily: 'SCDream4'}}>
           <FormControl fullWidth variant="outlined">
-            <InputLabel htmlFor="outlined-adornment-password">비밀번호</InputLabel>
+            <InputLabel htmlFor="outlined-adornment-password" style={{fontFamily: 'SCDream4'}}>비밀번호</InputLabel>
             <OutlinedInput
               id="outlined-adornment-password"
               label="비밀번호"
@@ -164,6 +166,7 @@ const LoginForm = () => {
             color="primary"
             onClick={onLogin}
             className="grid-item-button"
+            style={{fontFamily: 'SCDream4'}}
           >
             login
           </Button>
@@ -192,7 +195,7 @@ const LoginForm = () => {
           </Grid>
         </Grid>
 
-        <Grid item xs={3} >
+        {/* <Grid item xs={3} >
           <Grid container direction="row" justifyContent="center" alignItems="center">
             <img src="/images/naver.png" alt="" width="40px"/>
           </Grid>
@@ -211,7 +214,7 @@ const LoginForm = () => {
           <Grid container direction="row" justifyContent="center" alignItems="center">
             <img src="/images/kakao.png" alt="" width="40px" />
           </Grid>
-        </Grid>
+        </Grid> */}
 
         <Grid item xs={6} >
           <div style={{textAlign: 'center'}}>

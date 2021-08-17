@@ -124,7 +124,7 @@ const Profile = () => {
   const { me } = useSelector((state) => state.user)
   const { addressInfo } = useSelector((state) => state.modal)
   const genders = ['남', '여', '기타'];
-
+  const [firstLoad, setFirstLoad] = useState(true);
   const [nickname, setNickname] = useState(me?me.nickname:'')
   const onChangeNickname = useCallback((e) => {
     setNickname(e.target.value)
@@ -165,8 +165,15 @@ const Profile = () => {
   }, [])
   
   useEffect(()=>{
-    setPostCode(addressInfo.sigunguCode)
-    setMainAddress(addressInfo.address)
+    if(addressInfo.sigunguCode){
+      if(!firstLoad){
+        setPostCode(addressInfo.sigunguCode)
+        setMainAddress(addressInfo.address)
+      }
+    }
+    if(firstLoad){
+      setFirstLoad(false)
+    }
   },[addressInfo])
 
   function openAddressModal(){

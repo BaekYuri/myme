@@ -450,8 +450,8 @@ const CreateChallenge = () => {
                 </MuiPickersUtilsProvider>
               </Grid>
               <Grid item xs={12} sm={4} md={3}>
-                <Typography variant='h5' >도전 기간 {period ? period : 0} 일</Typography>
-                <Typography variant='h5' >필수 인증 {totalNumOfCert ? totalNumOfCert : 0} 일</Typography>
+                <h2 >도전 기간 {period ? period : 0} 일</h2>
+                <h2>필수 인증 {totalNumOfCert ? totalNumOfCert : 0} 일</h2>
                 {
                   totalCertError ? <FormHelperText error={totalCertError}>필수 인증 일은 0일 수 없습니다!</FormHelperText> : null
                 }

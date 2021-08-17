@@ -4,7 +4,7 @@ import {Grid, Typography} from '@material-ui/core'
 
 function App(props) {
     let {item, idx} = props
-    const day =['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
+    const day =['일','월','화','수','목','금','토']
     return(
         <Wrapper>
             <Grid container>

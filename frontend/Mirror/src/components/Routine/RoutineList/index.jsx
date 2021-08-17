@@ -12,9 +12,9 @@ function App(props){
             <ScheduleIcon/>
             <Typography variant='h5'> 오늘의 루틴</Typography>
             <div style={{display:'flex'}}>
-                <span style={{color:"#C2BDAC"}}>■</span>
+                <span style={{color:"deepskyblue"}}>■</span>
                 <span>할 일</span>
-                <span style={{color:"#2b3856"}}>■</span>
+                <span style={{color:"white"}}>■</span>
                 <span>완료</span>
             </div>
             </CardActions>

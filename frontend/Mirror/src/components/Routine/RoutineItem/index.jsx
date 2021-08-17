@@ -26,7 +26,7 @@ function App(props){
         })
     }
     return(
-        <Wrapper onClick={setChoosedRoutine}>
+        <Wrapper onClick={setChoosedRoutine} className={routine.DailyAchieveRoutines.length?'achieve-div':'no-achieve-div'}>
             <Grid container>
                 <Grid item xs={6} lg={8}>
                     <h3 className={routine.DailyAchieveRoutines.length?'text achieve':'text no-achieve'}>{routine.name}</h3>

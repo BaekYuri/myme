@@ -7,6 +7,11 @@ const Wrapper = styled.div`
         display: inline-block;
     }
 
-    .fc-prev-button { background: '#0000ff'}
+    .fc .fc-popover {
+        position: absolute;
+        z-index: 1;
+        box-shadow: 0 2px 6px rgb(0 0 0 / 15%);
+    }
+
 `;
 export default Wrapper;

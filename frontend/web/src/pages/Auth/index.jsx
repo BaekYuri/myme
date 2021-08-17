@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 import { LOAD_MY_INFO_REQUEST } from '../../reducers/user';
 import LoginForm from '../../components/Auth/LoginForm';
 import SignupForm from '../../components/Auth/SignupForm'
-
+import {Typography} from '@material-ui/core'
 const Auth = () => {
   const dispatch = useDispatch()
   const history = useHistory()
@@ -28,14 +28,24 @@ const Auth = () => {
   return(
     <Wrapper>
       <div className="box">
-        <div className="box2">
-          <img src="/images/contact_us_img_4.png" alt="" width="40px" style={{margin: "20px"}}/>
+        <div className="box2" style={{textAlign:'center'}}>
+          <div style={{height:'42px'}} />
+          <Typography
+                variant="h3"
+                className="logo"
+                style={{ fontFamily: 'BAUHS93', color:'white' }}
+              >
+                MYME
+          </Typography>
         </div>
         <div className="LoginCard">
           {isSignUp
             ? <SignupForm />
             : <LoginForm />
           }
+        </div>
+        <div className="box2">
+          
         </div>
       </div>
     </Wrapper>

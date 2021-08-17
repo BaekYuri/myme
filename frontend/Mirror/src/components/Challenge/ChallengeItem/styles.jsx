@@ -6,7 +6,7 @@ const Wrapper = styled.div`
     border-radius : 4px;
     height: max-content;
     margin:5px;
-    border:2px solid #666666;
+    border:2px solid #ffffff;
     text-align-last: center;
     text-align: -webkit-center;
     .title {
@@ -25,7 +25,7 @@ const Wrapper = styled.div`
       background-color: #626970;
     }
     .MuiLinearProgress-barColorPrimary{
-        background-color:#2b3856;
+        background-color:red;
     }
     .term{
       background-color: #555555;
@@ -36,7 +36,6 @@ const Wrapper = styled.div`
       margin: 0 5px;
     }
     .confirm-btn{
-      background-color: #C2BDAC;
       cursor: pointer;
       padding: 5px;
       text-align: center;
@@ -45,7 +44,6 @@ const Wrapper = styled.div`
       margin: 0 5px;
     }
     .more-btn{
-      background-color: #111a37;
       color: white;
     }
     .period{

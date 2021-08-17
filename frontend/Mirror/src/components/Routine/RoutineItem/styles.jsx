@@ -2,8 +2,11 @@ import styled from 'styled-components';
 import {ListItem} from '@material-ui/core';
 const Wrapper = styled(ListItem)`
     border-radius:4px;
-    border:2px solid #666666;
-
+    border:2px solid #ffffff;
+    cursor: pointer;
+    &:hover{
+        background-color:#111111;
+    }
     .text{
         white-space: nowrap;
         overflow: hidden;
@@ -13,10 +16,10 @@ const Wrapper = styled(ListItem)`
     }
 
     .achieve{
-        color:#2b3856;
+        color:white;
     }
     .no-achieve{
-        color:#C2BDAC;
+        color:deepskyblue;
     }
 `;
 export default Wrapper;

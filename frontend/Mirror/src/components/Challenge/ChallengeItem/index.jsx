@@ -3,7 +3,7 @@ import Wrapper from './styles'
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Grid from '@material-ui/core/Grid';
 import { convertCertType, convertDaysWeek } from '../../../config/config'
-
+import moment from 'moment'
 import {useDispatch, useSelector} from 'react-redux';
 import Modal from '@material-ui/core/Modal';
 import CertModal from '../CertModal';
@@ -55,14 +55,15 @@ const App = (props) => {
         </Grid>
       </Grid>
       <Grid container spacing={0}>
-        <Grid item xs={8}>
+        <Grid item xs={9}>
           <span className='period'>
-            {challenge.start_date}~{challenge.end_date}
+            {moment(challenge.start_date).format('YY-MM-DD')}~
+            {moment(challenge.end_date).format('YY-MM-DD')} /
           </span>
         </Grid>
-        <Grid item xs={4} >
-          <span className='title period' >
-            🏃🏼‍♂️ {100*challenge.certification_count/challenge.total_number_of_certification} %
+        <Grid item xs={3} >
+          <span className='title period' style={{color:'deepskyblue'}}>
+            {(100*challenge.certification_count/challenge.total_number_of_certification).toFixed(1)}%
           </span>
         </Grid>
       </Grid>
@@ -73,12 +74,12 @@ const App = (props) => {
       </Grid>
       <Grid container spacing={0}>
         <Grid item xs={6} onClick={()=>{props.changeChoosedChellenge(idx)}}>
-          <div className='confirm-btn'>
+          <div className='confirm-btn btn left-btn'>
             인증하기  
           </div>
         </Grid>
         <Grid item xs={6} onClick={() => onChallengeDashboard(challenge.id)} >
-          <div className='confirm-btn more-btn'>
+          <div className='confirm-btn more-btn btn right-btn'>
             상세보기
           </div>
         </Grid>

@@ -29,10 +29,19 @@ const SignupForm = () => {
   const dispatch = useDispatch()
   const { addressInfo } = useSelector((state) => state.modal)
   const [disabled, setDisabled] = useState(true);
-
+  const [firstLoad, setFirstLoad] = useState(true);
   useEffect(()=>{
-    setPostCode(addressInfo.sigunguCode)
-    setMainAddress(addressInfo.address)
+    if(addressInfo.sigunguCode){
+      if(!firstLoad){
+        setPostCode(addressInfo.sigunguCode)
+        setMainAddress(addressInfo.address)
+      }
+    }
+    if(firstLoad){
+      setPostCode('')
+      setMainAddress('')
+      setFirstLoad(false)
+    }
   },[addressInfo])
   const [name, setName] = useState('')
   const onChangeName = useCallback((e) => {
@@ -148,6 +157,7 @@ const SignupForm = () => {
     dispatch({
       type: CHANGE_SIGN_UP_MODE
     })
+    setFirstLoad(true)
   }, [])
 
   useEffect(() => {
@@ -165,7 +175,7 @@ const SignupForm = () => {
   }
 
   return (
-    <Container maxWidth="sm" style={{margin: '0 20px', padding: '20px', background: '#ffffff', border: 'solid 1px #eeeeee', borderRadius: '10px', boxShadow: '2px 2px 2px #eeeeee'}}>
+    <Container maxWidth="md" style={{margin: '0 20px', padding: '20px', background: '#ffffff', border: 'solid 1px #eeeeee', borderRadius: '10px', boxShadow: '2px 2px 2px #eeeeee'}}>
       <Grid
         container
         direction="row"
@@ -173,13 +183,16 @@ const SignupForm = () => {
         alignItems="center"
         spacing={2}
       >
+        <Grid container item xs={12} spacing={2}>
+          <Grid item xs={1}>
+            <AssignmentIndIcon fontSize="large"/>
+          </Grid>
+          <Grid item xs={11}>
+            <Typography >회원가입</Typography>
+          </Grid>
+        </Grid>
         
-        <Grid item xs={1}>
-          <AssignmentIndIcon fontSize="large" style={{ color: '#89DDBF' }}/>
-        </Grid>
-        <Grid item xs={11}>
-          <Typography >회원가입</Typography>
-        </Grid>
+        <Grid container item xs={12} md={6} spacing={2}>
         <Grid item xs={12} className="sign-up-grid">
           <CssTextField
             required
@@ -271,7 +284,9 @@ const SignupForm = () => {
             onChange={onChangePhoneNumber}
           />
         </Grid>
-          <Grid item xs={6}>
+        </Grid>
+        <Grid container item xs={12} md={6} spacing={2} style={{height: '376px'}}>
+        <Grid item xs={6}>
             <CssTextField
               required
               id="outlined-required"
@@ -347,21 +362,30 @@ const SignupForm = () => {
           />
           {termError && <ErrorMessage>약관에 동의하셔야 합니다.</ErrorMessage>}
         </Grid>
-        <Grid item xs={12} className="sign-up-grid-item3">
-          <Button
-            variant="contained"
-            disabled={disabled}
-            fullWidth={true}
-            color="primary"
-            onClick={onSubmit}
-            style={{
-              fontSize: 14,
-              fontFamily: 'Noto Sans KR',
-              fontWeight: 500,
-            }}
-          >
-            회원가입
-          </Button>
+        </Grid>
+        <Grid container item xs={12} className="sign-up-grid-item3" spacing={2}>
+          <Grid item xs={0} md={3}>
+
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Button
+              variant="contained"
+              disabled={disabled}
+              fullWidth={true}
+              color="primary"
+              onClick={onSubmit}
+              style={{
+                fontSize: 14,
+                fontFamily: 'Noto Sans KR',
+                fontWeight: 500,
+              }}
+            >
+              회원가입
+            </Button>
+          </Grid>
+          <Grid item xs={0} md={3}>
+
+          </Grid>
         </Grid>
         
         <Grid item xs={5}>
