@@ -3,12 +3,13 @@ import Wrapper from './styles'
 import {Typography, CardActions, Checkbox, ListItemText, ListItemSecondaryAction, Grid} from '@material-ui/core'
 import {SET_CHOOSED_ROUTINE} from '../../../reducers/routine'
 import {useDispatch} from 'react-redux'
+import moment from 'moment-timezone'
 function App(props){
     const dispatch = useDispatch()
     let {routine, idx} = props
     function getDay(){
-        let day = new Date()
-        day = day.getDay()==0?6:day.getDay()-1
+        let day = moment().tz('Asia/Seoul')
+        day = day.day()==0?6:day.day()-1
         return day
       }
     function getTime(time){

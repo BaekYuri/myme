@@ -109,7 +109,7 @@ router.get('/', isLoggedIn, async (req, res, next) => { // GET /routine
 
     let today = moment().day()
     today = today==0?6:today-1
-
+    console.log(moment().format('ha z'))
     const todayRoutines = await RoutineActiveDay.findAll({
       where: {
         day_of_week:today,
