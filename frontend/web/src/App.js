@@ -1,6 +1,6 @@
 // react
-import React from 'react';
-import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import { BrowserRouter, Switch, Route, Redirect, useHistory } from 'react-router-dom';
 
 //redux
 import { Provider } from 'react-redux';
@@ -8,7 +8,8 @@ import { Provider } from 'react-redux';
 // import store from './redux';
 import store, { persistor } from './store/configureStore'
 import { PersistGate } from 'redux-persist/integration/react';
-
+import { CLEAR_MODAL } from './reducers/modal';
+import { useDispatch } from 'react-redux';
 // page
 import RoutineSetting from './pages/RoutineSetting/';
 import HabitSetting from './pages/HabitSetting/';
@@ -36,6 +37,32 @@ import PostCodeModal from './components/Auth/PostCodeModal';
 import './index.css';
 import ScrollToTop from './common/ScrollToTop';
 
+
+const Routers = () => {
+  const history = useHistory()
+  const dispatch = useDispatch()
+  useEffect(()=>{
+    return history.listen((location)=>{
+      dispatch({type:CLEAR_MODAL})
+    })
+  },[history])
+  return (
+    <Switch>
+                  <Route exact path="/" component={Auth} />
+                  <Route path="/Home" component={Home} />
+                  <Route path="/RoutineSetting" component={RoutineSetting} />
+                  <Route path="/HabitSetting" component={HabitSetting} />
+                  <Route path="/ChallengeHome" component={ChallengeHome} />
+                  <Route path="/CreateChallenge" component={CreateChallenge} />
+                  <Route path="/SearchChallenge" component={SearchChallenge} />
+                  <Route path="/ChallengeMore/:category" component={MoreChallenges} />
+                  <Route path="/Profile" component={Profile} />
+                  <Route path="/Challenge/:challengeId" component={ChallengeDetail} />
+                  <Route path="/ChallengeDashboard/:challengeId" component={ChallengeDashboard} />
+                  <Redirect to="/not-found" />
+              </Switch>
+  )
+}
 // app
 const App = () => {
   return (
@@ -43,22 +70,7 @@ const App = () => {
       <PersistGate loading={null} persistor={persistor} >
           <BrowserRouter>
             <ScrollToTop>
-              <Switch>
-                <Route exact path="/" component={Auth} />
-                <Route path="/Home" component={Home} />
-                <Route path="/RoutineSetting" component={RoutineSetting} />
-                <Route path="/HabitSetting" component={HabitSetting} />
-                <Route path="/ChallengeHome" component={ChallengeHome} />
-                <Route path="/CreateChallenge" component={CreateChallenge} />
-                <Route path="/SearchChallenge" component={SearchChallenge} />
-                <Route path="/ChallengeMore/:category" component={MoreChallenges} />
-                <Route path="/Profile" component={Profile} />
-                {/* <Route path="/MirrorSetting" component={MirrorSetting} /> */}
-                <Route path="/Challenge/:challengeId" component={ChallengeDetail} />
-                <Route path="/ChallengeDashboard/:challengeId" component={ChallengeDashboard} />
-                {/* <Route path='/ChangePassword' component={ChangePassword}/> */}
-                <Redirect to="/not-found" />
-              </Switch>
+              <Routers/>
             </ScrollToTop>
           </BrowserRouter>
           <RoutineModal/>

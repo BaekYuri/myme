@@ -13,7 +13,7 @@ const { swaggerUI, specs } = require('./modules/swagger')
 
 dotenv.config()
 const app = express()
-app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(specs))
+// app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(specs))
 const { sequelize } = require('./models')
 const indexRouter = require('./routes')
 const userRouter = require('./routes/user')

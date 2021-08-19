@@ -91,7 +91,7 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
         case DELETE_EVENT_SUCCESS:
             draft.deleteEventLoading = false
             draft.deleteEventDone = true
-            draft.events = draft.events.filter((v) => v.id !== action.id)
+            draft.events = draft.events.filter((v) => v.id != action.id)
             break
         case DELETE_EVENT_FAILURE:
             draft.deleteEventLoading = false

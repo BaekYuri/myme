@@ -180,7 +180,7 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {  // POST /user/login
  *        '200':
  *          description: Success
  */
-router.post('/logout', isLoggedIn, (req, res) => {
+router.post('/logout', (req, res) => {
   req.logout()
   req.session.destroy()
   res.send('ok')

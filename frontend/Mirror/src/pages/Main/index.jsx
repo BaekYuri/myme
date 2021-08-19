@@ -110,7 +110,7 @@ const Main = props => {
               <Grid item xs={12}>
                 <Typography variant='h5'>오늘의 일정</Typography>
                 <List className="listScroll" component="nav" aria-label="mailbox folders"
-                style={{ maxHeight: '150px'}}>           
+                style={{ maxHeight: '100px'}}>           
                 {  
                     todayEvent.length === 0 ?
                     <ListItem>오늘의 일정이 없습니다</ListItem> :

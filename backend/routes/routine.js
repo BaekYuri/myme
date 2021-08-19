@@ -4,7 +4,8 @@ require('moment-timezone');
 moment.tz.setDefault("Asia/Seoul");
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
-const { Routine, User, RoutinizedHabit, RoutineActiveDay, Habit, DailyAchieveHabit, DailyAchieveRoutine } = require('../models')
+const { sequelize, Routine, User, RoutinizedHabit, RoutineActiveDay, Habit, DailyAchieveHabit, DailyAchieveRoutine } = require('../models');
+const routinizedHabit = require('../models/routinizedHabit');
 const { isLoggedIn } = require('./middlewares')
 
 const router = express.Router()
@@ -377,12 +378,34 @@ router.put('/:routineId', isLoggedIn, async (req, res, next) => { // PATCH /rout
  *          description: Success
  */
 router.delete('/:routineId', isLoggedIn, async (req, res, next) => {
+  const t = await sequelize.transaction();
   try {
+    let routinizedHabitIds = await RoutinizedHabit.findAll({
+      where: {RoutineId : req.params.routineId},
+      attributes: ['id'],
+      group:['id']
+    },{ transaction: t })
+    for(let i=0;i<routinizedHabitIds.length;i++){
+      await DailyAchieveHabit.destroy({
+        where:{RoutinizedHabitId : routinizedHabitIds[i].id}
+      },{ transaction: t })
+    }
+    await RoutinizedHabit.destroy({
+      where: {RoutineId : req.params.routineId}
+    },{ transaction: t })
+    await DailyAchieveRoutine.destroy({
+      where: {RoutineId : req.params.routineId}
+    },{ transaction: t })
+    await RoutineActiveDay.destroy({
+      where: {RoutineId : req.params.routineId}
+    },{ transaction: t })
     await Routine.destroy({
       where: { id: req.params.routineId }
-    })
+    },{ transaction: t })
+    await t.commit();
     res.status(200).json('Success')
   } catch (error) {
+    await t.rollback();
     console.error(error)
     next(error)
   }

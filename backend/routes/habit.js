@@ -1,5 +1,11 @@
 const express = require('express')
-const { User, Habit, RoutinizedHabit, sequelize } = require('../models')
+let moment = require('moment')
+require('moment-timezone');
+moment.tz.setDefault("Asia/Seoul");
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
+const { User, Habit, RoutinizedHabit, sequelize, Routine, DailyAchieveHabit, DailyAchieveRoutine } = require('../models');
+const routinizedHabit = require('../models/routinizedHabit');
 const { isLoggedIn } = require('./middlewares')
 
 const router = express.Router()
@@ -228,18 +234,60 @@ router.post('/', isLoggedIn, async (req, res, next) => { // POST /habit
  *                UserId: 1
  */
  router.delete('/:habitId', isLoggedIn, async (req, res, next) => { // PUT /habit/{habitId}
-  const t = await sequelize.transaction();
+  
   try {
+    //habitId를 가지고 있는 모든 루틴 아이디 검색
+    const routineIds = await RoutinizedHabit.findAll({
+      attributes: ['RoutineId'],
+      where : {HabitId: req.params.habitId},
+      group:['RoutineId']
+    })
+    
+    for(let i=0;i<routineIds.length;i++){
+      let nowRoutizedHabits = await RoutinizedHabit.findAll({
+        where:{Routineid : routineIds[i].RoutineId,
+          [Op.not]:{HabitId:req.params.habitId}
+        },
+        include: [{
+          model: DailyAchieveHabit,
+          required: false,
+          where:{
+            achieve_datetime:{
+              [Op.between]: [moment().startOf('day'), moment().endOf('day')],
+            }
+          }
+        }]
+      })
+      nowRoutizedHabits.sort((a,b)=>{return a.order-b.order})
+      let achieveCnt = 0;
+      for(let j=0;j<nowRoutizedHabits.length;j++){
+        await RoutinizedHabit.update(
+          {order: j},
+          {
+            where: { id: nowRoutizedHabits[j].id }
+          }
+        )
+        if(nowRoutizedHabits[j].DailyAchieveHabits.length>0){
+          achieveCnt++
+        }
+      }
+      if(nowRoutizedHabits.length==achieveCnt){
+        await DailyAchieveRoutine.create({
+          authorized: true,
+          achieve_datetime: moment().toDate(),
+          RoutineId: routineIds[i].RoutineId
+        })
+      }
+      
+    }
     await RoutinizedHabit.destroy({
       where : {HabitId: req.params.habitId}
-    },{ transaction: t })
+    })
     await Habit.destroy({
       where: { id:req.params.habitId }
-    },{ transaction: t })
-    await t.commit();
+    })
     res.status(200).json("success")
   } catch (error) {
-    await t.rollback();
     console.error(error)
     next(error)
   }

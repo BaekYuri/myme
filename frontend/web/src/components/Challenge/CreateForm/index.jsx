@@ -17,6 +17,7 @@ import {
 } from '@material-ui/core/';
 
 import { teal } from '@material-ui/core/colors';
+import moment from 'moment';
 import Wrapper from './styles';
 import DateFnsUtils from '@date-io/date-fns';
 import {
@@ -28,7 +29,7 @@ import { categories } from '../../../config/config';
 import { ColorButton } from '../../../common/Buttons'
 
 import { useDispatch, useSelector } from 'react-redux';
-import { ADD_CHALLENGE_REQUEST, CLEAR_ADD_CHALLENGE_DONE, UPLOAD_CHALLENGE_IMAGE_REQUEST } from '../../../reducers/challenge';
+import { ADD_CHALLENGE_REQUEST, CLEAR_ADD_CHALLENGE_DONE, CLEAR_IMAGE_PATH, UPLOAD_CHALLENGE_IMAGE_REQUEST } from '../../../reducers/challenge';
 import { useHistory } from 'react-router-dom';
 import { OPEN_CONFIRM_MODAL } from '../../../reducers/modal';
 
@@ -59,7 +60,7 @@ const CreateChallenge = () => {
   }, [])
   
   // 챌린지 시작 Date
-  const [startDate, setStartDate] = useState(new Date());
+  const [startDate, setStartDate] = useState(moment().startOf('day'));
   
   // 챌린지 종료 Date
   const [endDate, setEndDate] = useState(startDate);
@@ -75,6 +76,13 @@ const CreateChallenge = () => {
     const d = new Date(startDate.valueOf()+(1000*60*60*24*365))
     setMaxDate(d)
   }, [startDate])
+
+  // 처음 입장하자 마자 이미지 패스 초기화
+  useEffect(() => {
+    dispatch({
+      type: CLEAR_IMAGE_PATH,
+    })
+  }, [])
 
   // 총 인증 일 수
   /**
@@ -225,7 +233,7 @@ const CreateChallenge = () => {
       setEndDate(tempEnd)
       setTotalNumOfCert(period*(10-certCycle)/7)
     }
-  }, [period, certCycle, getWeekdayNum, getWeekendNum, startDate])
+  }, [period, certCycle, startDate])
 
   // 총 인증 일 수 확인...
   // useEffect(() => {
@@ -272,13 +280,14 @@ const CreateChallenge = () => {
     if (name !== '' && subject !== '' && challengeImagePath !== '' && content !== '' && startDate !== '' && endDate !== '' && period !== 0 && totalNumOfCert !== 0 && certStartTime !== '' && certEndTime !== '' && !activeWeekError && !weekError && !certTimeError && !totalCertError) {
       setSubmitDisable(false)
     }
-  }, [name, subject, challengeImagePath, content, startDate, endDate, period, totalNumOfCert, certStartTime, certEndTime, activeWeekError, certTimeError, totalCertError, weekError])
+  }, [name, subject, challengeImagePath, content, startDate, endDate, period, totalNumOfCert, certStartTime, certEndTime])
   
   const onClickImageUpload = useCallback(() => {
     imageInput.current.click()
   }, [imageInput.current])
 
   const onChangeImage = useCallback((e) => {
+    console.log('image', e.target.files[0])
 
     const imageFormData = new FormData()
     imageFormData.append('image', e.target.files[0])
@@ -287,7 +296,7 @@ const CreateChallenge = () => {
       type: UPLOAD_CHALLENGE_IMAGE_REQUEST,
       data: imageFormData
     })
-  }, [dispatch])
+  }, [])
   
   const onSubmit = useCallback((e) => {
     e.preventDefault()
@@ -320,7 +329,7 @@ const CreateChallenge = () => {
       }
     })
   }, [name, subject, challengeImagePath, content, startDate, endDate, period, certCycle, totalNumOfCert, certStartTime, certEndTime,
-    mon, tue, wed, thu, fri, sat, sun, dispatch]);
+    mon, tue, wed, thu, fri, sat, sun, categories]);
 
   useEffect(() => {
     if (addChallengeDone) {
@@ -339,11 +348,11 @@ const CreateChallenge = () => {
         message: addChallengeError
       })
     }
-  }, [addChallengeDone, addChallengeError, dispatch, history])
+  }, [addChallengeDone, addChallengeError])
 
   const onCancel = useCallback(() => {
     history.push('/ChallengeHome')
-  }, [history])
+  }, [])
 
   return (
     <Wrapper>
@@ -623,7 +632,7 @@ const CreateChallenge = () => {
           </Grid>
           <Grid item xs={12} sm={3} >
             <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <img accept="image/*" src={challengeImagePath ? challengeImagePath : "/images/camera.png"} style={{ maxHeight: '150px', maxWidth: '150px' }} alt='' />
+              <img accept="image/*" src={challengeImagePath ? challengeImagePath : "/images/camera.png"} style={{ maxHeight: '150px', maxWidth: '150px' }} />
             </div>
             <input type="file" name="image" hidden ref={imageInput} onChange={onChangeImage} />
           </Grid>

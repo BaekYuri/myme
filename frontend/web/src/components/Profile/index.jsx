@@ -168,7 +168,7 @@ const Profile = () => {
     if(firstLoad){
       setFirstLoad(false)
     }
-  },[addressInfo, firstLoad])
+  },[addressInfo])
 
   function openAddressModal(){
     dispatch({type:OPEN_ADDRESS_MODAL})

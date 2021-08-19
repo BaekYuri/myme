@@ -41,7 +41,7 @@ const SignupForm = () => {
       setMainAddress('')
       setFirstLoad(false)
     }
-  },[addressInfo,firstLoad])
+  },[addressInfo])
   const [name, setName] = useState('')
   const onChangeName = useCallback((e) => {
     setName(e.target.value)

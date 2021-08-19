@@ -1,7 +1,7 @@
 import { withStyles } from '@material-ui/core/';
 import { teal } from '@material-ui/core/colors';
 
-export const backUrl = 'http://localhost:3065'
+export const backUrl = 'https://api.myme.today';
 
 export const categories = [
   {
