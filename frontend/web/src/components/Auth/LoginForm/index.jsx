@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import clsx from 'clsx';
 import {
   Button,
   Grid,
@@ -30,12 +29,12 @@ const LoginForm = () => {
   const [email, setEmail] = useState('')
   const onChangeEmail = useCallback((e) => {
     setEmail(e.target.value)
-  }, [email])
+  }, [])
 
   const [password, setPassword] = useState('')
   const onChangePassword = useCallback((e) => {
     setPassword(e.target.value)
-  }, [password])
+  }, [])
 
   const [showPassword, setShowPassword] = useState(false)
   const onChangeShowPassword = useCallback(() => {
@@ -74,13 +73,13 @@ const LoginForm = () => {
     }
 
     dispatch(loginRequestAction({email, password}))
-  }, [email, password])
+  }, [email, password, dispatch])
 
   const onChangeSignupMode = useCallback(() => {
     dispatch({
       type: CHANGE_SIGN_UP_MODE
     })
-  }, []) 
+  }, [dispatch]) 
 
   useEffect(() => {
     if (email !== '' && password !== '') {
@@ -99,7 +98,7 @@ const LoginForm = () => {
         message: logInError
       })
     }
-  }, [logInDone, logInError])
+  }, [logInDone, logInError, dispatch])
 
   return (
     <Container maxWidth="xs" style={{margin: '0 20px', padding: '20px', background: '#ffffff', border: 'solid 1px #eeeeee', borderRadius: '10px', boxShadow: '2px 2px 2px #eeeeee'}}>

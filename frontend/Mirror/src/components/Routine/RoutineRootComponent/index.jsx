@@ -5,6 +5,7 @@ import RoutinizedHabitList from '../RoutinizedHabitList'
 import ProgressItem from '../ProgressItem'
 import {useSelector, useDispatch} from 'react-redux'
 import {SET_CHOOSED_ROUTINE} from '../../../reducers/routine'
+import { Fade } from '@material-ui/core';
 import Wrapper from './styles';
 function App(){
     let {choosedRoutine, myRoutines, choosedRoutinizedHabit} = useSelector((state)=> {return state.routine})
@@ -46,12 +47,13 @@ function App(){
     function clearTime(){
         setTime(0)
     }
+
     return(
         <Wrapper>
         <Grid container spacing={3}>
             <Grid item xs={6}>
                 {
-                    choosedRoutine==-1 || myRoutines.length<choosedRoutine?
+                    choosedRoutine==-1 || myRoutines.length<=choosedRoutine?
                     <RoutineList myRoutines={myRoutines}/>
                     :
                     <RoutinizedHabitList routine={myRoutines[choosedRoutine]} goBack={goBack} stopInterval={stopInterval} clearTime={clearTime}/>
@@ -59,8 +61,7 @@ function App(){
             </Grid>
             <Grid item xs={6} className={zoomIn?'progress progress-expanded':'progress'}>
                 {
-                    !myRoutines[choosedRoutine] || !myRoutines[choosedRoutine].RoutinizedHabits[choosedRoutinizedHabit]?
-                    null:
+                    myRoutines[choosedRoutine] && myRoutines[choosedRoutine].RoutinizedHabits[choosedRoutinizedHabit]?
                     <ProgressItem 
                     choosedRoutine={choosedRoutine} 
                     choosedRoutinizedHabit={choosedRoutinizedHabit} 
@@ -71,7 +72,9 @@ function App(){
                     clearTime={clearTime}
                     zoomIn={zoomIn}
                     changeZoomIn={changeZoomIn}
-                    changeZoomOut={changeZoomOut}/>
+                    changeZoomOut={changeZoomOut}/>:
+                    null
+                    
                 }
             </Grid>
         </Grid>

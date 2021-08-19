@@ -8,5 +8,9 @@ const Wrapper = styled.button`
     margin-left: 20px;
     border: none;
     font-weight: bold;
+    cursor: pointer;
+    &:hover{
+        background-color:rgb(137,221,191);
+    }
 `;
 export default Wrapper;

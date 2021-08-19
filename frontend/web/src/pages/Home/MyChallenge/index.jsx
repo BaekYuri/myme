@@ -73,6 +73,7 @@ const MyChallengeHome = () => {
         </Tabs>
       </Paper>
       <TabPanel value={value} index={0}>
+        <Grid container spacing={2}>
         {
           myChallenges.length !== 0 ?
           (
@@ -89,8 +90,10 @@ const MyChallengeHome = () => {
               <Typography component={'div'} >전체 챌린지에 도전해보세요!</Typography>
             </Grid>
         }
+        </Grid>
       </TabPanel>
       <TabPanel value={value} index={1}>
+        <Grid container spacing={2}>
         {
           workoutChallenges.length !== 0 ?
           (
@@ -107,8 +110,10 @@ const MyChallengeHome = () => {
               <Typography component={'div'} >운동 챌린지에 도전해보세요!</Typography>
             </Grid>
         }
+        </Grid>
       </TabPanel>
       <TabPanel value={value} index={2}>
+      <Grid container spacing={2}>
         {
           studyChallenges.length !== 0 ?
           (
@@ -125,8 +130,10 @@ const MyChallengeHome = () => {
               <Typography component={'div'} >공부 챌린지에 도전해보세요!</Typography>
             </Grid>
         }
+        </Grid>
       </TabPanel>
       <TabPanel value={value} index={3}>
+      <Grid container spacing={2}>
         {
           lifeChallenges.length !== 0 ?
           (
@@ -143,8 +150,10 @@ const MyChallengeHome = () => {
               <Typography component={'div'} >생활 챌린지에 도전해보세요!</Typography>
             </Grid>
         }
+        </Grid>
       </TabPanel>
       <TabPanel value={value} index={4}>
+      <Grid container spacing={2}>
       {
           mealChallenges.length !== 0 ?
           (
@@ -161,8 +170,10 @@ const MyChallengeHome = () => {
               <Typography component={'div'} >식사 챌린지에 도전해보세요!</Typography>
             </Grid>
         }
+        </Grid>
       </TabPanel>
       <TabPanel value={value} index={5}>
+      <Grid container spacing={2}>
         {
           abilityChallenges.length !== 0 ?
           (
@@ -179,8 +190,10 @@ const MyChallengeHome = () => {
               <Typography component={'div'} >역량 챌린지에 도전해보세요!</Typography>
             </Grid>
         }
+        </Grid>
       </TabPanel>
       <TabPanel value={value} index={6}>
+      <Grid container spacing={2}>
         {
           hobbyChallenges.length !== 0 ?
           (
@@ -197,8 +210,10 @@ const MyChallengeHome = () => {
               <Typography component={'div'} >취미 챌린지에 도전해보세요!</Typography>
             </Grid>
         }
+        </Grid>
       </TabPanel>
       <TabPanel value={value} index={7}>
+      <Grid container spacing={2}>
         {
           assetChallenges.length !== 0 ?
           (
@@ -215,6 +230,7 @@ const MyChallengeHome = () => {
               <Typography component={'div'} >자산 챌린지에 도전해보세요!</Typography>
             </Grid>
         }
+        </Grid>
       </TabPanel>
     </>
   )

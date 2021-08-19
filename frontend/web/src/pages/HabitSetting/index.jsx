@@ -16,7 +16,8 @@ function App (props) {
     dispatch({
       type: LOAD_MY_HABITS_REQUEST,
     })
-  }, [])
+  }, [dispatch])
+
   function openModal(){
     dispatch({type:OPEN_MODIFY_HABIT_MODAL})
     dispatch({type:SET_MODIFY_HABIT_MODAL, idx:-1})

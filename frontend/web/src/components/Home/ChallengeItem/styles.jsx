@@ -1,13 +1,10 @@
 import styled from 'styled-components';
 import Paper from '@material-ui/core/Paper';
 const Wrapper = styled(Paper)`
-    display: inline-block;
     padding : 10px;
     border-radius : 10px;
-    min-width: 270px;
-    height: max-content;
-    margin:5px;
     background-color:white;
+    height: 100%;
     .title {
         margin:0px;
         padding: 0px;

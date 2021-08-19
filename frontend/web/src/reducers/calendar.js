@@ -1,6 +1,4 @@
-import { SystemUpdate } from '@material-ui/icons'
 import produce from 'immer'
-import moment from 'moment'
 
 const initialState = {
     events: [], // 전체 일정
@@ -93,7 +91,7 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
         case DELETE_EVENT_SUCCESS:
             draft.deleteEventLoading = false
             draft.deleteEventDone = true
-            draft.events = draft.events.filter((v) => v.id != action.id)
+            draft.events = draft.events.filter((v) => v.id !== action.id)
             break
         case DELETE_EVENT_FAILURE:
             draft.deleteEventLoading = false
@@ -108,7 +106,7 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
             draft.modifyEventLoading = false
             draft.modifyEventDone = true
             for(let i=0;i<draft.events.length;i++){
-                if(draft.events[i].id == draft.choosedEvent){
+                if(draft.events[i].id === draft.choosedEvent){
                     draft.events[i] = action.data
                 }
             }
@@ -139,7 +137,6 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
             break
         case SET_CHOOSED_EVENT_MODAL:
             draft.choosedEvent = action.data.id
-            console.log(draft.choosedEvent)
             draft.eventInfo=null
             draft.eventInfo={
                 id: action.data.id,
@@ -165,7 +162,7 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
         case SET_CHOOSED_EVENT_COLOR:
             draft.eventInfo.color = action.color
             break
-
+          default:break
     }
 })
 

@@ -1,27 +1,23 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
 import {
   Button,
   Grid,
-  IconButton,
   Typography,
   Divider,
   TextField,
-  Box,
   Container,
 } from '@material-ui/core';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 
-import { useDispatch, useSelector } from 'react-redux';
-import { CHANGE_SIGN_UP_MODE, loginRequestAction } from '../../../reducers/user';
+import { useDispatch } from 'react-redux';
+import { loginRequestAction } from '../../../reducers/user';
+import Wrapper from './styles';
 
 const regExpEm = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 const regExpPw = /(?=.*\d{1,50})(?=.*[~`!@#$%\^&*()-+=]{1,50})(?=.*[a-zA-Z]{2,50}).{8,50}$/;
 
 const LoginForm = () => {
-  let history = useHistory()
   const dispatch = useDispatch()
-  const { isSignUp } = useSelector((state) => state.user)
 
   const [email, setEmail] = useState('')
   const onChangeEmail = useCallback((e) => {
@@ -52,14 +48,9 @@ const LoginForm = () => {
     }
 
     dispatch(loginRequestAction({email, password}))
-  }, [email, password])
+  }, [email, password, dispatch])
 
 
-  const onChangeSignupMode = useCallback(() => {
-    dispatch({
-      type: CHANGE_SIGN_UP_MODE
-    })
-  }, []) 
 
 
   useEffect(() => {
@@ -73,7 +64,8 @@ const LoginForm = () => {
   }, [email, password]);
 
   return (
-    <Container maxWidth="sm" style={{margin: '0 20px', padding: '20px', background: '#ffffff', border: 'solid 1px #eeeeee', borderRadius: '10px', boxShadow: '2px 2px 2px #eeeeee'}}>
+    <Wrapper>
+    <Container maxWidth="sm" style={{margin: '0 20px', padding: '20px', border: 'solid 1px #eeeeee', borderRadius: '10px'}}>
       <Grid
         container
         direction="row"
@@ -83,10 +75,10 @@ const LoginForm = () => {
         className="grid"
       >
         <Grid>
-          <AccountBoxIcon fontSize="large" style={{ color: '#89DDBF' }} />
+          <AccountBoxIcon fontSize="large" style={{ color: '#89DDBF', marginTop:"5px " }} />
         </Grid>
         <Grid item xs={11}>
-          <Typography>
+          <Typography variant="h5">
             로그인
           </Typography>
         </Grid>
@@ -94,7 +86,7 @@ const LoginForm = () => {
           <TextField
             required
             id="outlined-required"
-            label="이메일"
+            placeholder="이메일"
             className="text-field"
             defaultValue={email}
             variant="outlined"
@@ -110,13 +102,16 @@ const LoginForm = () => {
           <TextField
             required
             id="outlined-password-input"
-            label="비밀번호"
+            placeholder="비밀번호"
             className="text-field"
             type="password"
             autoComplete="current-password"
             defaultValue={password}
             variant="outlined"
             style={{background: 'white'}}
+            // style={{border: '#fff 1px solid', color:'#fff'}}
+            // InputLabelProps={{ style:{color: '#fff'}}}
+            // inputProps={{style:{color:'#fff'}}}
             fullWidth={true}
             onChange={onChangePassword}
             // onFocus={event => {
@@ -129,14 +124,16 @@ const LoginForm = () => {
             variant="contained"
             disabled={disabled}
             fullWidth={true}
-            color="primary"
+            
+            color="secondary"
+            style={{color:'white', border:'#eee 1px solid'}}
             onClick={onLogin}
             className="grid-item-button"
           >
             login
           </Button>
         </Grid>
-        <Grid item xs={12} className="grid-item">
+        <Grid item xs={12} className="grid-item" style={{margin:'10px 0'}}>
           <Grid
             container
             direction="row"
@@ -145,59 +142,35 @@ const LoginForm = () => {
             spacing={0}
           >
             <Grid item xs={5}>
-              <Divider />
+            <Divider style={{backgroundColor:'#fff'}}/>
             </Grid>
 
             <Grid item xs={2}>
-              <Typography align="center" className="grid-item-typography1">
+              <Typography variant="h6" align="center" className="grid-item-typography1">
                 or
               </Typography>
             </Grid>
 
             <Grid item xs={5}>
-              <Divider />
+              <Divider style={{backgroundColor:'#fff'}}/>
             </Grid>
           </Grid>
         </Grid>
-
-        <Grid item xs={3} >
-          <Grid container direction="row" justifyContent="center" alignItems="center">
-            <img src="/images/naver.png" alt="" width="40px"/>
-          </Grid>
-        </Grid>
-        <Grid item xs={3} >
-          <Grid container direction="row" justifyContent="center" alignItems="center">
-            <img src="/images/facebook.png" alt="" width="40px" />
-          </Grid>
-        </Grid>
-        <Grid item xs={3} >
-          <Grid container direction="row" justifyContent="center" alignItems="center">
-            <img src="/images/google.png" alt="" width="40px" />
-          </Grid>
-        </Grid>
-        <Grid item xs={3} >
-          <Grid container direction="row" justifyContent="center" alignItems="center">
-            <img src="/images/kakao.png" alt="" width="40px" />
-          </Grid>
-        </Grid>
-
-        <Grid item xs={6} >
-          <div style={{textAlign: 'center'}}>
-            계정이 없으신가요?
+        <Grid item xs={6}>
+          <div style={{textAlign: 'center', letterSpacing: '2px', color:'#eee', float:'right'}}>
+           회원가입 하러가기
           </div>
         </Grid>
-
-        <Grid item xs={6} >
-          <Button
-            fullWidth={true}
-            onClick={onChangeSignupMode}
-            className="grid2-item-button"
-          >
-            회원가입
-          </Button>
+        <Grid item xs={6} style={{textAlign: 'center', float:'left'}}>
+          <img src="./images/mymeQR.png" width="100px" alt=''></img>
         </Grid>
+        
+      
+       
       </Grid>
     </Container>
+    {/* <div style={{textAlign:'center', marginTop:'10px'}}>회원가입은 https://myme.today 에서 가능합니다</div> */}
+    </Wrapper>
   );
 }
 

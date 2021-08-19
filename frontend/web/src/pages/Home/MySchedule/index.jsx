@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import moment from 'moment';
 import {useDispatch, useSelector} from 'react-redux';
 import Calendar from '../../../components/Home/Calendar/index'
 import TodayEvent from '../../../components/Home/Calendar/TodayEvent/index'
-import Container from '@material-ui/core/Container';
-import {Paper,List, ListItem, Button} from '@material-ui/core'
+import {Paper,List, ListItem} from '@material-ui/core'
 import { OPEN_CREATE_EVENT_MODAL } from '../../../reducers/modal';
+import AddRoutineButton from '../../../components/Routine/AddRoutineButton'
 function App (props) {
   const dispatch = useDispatch()
   const { events } = useSelector((state) => state.calendar)
@@ -22,13 +22,13 @@ function App (props) {
     ) 
 
   return(
-    <Container>
-        <div className='menu daily-menu'><h3>오늘의 일정</h3><Button className='btn' onClick={openCreateEventModal}>+일정추가</Button></div>
+    <div>
+        <div className='menu daily-menu'><h3>오늘의 일정</h3><AddRoutineButton onClick={openCreateEventModal} title='일정 추가'></AddRoutineButton></div>
         
         <Paper style={{margin: '0 0 10px 0'}}>
           <List component="nav" aria-label="mailbox folders">           
               {  
-                  todayEvent.length == 0 ?
+                  todayEvent.length === 0 ?
                   <ListItem>오늘의 일정이 없습니다</ListItem> :
                   <>
                   {
@@ -41,7 +41,7 @@ function App (props) {
           </List>
         </Paper>
         <Calendar myEvent={events}/>
-    </Container>
+    </div>
   );
 }
 

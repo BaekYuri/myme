@@ -1,18 +1,13 @@
-import React, {useState, useCallback} from 'react'
-import { connect, useDispatch, useSelector } from 'react-redux'
-import FullCalendar, { formatDate } from '@fullcalendar/react'
+import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import Wrapper from './styles'
-import { makeStyles } from '@material-ui/core/styles';
-import { CLOSE_CREATE_EVENT_MODAL } from '../../../reducers/modal';
-import { OPEN_MODIFY_EVENT_MODAL, TOGGLE_MODIFY_EVENT_MODAL } from '../../../reducers/modal';
-import {  SET_CHOOSED_EVENT,SET_CHOOSED_EVENT_MODAL } from '../../../reducers/calendar';
+import { OPEN_MODIFY_EVENT_MODAL } from '../../../reducers/modal';
+import { SET_CHOOSED_EVENT_MODAL } from '../../../reducers/calendar';
 import googleCalendarPlugin from '@fullcalendar/google-calendar';
-
-import { Paper } from '@material-ui/core'
-import { months, monthsShort } from 'moment'
 
 const App = (props) => {
   const dispatch = useDispatch()
@@ -45,13 +40,9 @@ const App = (props) => {
                 height='600px'
                 dayMaxEvents={true}
                 events={events}
-                
-
                 eventClick={openModifyEventModal}
-                dayCellContent={(info)=>{return info.date.getDate()}}
                 />
         </Wrapper>
     )
   }
-
 export default App

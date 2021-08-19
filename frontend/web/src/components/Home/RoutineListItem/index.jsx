@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React from 'react';
 import Wrapper from './styles'
 
 import {
@@ -21,15 +21,15 @@ const App = (props) => {
 
   function getDay(){
     let day = new Date()
-    day = day.getDay()==0?6:day.getDay()-1
+    day = day.getDay()===0?6:day.getDay()-1
     return day
   }
   
   function getTime(time){
     let timeArr = time.split(':')
     
-    let am= Math.floor(timeArr[0]/12)==0?'오전':'오후'
-    let hour= timeArr[0]%12==0?12:timeArr[0]%12
+    let am= Math.floor(timeArr[0]/12)===0?'오전':'오후'
+    let hour= timeArr[0]%12===0?12:timeArr[0]%12
     hour = hour<10?`0${hour}`:hour
     return am+' '+hour+':'+timeArr[1]
   }
@@ -39,7 +39,7 @@ const App = (props) => {
   }
   return(
     <Wrapper>
-      <Accordion className="panel" className='routine-list-item' expanded={choosedRoutine === routineIdx} onChange={handleChange}>
+      <Accordion className="panel routine-list-item" expanded={choosedRoutine === routineIdx} onChange={handleChange}>
         <AccordionSummary
           className={routine.DailyAchieveRoutines.length?"panel-summary panel-summary-success":"panel-summary"}
           aria-controls="panel1a-content"
@@ -59,7 +59,7 @@ const App = (props) => {
         <AccordionDetails className='routine-list-item-detail'>
           <List className='accordian-detail-list'>
             {
-              routine.RoutinizedHabits && routine.RoutinizedHabits.length!=0
+              routine.RoutinizedHabits && routine.RoutinizedHabits.length!==0
                 ? (
                   routine.RoutinizedHabits.map((habit, idx) => {
                     return (
@@ -70,7 +70,7 @@ const App = (props) => {
                   })
                 )
                 : <ListItem className='items'>
-                    <Paper style={{height:'66px', lineHeight:'66px',padding: "0px 16px",width: "100%"}}><h3>설정된 습관이 없어요!</h3></Paper>
+                    <Paper style={{height:'66px', lineHeight:'66px',padding: "0px 16px",width: "100%"}}><p>설정된 습관이 없어요!</p></Paper>
                 </ListItem>
             }
           </List>

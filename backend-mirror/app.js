@@ -7,6 +7,8 @@ const dotenv = require('dotenv')
 const passport = require('passport')
 const cors = require('cors')
 const passportConfig = require('./passport')
+const helmet = require('helmet')
+const hpp = require('hpp')
 const { swaggerUI, specs } = require('./modules/swagger')
 
 dotenv.config()
@@ -23,7 +25,7 @@ const habitRouter = require('./routes/habit')
 const scheduleRouter = require('./routes/schedule')
 const weatherRouter = require('./routes/weather')
 
-app.set('port', process.env.PORT || 3066)
+app.set('port', process.env.PORT || 3065)
 passportConfig()
 sequelize.sync()
   .then(() => {
@@ -38,6 +40,15 @@ sequelize.sync()
 // 요청에 따라서 어디까지 실행되는지 결정된다. 중간에 실행 되면 => 거기서 멈춤, 서버 부하 줄어든다!
 // app.set('trust proxy', 1)
 // app.use(morgan('dev'))
+if (process.env.NODE_ENV === 'production') {
+  app.use(morgan('combined'))
+  app.use(hpp())
+  app.use(helmet())
+} else {
+  app.use(morgan('dev'))
+  app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(specs))
+}
+
 app.use(cookieParser(process.env.COOKIE_SECRET))
 app.use(session({
   httpOnly: true,
@@ -59,7 +70,7 @@ app.use(express.urlencoded({ extended: true })) // true면 qs, false면 querystr
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(cors({
-  origin: true,
+  origin: ['http://localhost:3000', 'https://mirrorme.today'],
   credentials: true,
 }))
 

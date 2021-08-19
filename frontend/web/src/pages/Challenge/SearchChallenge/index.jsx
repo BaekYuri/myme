@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Grid, IconButton, InputBase, makeStyles, Paper, Typography} from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import Wrapper from './styles';
@@ -63,7 +63,7 @@ const SearchChallenge = () => {
       type: SEARCH_CHALLENGE_REQUEST,
       data: searchWord
     })
-  }, [searchWord])
+  }, [searchWord, dispatch])
 
   // useEffect(() => {
   //   console.log(searchWord)

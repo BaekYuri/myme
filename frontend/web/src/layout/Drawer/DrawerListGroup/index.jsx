@@ -1,11 +1,10 @@
 import React, { Fragment, useCallback, useEffect } from 'react';
 import { useHistory, NavLink } from 'react-router-dom';
 
-import { connect, useDispatch, useSelector } from 'react-redux';
-import {ExpandMore, HomeRounded, EventNoteRounded, GavelRounded, LaptopWindowsRounded, FaceRounded} from '@material-ui/icons';
-
+import { useDispatch, useSelector } from 'react-redux';
+import {ExpandMore, HomeRounded, EventNoteRounded, GavelRounded, FaceRounded} from '@material-ui/icons';
+import InsertEmoticonIcon from '@material-ui/icons/InsertEmoticon';
 import {
-  Avatar,
   List,
   ListItem,
   ListItemIcon,
@@ -17,15 +16,13 @@ import {
   AccordionDetails,
 } from '@material-ui/core';
 import { logoutRequestAction } from '../../../reducers/user';
-import { CLEAR_MY_ROUTINES } from '../../../reducers/routine';
-import { CLEAR_MY_CHALLENGES } from '../../../reducers/challenge';
 import { CLOSE_DRAWER } from '../../../reducers/layout';
 import { OPEN_CONFIRM_MODAL } from '../../../reducers/modal';
 import { persistor } from '../../../store/configureStore';
 
 const DrawerListGroup = (props) => {
   const dispatch = useDispatch()
-  const { me, logOutError } = useSelector((state) => state.user)
+  const { me, logOutError, logOutDone } = useSelector((state) => state.user)
 
   let history = useHistory();
 
@@ -33,7 +30,7 @@ const DrawerListGroup = (props) => {
       dispatch({
         type: CLOSE_DRAWER
       })
-  }, [])
+  }, [dispatch])
 
   const onSignOut = useCallback(() => {
     // dispatch({
@@ -46,10 +43,10 @@ const DrawerListGroup = (props) => {
       type: CLOSE_DRAWER
     })
     dispatch(logoutRequestAction())
-  }, [me])
+  }, [dispatch])
 
   useEffect(() => {
-    if (!me) {
+    if (logOutDone || !me) {
       history.push('/')
       persistor.purge()
     }
@@ -59,7 +56,7 @@ const DrawerListGroup = (props) => {
         message: logOutError
       })
     }
-  }, [me, logOutError])
+  }, [me, logOutDone, logOutError, dispatch, history])
 
   return (
     <>
@@ -72,12 +69,11 @@ const DrawerListGroup = (props) => {
                 expandIcon={<ExpandMore />}
                 aria-controls="panel1a-content"
                 id="panel1a-header"
+                style={{marginTop:'5px'}}
               >
-                <Avatar
-                  alt="profile picture"
-                  src={`https://picsum.photos/id/82/200/300.webp`}
-                  className="avatar"
-                />
+                {/* <Avatar alt="profile picture"> */}
+                  <InsertEmoticonIcon fontSize="large" style={{marginRight: '10px'}}/>
+                  {/* </Avatar> */}
                 <ListItemText
                   primary={me?.nickname}
                   disableTypography
@@ -98,7 +94,7 @@ const DrawerListGroup = (props) => {
                     />
                   </ListItem>
                   </NavLink>
-                  <NavLink to="/ChangePassword" className='router'
+                  {/* <NavLink to="/ChangePassword" className='router'
                     activeClassName='active-router' onClick={onMovePage}>
                     <ListItem
                       button
@@ -109,7 +105,7 @@ const DrawerListGroup = (props) => {
                         disableTypography
                       />
                     </ListItem>
-                  </NavLink>
+                  </NavLink> */}
                   <ListItem button key={'Sign Out'}>
                     <ListItemText
                       primary={'로그아웃'}
@@ -154,7 +150,7 @@ const DrawerListGroup = (props) => {
                 <ListItemText primary={'챌린지'} disableTypography />
               </ListItem>
         </NavLink>
-        <NavLink to="/MirrorSetting" className='router'
+        {/* <NavLink to="/MirrorSetting" className='router'
         activeClassName='active-router' onClick={onMovePage}>
           <ListItem
             button
@@ -163,7 +159,7 @@ const DrawerListGroup = (props) => {
             <ListItemIcon><LaptopWindowsRounded/></ListItemIcon>
             <ListItemText primary={'스마트 미러 관리'} disableTypography />
           </ListItem>
-        </NavLink>
+        </NavLink> */}
         <NavLink to="/HabitSetting" className='router'
         activeClassName='active-router' onClick={onMovePage}>
           <ListItem

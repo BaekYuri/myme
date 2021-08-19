@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import store from 'store';
 
@@ -10,7 +10,6 @@ import {
   Grid,
   Typography,
   AppBar,
-  Button,
   IconButton,
   useMediaQuery,
 } from '@material-ui/core';
@@ -44,7 +43,7 @@ const Header = (state) => {
     dispatch({
       type: TOGGLE_DRAWER
     })
-  }, [])
+  }, [dispatch])
 
   return (
     <>

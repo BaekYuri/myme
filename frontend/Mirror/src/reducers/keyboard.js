@@ -22,10 +22,10 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
     case CLOSE_KEY_BOARD:
       draft.openKeyboard = false
       break
-
     case SET_KEY_INFO:
       draft.keyInfo = action.data
       draft.keyInfo=false
+      break
       default:break
   }
 })

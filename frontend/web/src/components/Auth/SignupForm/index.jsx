@@ -4,7 +4,6 @@ import {
   Grid,
   Typography,
   Divider,
-  TextField,
   Checkbox,
   Container,
   FormControlLabel,
@@ -23,7 +22,7 @@ const ErrorMessage = styled.div`
 
 const regExpEm = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 const regExpPw = /(?=.*\d{1,50})(?=.*[~`!@#$%\^&*()-+=]{1,50})(?=.*[a-zA-Z]{2,50}).{8,50}$/;
-const regExpPN = /(\d{3}).*(\d{3}).*(\d{4})/
+const regExpPN = /^\d{3}-\d{3,4}-\d{4}$/;
 
 const SignupForm = () => {
   const dispatch = useDispatch()
@@ -42,7 +41,7 @@ const SignupForm = () => {
       setMainAddress('')
       setFirstLoad(false)
     }
-  },[addressInfo])
+  },[addressInfo,firstLoad])
   const [name, setName] = useState('')
   const onChangeName = useCallback((e) => {
     setName(e.target.value)
@@ -151,14 +150,14 @@ const SignupForm = () => {
     dispatch({
       type: CHANGE_SIGN_UP_MODE
     })
-  }, [password, passwordCheck, term])
+  }, [password, passwordCheck, term, age, dispatch, email, gender, mainAddress, name, nickname, phoneNumber, postCode, subAddress])
 
   const onChangeSignupMode = useCallback(() => {
     dispatch({
       type: CHANGE_SIGN_UP_MODE
     })
     setFirstLoad(true)
-  }, [])
+  }, [dispatch])
 
   useEffect(() => {
     if (name !== '' && email !== '' && nickname !== '' && password !== '' && passwordCheck !== '' && phoneNumber !== '' && mainAddress!==''&& subAddress !== '' && term === true) {
@@ -185,10 +184,12 @@ const SignupForm = () => {
       >
         <Grid container item xs={12} spacing={2}>
           <Grid item xs={1}>
-            <AssignmentIndIcon fontSize="large"/>
+            <AssignmentIndIcon color="action" fontSize='large' />
           </Grid>
           <Grid item xs={11}>
-            <Typography >회원가입</Typography>
+          <h3 style={{margin: '5px 0 0 13px'}}>
+            회원가입
+          </h3>
           </Grid>
         </Grid>
         
@@ -206,6 +207,7 @@ const SignupForm = () => {
             placeholder="이메일"
             fullWidth={true}
             onChange={onChangeEmail}
+            InputLabelProps={{ style:{fontFamily: 'SCDream4'}}}
           />
         </Grid>
 
@@ -223,6 +225,7 @@ const SignupForm = () => {
             placeholder="비밀번호"
             fullWidth={true}
             onChange={onChangePassword}
+            InputLabelProps={{ style:{fontFamily: 'SCDream4'}}}
           />
         </Grid>
         <Grid item xs={12} className="sign-up-grid-item2">
@@ -239,9 +242,12 @@ const SignupForm = () => {
             placeholder="비밀번호 확인"
             fullWidth={true}
             onChange={onChangePasswordCheck}
+            InputLabelProps={{ style:{fontFamily: 'SCDream4'}}}
           />
         </Grid>
+        <Grid item xs={12}>
         {passwordError && <ErrorMessage>비밀번호가 일치하지 않습니다.</ErrorMessage>}
+        </Grid>
         <Grid item xs={6} className="sign-up-grid-item1">
           <CssTextField
             required
@@ -254,6 +260,7 @@ const SignupForm = () => {
             placeholder="이름"
             fullWidth={true}
             onChange={onChangeName}
+            InputLabelProps={{ style:{fontFamily: 'SCDream4'}}}
           />
         </Grid>
         <Grid item xs={6} className="sign-up-grid-item1">
@@ -268,6 +275,7 @@ const SignupForm = () => {
             placeholder="닉네임"
             fullWidth={true}
             onChange={onChangeNickname}
+            InputLabelProps={{ style:{fontFamily: 'SCDream4'}}}
           />
         </Grid>
         <Grid item xs={12} className="sign-up-grid-item1">
@@ -282,6 +290,7 @@ const SignupForm = () => {
             placeholder="전화번호 000-0000-0000"
             fullWidth={true}
             onChange={onChangePhoneNumber}
+            InputLabelProps={{ style:{fontFamily: 'SCDream4'}}}
           />
         </Grid>
         </Grid>
@@ -301,6 +310,7 @@ const SignupForm = () => {
               InputProps={{
                 readOnly: true,
               }}
+              InputLabelProps={{ style:{fontFamily: 'SCDream4'}}}
             />
           </Grid>
           <Grid item xs={6}>
@@ -321,6 +331,7 @@ const SignupForm = () => {
               InputProps={{
                 readOnly: true,
               }}
+              InputLabelProps={{ style:{fontFamily: 'SCDream4'}}}
             />
           </Grid>
           <Grid item xs={12}>
@@ -335,10 +346,11 @@ const SignupForm = () => {
               placeholder="상세 주소"
               fullWidth={true}
               onChange={onChangeSubAddress}
+              InputLabelProps={{ style:{fontFamily: 'SCDream4'}}}
             />
           </Grid>
           <Grid item xs={6}>
-              <CssTextField select defaultValue={gender} label="성별" fullWidth={true} onChange={onChangeGender} variant="outlined">
+              <CssTextField select defaultValue={gender} label="성별" fullWidth={true} onChange={onChangeGender} variant="outlined" InputLabelProps={{ style:{fontFamily: 'SCDream4'}}}>
                       {genders.map((option, i) => (
                         <MenuItem key={i} value={option} >
                           {option}
@@ -347,7 +359,7 @@ const SignupForm = () => {
               </CssTextField>
             </Grid>
             <Grid item xs={6}>
-              <CssTextField select defaultValue={age} fullWidth={true} label="나이" onChange={onChangeAge} variant="outlined" >
+              <CssTextField select defaultValue={age} fullWidth={true} label="나이" onChange={onChangeAge} variant="outlined" InputLabelProps={{ style:{fontFamily: 'SCDream4'}}}>
                         {[...Array(100).keys()].map(x => ++x).map((age, i) => (
                           <MenuItem key={i} value={age} >
                             {age}
@@ -358,7 +370,8 @@ const SignupForm = () => {
         <Grid item xs={12}>
           <FormControlLabel
             control={<Checkbox checked={term} onChange={onChangeTerm} />}
-            label="MYME 약관에 동의하셔야 합니다."
+            label={<Typography style={{fontFamily: 'SCDream4'}}>MYME 약관에 동의하셔야 합니다.</Typography>}
+            InputLabelProps={{ style:{fontFamily: 'SCDream4'}}}
           />
           {termError && <ErrorMessage>약관에 동의하셔야 합니다.</ErrorMessage>}
         </Grid>
@@ -393,28 +406,30 @@ const SignupForm = () => {
         </Grid>
 
         <Grid item xs={2}>
-          <Typography
+          <h4
             align="center"
             className="sign-up3-grid-item-typography"
           >
             or
-          </Typography>
+          </h4>
         </Grid>
 
         <Grid item xs={5}>
           <Divider />
         </Grid>
         
-        <Grid item xs={6}>
-          <Typography align="center" className="sign-up4-grid-item-typography">
-            {'계정이 있으신가요?'}
-          </Typography>
+        <Grid item xs={6} >
+          {/* <h4 align="center" className="sign-up4-grid-item-typography"> */}
+          <div style={{textAlign: 'center'}}>
+            {'계정이 있으신가요?'}</div>
+          {/* </h4> */}
         </Grid>
         <Grid item xs={6}>
           <Button
             fullWidth={true}
             onClick={onChangeSignupMode}
             className="sign-up4-grid-item-button"
+            style={{fontFamily: 'SCDream4'}}
           >
             {'login'}
           </Button>

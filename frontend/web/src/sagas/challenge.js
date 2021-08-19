@@ -93,7 +93,6 @@ function uploadChallengeImageAPI(data) {
 function* uploadChallengeImage(action) {
   try {
     const result = yield call(uploadChallengeImageAPI, action.data)
-    console.log(result)
     yield put({
       type: UPLOAD_CHALLENGE_IMAGE_SUCCESS,
       data: result.data
@@ -113,7 +112,7 @@ function addChallengeAPI(data) {
 function* addChallenge(action) {
   try {
     const result = yield call(addChallengeAPI, action.data)
-    console.log(result)
+
     yield put({
       type: ADD_CHALLENGE_SUCCESS,
       data: result.data
@@ -133,7 +132,6 @@ function loadChallengesAPI() {
 function* loadChallenges() {
   try {
     const result = yield call(loadChallengesAPI)
-    console.log(result)
     yield put({
       type: LOAD_CHALLENGES_SUCCESS,
       data: result.data
@@ -153,7 +151,6 @@ function loadChallengeAPI(data) {
 function* loadChallenge(action) {
   try {
     const result = yield call(loadChallengeAPI, action.data)
-    console.log(result)
     yield put({
       type: LOAD_CHALLENGE_SUCCESS,
       data: result.data
@@ -173,7 +170,6 @@ function loadNewChallengesAPI() {
 function* loadNewChallenges() {
   try {
     const result = yield call(loadNewChallengesAPI)
-    console.log(result)
     yield put({
       type: LOAD_NEW_CHALLENGES_SUCCESS,
       data: result.data
@@ -193,7 +189,6 @@ function loadRecChallengesAPI() {
 function* loadRecChallenges() {
   try {
     const result = yield call(loadRecChallengesAPI)
-    console.log(result)
     yield put({
       type: LOAD_REC_CHALLENGES_SUCCESS,
       data: result.data
@@ -213,7 +208,6 @@ function loadWorkoutChallengesAPI() {
 function* loadWorkoutChallenges() {
   try {
     const result = yield call(loadWorkoutChallengesAPI)
-    console.log(result)
     yield put({
       type: LOAD_WORKOUT_CHALLENGES_SUCCESS,
       data: result.data
@@ -233,7 +227,6 @@ function loadStudyChallengesAPI() {
 function* loadStudyChallenges() {
   try {
     const result = yield call(loadStudyChallengesAPI)
-    console.log(result)
     yield put({
       type: LOAD_STUDY_CHALLENGES_SUCCESS,
       data: result.data
@@ -253,7 +246,6 @@ function loadLifeChallengesAPI() {
 function* loadLifeChallenges() {
   try {
     const result = yield call(loadLifeChallengesAPI)
-    console.log(result)
     yield put({
       type: LOAD_LIFE_CHALLENGES_SUCCESS,
       data: result.data
@@ -273,7 +265,6 @@ function loadMealChallengesAPI() {
 function* loadMealChallenges() {
   try {
     const result = yield call(loadMealChallengesAPI)
-    console.log(result)
     yield put({
       type: LOAD_MEAL_CHALLENGES_SUCCESS,
       data: result.data
@@ -293,7 +284,6 @@ function loadAbilityChallengesAPI() {
 function* loadAbilityChallenges() {
   try {
     const result = yield call(loadAbilityChallengesAPI)
-    console.log(result)
     yield put({
       type: LOAD_ABILITY_CHALLENGES_SUCCESS,
       data: result.data
@@ -313,7 +303,6 @@ function loadHobbyChallengesAPI() {
 function* loadHobbyChallenges() {
   try {
     const result = yield call(loadHobbyChallengesAPI)
-    console.log(result)
     yield put({
       type: LOAD_HOBBY_CHALLENGES_SUCCESS,
       data: result.data
@@ -333,7 +322,6 @@ function loadAssetChallengesAPI() {
 function* loadAssetChallenges() {
   try {
     const result = yield call(loadAssetChallengesAPI)
-    console.log(result)
     yield put({
       type: LOAD_ASSET_CHALLENGES_SUCCESS,
       data: result.data
@@ -424,7 +412,7 @@ function* certifyChallenge(action) {
 }
 
 function likeChallengeAPI(data) {
-  return axios.patch(`/challenge/${data}/like`)
+  return axios.put(`/challenge/${data}/like`)
 }
 
 function* likeChallenge(action) {

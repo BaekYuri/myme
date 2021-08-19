@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 import Slider from 'react-slick';
 import PersonIcon from '@material-ui/icons/Person';
@@ -56,7 +56,7 @@ const MoreCardList = (props) => {
       data: id,
     })
     history.push(`/Challenge/${id}`)
-  }, [dispatch])
+  }, [dispatch,history])
 
   return (
     <Slider
@@ -99,7 +99,7 @@ const MoreCardList = (props) => {
                   <div className="term" style={{ margin: 0 }}>{convertCertType(challenge.certification_cycle)}</div>
                 </Grid>
                 <Grid item xs={12} style={{ padding: '3px', fontSize: 14 }}>
-                  <div className="term" style={{ margin: 0, color: 'black', backgroundColor: 'white' }}><span role="img">📅 </span>{challenge.start_date} ~ {challenge.end_date}</div>
+                  <div className="term" style={{ margin: 0, color: 'black', backgroundColor: 'white' }}><span role="img" aria-label='challenge-date'>📅 </span>{challenge.start_date} ~ {challenge.end_date}</div>
                 </Grid>
                 <Grid item xs={6} style={{ padding: '3px', display: 'flex', justifyContent: 'center' }}>
                   <div style={{ margin: 0, display: 'flex', alignItems: 'center' }}>

@@ -1,6 +1,6 @@
-import React,{useState} from 'react';
+import React from 'react';
 import Wrapper from './styles'
-import {Typography, CardActions, Checkbox, ListItemText, ListItemSecondaryAction, Grid} from '@material-ui/core'
+import { Grid} from '@material-ui/core'
 import {SET_CHOOSED_ROUTINE} from '../../../reducers/routine'
 import {useDispatch} from 'react-redux'
 import moment from 'moment-timezone'
@@ -9,14 +9,14 @@ function App(props){
     let {routine, idx} = props
     function getDay(){
         let day = moment().tz('Asia/Seoul')
-        day = day.day()==0?6:day.day()-1
+        day = day.day()===0?6:day.day()-1
         return day
       }
     function getTime(time){
         let timeArr = time.split(':')
         
-        let am= Math.floor(timeArr[0]/12)==0?'오전':'오후'
-        let hour= timeArr[0]%12==0?12:timeArr[0]%12
+        let am= Math.floor(timeArr[0]/12)===0?'오전':'오후'
+        let hour= timeArr[0]%12===0?12:timeArr[0]%12
         hour= hour<10?`0${hour}`:hour
         return am+' '+hour+':'+timeArr[1]
     }

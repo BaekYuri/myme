@@ -148,7 +148,7 @@ function updateMyInfoAPI(data) {
 
 function* updateMyInfo(action) {
   try {
-      const result = yield call(updateMyInfoAPI, action.data)
+      yield call(updateMyInfoAPI, action.data)
       yield put({
           type: UPDATE_MY_INFO_SUCCESS,
           data: action.data
@@ -234,7 +234,6 @@ function logInAPI(data) {
 function* logIn(action) {
   try {
       const result = yield call(logInAPI, action.data)
-      console.log(result)
       yield put({
           type: LOG_IN_SUCCESS,
           data: result.data
@@ -254,7 +253,6 @@ function logOutAPI() {
 function* logOut() {
   try {
       const result = yield call(logOutAPI)
-      console.log(result)
       yield put({
           type: LOG_OUT_SUCCESS,
       })
@@ -273,7 +271,6 @@ function signUpAPI(data) {
 function* signUp(action) {
   try {
       const result = yield call(signUpAPI, action.data)
-      console.log(result)
       yield put({
           type: SIGN_UP_SUCCESS,
       })

@@ -147,6 +147,8 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
       draft.addressInfo = action.data
       draft.addressModal=false
       break
+      
+      default:break
   }
 })
 

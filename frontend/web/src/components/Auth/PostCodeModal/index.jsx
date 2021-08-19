@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import DaumPostcode from 'react-daum-postcode'
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
@@ -27,7 +27,7 @@ function getModalStyle() {
   }));
   
   function Postcode() {
-      const { addressModal, addressInfo } = useSelector((state) => state.modal)
+      const { addressModal } = useSelector((state) => state.modal)
       const dispatch = useDispatch()
       const classes = useStyles();
       // getModalStyle is not a pure function, we roll the style only on the first render

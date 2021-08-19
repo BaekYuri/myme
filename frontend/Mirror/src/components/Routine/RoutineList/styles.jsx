@@ -11,8 +11,6 @@ const Wrapper = styled(CustomCard)`
         height: 354px;
         overflow: auto;
     }
-    .no-routine{
-        padding:10px;
-    }
+    
 `;
 export default Wrapper;

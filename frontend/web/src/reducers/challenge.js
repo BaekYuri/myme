@@ -524,6 +524,7 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
       draft.challengeImagePath = ''
       const challenge = draft.myChallenges.find((v) => v.id === action.data.ChallengeParticipationId)
       challenge.certification_count += 1
+      challenge.DailyCertifyChallenges = challenge.DailyCertifyChallenges.concat(action.data)
       break
     }
     case CERTIFY_CHALLENGE_FAILURE:

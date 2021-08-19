@@ -3,20 +3,17 @@ import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import moment from 'moment';
 import {Close} from '@material-ui/icons';
-import {connect, useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import { CLOSE_CREATE_EVENT_MODAL, OPEN_CONFIRM_MODAL, SET_ALERT_MODAL_FUNCTION, OPEN_ALERT_MODAL } from '../../../../reducers/modal';
-import { CREATE_EVENT_REQUEST, DELETE_EVENT_REQUEST, MODIFY_EVENT_REQUEST,
-  SET_CHOOSED_EVENT_TITLE, SET_CHOOSED_EVENT_START, SET_CHOOSED_EVENT_END, SET_CHOOSED_EVENT_ALLDAY, SET_CHOOSED_EVENT_COLOR } from '../../../../reducers/calendar';
+import { CREATE_EVENT_REQUEST} from '../../../../reducers/calendar';
 
-import { Button, TextField } from '@material-ui/core'
+import { TextField } from '@material-ui/core'
 import { CirclePicker } from 'react-color';
 
 //icons
-import FirstPageTwoToneIcon from '@material-ui/icons/FirstPageTwoTone';
-import LastPageTwoToneIcon from '@material-ui/icons/LastPageTwoTone';
 import LocalOfferTwoToneIcon from '@material-ui/icons/LocalOfferTwoTone';
 
-import { withStyles, Switch, Typography } from '@material-ui/core/';
+import Switch from '../../../../common/Switch'
 function getModalStyle() {
   return {
     top: `50%`,
@@ -126,7 +123,6 @@ function CreateCalendar(props) {
   const dispatch = useDispatch()
   const classes = useStyles();
   const [modalStyle] = React.useState(getModalStyle);
-  const {eventInfo} = useSelector((state) => state.calendar)
   const { createEventModal } = useSelector((state) => state.modal)
 
 //모달 닫는 함수
@@ -147,13 +143,11 @@ function handleClose() {
   const [startDate, setStartDate] = useState(today);
   const startDateChange = (e) => {
     setStartDate(e.target.value);
-    console.log(startDate)
   };
 
   const [endDate, setEndDate] = useState(today);
   const endDateChange = (e) => {
     setEndDate(e.target.value);
-    console.log('end:'+endDate)
   };
 
   const [allDay, setAllDay] = useState(true);

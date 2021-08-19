@@ -1,15 +1,13 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from 'react-slick';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { 
     Card,
     CardActionArea,
-    CardActions,
     CardContent,
     CardMedia,
-    Typography,
     Grid,
     Box
 } from '@material-ui/core/';
@@ -18,8 +16,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import { useHistory } from 'react-router-dom';
 import { ColorButton } from '../../../common/Buttons';
-import { LOAD_CHALLENGE_REQUEST, SHOW_CHALLENGE } from '../../../reducers/challenge';
-import { OPEN_CONFIRM_MODAL } from '../../../reducers/modal';
+import { SHOW_CHALLENGE } from '../../../reducers/challenge';
 import { categories, convertCertType } from '../../../config/config';
 import './style.css'
 
@@ -27,7 +24,6 @@ const CardList = (props) => {
   const dispatch = useDispatch()
   const history = useHistory()
   const { challenges } = props
-  const { loadChallengeDone, loadChallengeError, singleChallenge } = useSelector((state) => state.challenge)
 
   // 슬라이더 세팅
   const settings = {
@@ -70,7 +66,7 @@ const CardList = (props) => {
       data: id,
     })
     history.push(`/Challenge/${id}`)
-  }, [dispatch])
+  }, [dispatch, history])
 
   // useEffect(() => {
   //   if (loadChallengeDone) {
@@ -96,7 +92,7 @@ const CardList = (props) => {
                 <Card style={{ maxWidth: 270, marginRight: 5, marginLeft: 5 }} >
                   <CardActionArea>
                     <CardMedia
-                      style={{ maxWidth: '270px', maxHeight: '100px' }}
+                      style={{ width: '270px', height: '100px', objectFit: 'cover' }}
                       component="img"
                       alt="Contemplative Reptile"
                       image={challenge.img_addr}
@@ -125,12 +121,15 @@ const CardList = (props) => {
                       <div className="term" style={{ margin: 0 }}>{convertCertType(challenge.certification_cycle)}</div>
                     </Grid>
                     <Grid item xs={12} style={{ padding: '5px', fontSize: 12 }}>
-                      <div className="term" style={{ margin: 0, color: 'black', backgroundColor: 'white' }}><span role="img">📅 </span>{challenge.start_date} ~ {challenge.end_date}</div>
+                      <div className="term" style={{ margin: 0, color: 'black', backgroundColor: 'white' }}><span role="img" aria-label='calendar'>📅 </span>{challenge.start_date} ~ {challenge.end_date}</div>
                     </Grid>
                     <Grid item xs={6} style={{ padding: '5px', display: 'flex', justifyContent: 'center' }}>
-                      <div style={{ margin: 0, display: 'flex', alignItems: 'center' }}>
-                        <PersonIcon color='primary' /> {challenge.ChallengeParticipations.length}
-                        <FavoriteIcon color='secondary' fontSize='small' /> {challenge.Likers.length}
+                      <div style={{ margin: 0, display: 'flex', alignItems: 'center' }} className='like-and-paticipant'>
+
+                        <PersonIcon color='primary' /> 
+                        <span>{challenge.ChallengeParticipations.length}</span>
+                        <FavoriteIcon color='secondary' fontSize='small' /> 
+                        <span>{challenge.Likers.length}</span>
                       </div>
                     </Grid>
                     <Grid item xs={6} style={{ padding: '5px' }}>

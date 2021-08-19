@@ -1,4 +1,4 @@
-import { all, fork, put, takeLatest, call, take, select } from "redux-saga/effects";
+import { all, fork, put, takeLatest, call, select } from "redux-saga/effects";
 import axios from 'axios'
 import {
   ADD_ROUTINE_REQUEST,
@@ -41,7 +41,6 @@ import {
   SET_ORDER_SUCCESS,
   SET_ORDER_FAILURE,
 } from '../reducers/routine'
-import { RestoreOutlined } from "@material-ui/icons";
 import {
   OPEN_CONFIRM_MODAL
 } from '../reducers/modal'
@@ -50,18 +49,21 @@ const myRoutines = state => {
   return state.routine.myRoutines;
 }
 function addRoutineAPI(data) {
-  console.log('요청함!')
   return axios.post('/routine', data)
 }
 
 function* addRoutine(action) {
   try {
     const result = yield call(addRoutineAPI, action.data)
-    console.log(result)
     yield put({
       type: ADD_ROUTINE_SUCCESS,
       data: result.data
     })
+    const routine = yield select(myRoutines)
+    yield put({
+      type:CHECK_ROUTINE_REQUEST,
+      routineIdx: routine[routine.length-1],
+      routineId: routine[routine.length-1].id})
     yield put({
       type:OPEN_CONFIRM_MODAL,
       message:'루틴 등록이 완료되었습니다.'
@@ -79,14 +81,12 @@ function* addRoutine(action) {
 }
 
 function loadRoutinesAPI() {
-  console.log('요청함!')
   return axios.get('/routine')
 }
 
 function* loadRoutines() {
   try {
     const result = yield call(loadRoutinesAPI)
-    console.log(result)
     yield put({
       type: LOAD_MY_ROUTINES_SUCCESS,
       data: result.data
@@ -119,12 +119,11 @@ function* loadTodayRoutines() {
 }
 
 function deleteRoutineAPI(id){
-  console.log('루틴 삭제')
   return axios.delete('/routine/'+id)
 }
 function* deleteRoutine(action){
   try{
-    const result = yield call(deleteRoutineAPI, action.id)
+    yield call(deleteRoutineAPI, action.id)
     yield put({
       type: DELETE_ROUTINE_SUCCESS,
       idx: action.idx
@@ -146,7 +145,6 @@ function* deleteRoutine(action){
 }
 
 function modifyRoutineAPI(data, id){
-  console.log('루틴 수정')
   return axios.put('/routine/'+id, data)
 }
 function* modifyRoutine(action){
@@ -173,7 +171,6 @@ function* modifyRoutine(action){
 }
 
 function addRoutinizedHabitAPI(data, id) {
-  console.log('루틴 습관 등록 요청')
   return axios.post('/routinizedHabit/'+id, data)
 }
 
@@ -189,7 +186,6 @@ function* addRoutinizedHabit(action) {
       type:OPEN_CONFIRM_MODAL,
       message:'루틴에 습관이 등록되었습니다.'
     })
-    console.log(result);
   } catch (error) {
     yield put({
       type: ADD_ROUTINIZED_HABIT_FAILURE,
@@ -203,12 +199,11 @@ function* addRoutinizedHabit(action) {
 }
 
 function deleteRoutinizedHabitAPI(id){
-  console.log('루틴 습관 삭제 요청')
   return axios.delete('/routinizedHabit/'+id)
 }
 function* deleteRoutinizedHabit(action){
   try {
-    const result = yield call(deleteRoutinizedHabitAPI, action.id)
+    yield call(deleteRoutinizedHabitAPI, action.id)
     yield put({
       type: DELETE_ROUTINIZED_HABIT_SUCCESS,
       routineIdx: action.routineIdx , 
@@ -221,7 +216,20 @@ function* deleteRoutinizedHabit(action){
       idx: action.routineIdx,
       message: true
     })
-    console.log(result);
+
+    if(routine[action.routineIdx].DailyAchieveRoutines.length>0) return
+    let isComplete = true
+    for(let item of routine[action.routineIdx].RoutinizedHabits){
+      if(item.DailyAchieveHabits.length===0){
+        isComplete = false
+      }
+    }
+    if(isComplete){
+      yield put({
+        type:CHECK_ROUTINE_REQUEST,
+        routineIdx: action.routineIdx,
+        routineId: routine[action.routineIdx].id})
+    }
   } catch (error) {
     yield put({
       type: DELETE_ROUTINIZED_HABIT_FAILURE,
@@ -234,13 +242,11 @@ function* deleteRoutinizedHabit(action){
 }
 
 function checkRoutinizedHabitAPI(routineId, habitId){
-  console.log('루틴 습관 완료 체크 요청')
   return axios.post('/routinizedHabit/', {routineId, habitId})
 }
 
 function* checkRoutinizedHabit(action){
   try{
-    console.log(action.routineId, action.habitId)
     const result = yield call(checkRoutinizedHabitAPI, action.routineId, action.habitId)
     yield put({
       type: CHECK_ROUTINIZED_HABIT_SUCCESS,
@@ -283,7 +289,6 @@ function* checkRoutinizedHabit(action){
 }
 
 function setOrderAPI(habits, routineId){
-  console.log('순서 저장')
   return axios.put('/routinizedHabit/order', {habits})
 }
 
@@ -320,7 +325,7 @@ function checkDailyAchieveRoutineAPI(routineId){
 }
 function* checkDailyAchieveRoutine(action){
   try{
-    const result = yield call(checkDailyAchieveRoutineAPI, action.routineId)
+    yield call(checkDailyAchieveRoutineAPI, action.routineId)
     yield put({
       type: CHECK_ROUTINE_SUCCESS,
       routineIdx: action.routineIdx,

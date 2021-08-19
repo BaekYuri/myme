@@ -6,7 +6,7 @@ import { convertNumDay } from '../../../config/config'
 import { CERTIFY_CHALLENGE_REQUEST, UPLOAD_CHALLENGE_IMAGE_REQUEST } from '../../../reducers/challenge'
 import CloseIcon from '@material-ui/icons/Close';
 import { OPEN_CONFIRM_MODAL } from '../../../reducers/modal'
-
+import CircularProgress from '@material-ui/core/CircularProgress';
 // forwardRef를 써서 warning을 없애긴 했는데 어떤 문제인지 정확히는 모르겠다...
 const CertModal = forwardRef((props, ref) => {
   const { challenge, closeCertModal } = props
@@ -19,6 +19,7 @@ const CertModal = forwardRef((props, ref) => {
     endTime: challenge.Challenge.ChallengeCertificationTimes[0].certification_available_end_time.substring(0, 5)
   }
   const [content, setContent] = useState('')
+  const {uploadChallengeImageLoading} = useSelector((state)=>{return state.challenge})
   const onChangeContent = useCallback((e) => {
     setContent(e.target.value)
   }, [])
@@ -28,8 +29,7 @@ const CertModal = forwardRef((props, ref) => {
   }, [])
 
   const onUploadImage = useCallback((e) => {
-    // console.log('image', e.target.files[0])
-
+    if(!e.target.files[0]) return
     const imageFormData = new FormData()
     imageFormData.append('image', e.target.files[0])
 
@@ -51,19 +51,20 @@ const CertModal = forwardRef((props, ref) => {
 
     const nowDate = new Date()
     const y = nowDate.getFullYear()
-    const m = nowDate.getMonth()+1
+    const m = nowDate.getMonth() + 1
     const d = nowDate.getDate()
+
 
     dispatch({
       type: CERTIFY_CHALLENGE_REQUEST,
       data: {
         img_addr: challengeImagePath,
         content: content.length === 0 ? '인증합니다!' : content,
-        certification_datetime: y+'-'+m+'-'+d,
+        certification_datetime: y + '-' + m + '-' + d,
         challengeId: challenge.id // challengeParticipation id...
       }
     })
-  }, [challengeImagePath, content, challenge.id, closeCertModal, dispatch])
+  }, [challengeImagePath, content, challenge.id, dispatch])
 
   useEffect(() => {
     if (certifyChallengeDone) {
@@ -79,12 +80,14 @@ const CertModal = forwardRef((props, ref) => {
         message: certifyChallengeError
       })
     }
-  }, [certifyChallengeDone, certifyChallengeError])
+  }, [certifyChallengeDone, certifyChallengeError,closeCertModal, dispatch])
 
   const checkCertAvailable = () => {
     const now = new Date()
+    const startDate = new Date(challenge.start_date)
     // 이건 이후에 최적화 시키자... 일요일을 0번으로!
-    const day = ( now.getDay() === 0 ? 6 : now.getDay()-1 )
+
+    const day = (now.getDay() === 0 ? 6 : now.getDay() - 1)
     const hour = now.getHours()
     const minute = now.getMinutes()
 
@@ -117,14 +120,15 @@ const CertModal = forwardRef((props, ref) => {
 
     const dayCheck = activeDays.map((day) => day.active_day_of_week).includes(day)
     const timeCheck = checkCertTime()
+    const startDayCheck = now >= startDate
 
-    return dayCheck&&timeCheck
+    return dayCheck && timeCheck && startDayCheck
   }
 
   const canCert = checkCertAvailable()
 
   return (
-    <div 
+    <div
       style={{
         top: '50%',
         left: '50%',
@@ -135,7 +139,7 @@ const CertModal = forwardRef((props, ref) => {
         backgroundColor: '#E5E3E3',
         border: '1px solid #66A091',
         padding: "15px",
-        borderRadius:'10px',
+        borderRadius: '10px',
       }}
     >
       <IconButton style={{ position: 'absoulte', float: 'right', color: '#CCCCCC', padding: 0 }} onClick={closeCertModal}>
@@ -143,7 +147,13 @@ const CertModal = forwardRef((props, ref) => {
       </IconButton>
       <Grid container spacing={3}>
         <Grid item xs={12} style={{ textAlign: 'center' }} >
-          <img alt={challenge.Challenge.name} src={challengeImagePath ? challengeImagePath : "/images/camera.png"} style={{ maxWidth: 200, maxHeight: 200 }} />
+          {
+            uploadChallengeImageLoading?
+            <CircularProgress />
+            :
+            <img alt={challenge.Challenge.name} src={challengeImagePath ? challengeImagePath : "/images/camera.png"} style={{ maxWidth: 200, maxHeight: 200 }} />
+          }
+          
           <input accept="image/*" type="file" name="image" hidden ref={imageInput} onChange={onUploadImage} />
         </Grid>
         <Grid item xs={12}>
@@ -159,16 +169,16 @@ const CertModal = forwardRef((props, ref) => {
           />
         </Grid>
         <Grid item xs={12} >
-        {
-          canCert
-            ? <span>지금 인증 할 수 있습니다!</span>
-            : <span>지금은 인증 할 수 없습니다. 가능한 요일과 시간을 확인해주세요!</span>
-        }
+          {
+            canCert
+              ? <span>지금 인증 할 수 있습니다!</span>
+              : <span>지금은 인증 할 수 없습니다. 가능한 요일과 시간을 확인해주세요!</span>
+          }
         </Grid>
-        <Grid item xs={12} style={{padding: '0 12px'}} >
+        <Grid item xs={12} style={{ padding: '0 12px' }} >
           인증가능 요일 : {activeDays.map((day, i) => <span key={i}>{convertNumDay(day.active_day_of_week)} </span>)}
         </Grid>
-        <Grid item xs={12} style={{padding: '0 12px'}} >
+        <Grid item xs={12} style={{ padding: '0 12px' }} >
           인증가능 시간 : {activeTime.startTime} ~ {activeTime.endTime}
         </Grid>
         <Grid item xs={6} >

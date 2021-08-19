@@ -9,6 +9,7 @@ const Wrapper = styled.div`
     border:2px solid #ffffff;
     text-align-last: center;
     text-align: -webkit-center;
+    width: -webkit-fill-available;
     .title {
         margin:0px;
         padding: 5px;
@@ -28,7 +29,7 @@ const Wrapper = styled.div`
         background-color:red;
     }
     .term{
-      background-color: #555555;
+      background-color: #050505;
       padding: 5px;
       text-align: center;
       color: white;

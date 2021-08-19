@@ -1,4 +1,3 @@
-import { SystemUpdate } from '@material-ui/icons'
 import produce from 'immer'
 
 const initialState = {
@@ -38,6 +37,8 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
             draft.loadEventLoading = false
             draft.loadEventError = action.error
             break
+            default:
+                break
     }
 })
 

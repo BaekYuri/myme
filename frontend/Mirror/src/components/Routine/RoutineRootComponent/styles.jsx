@@ -9,5 +9,8 @@ const Wrapper = styled.div`
         z-index:50;
         width: 1400px;
     }
+    .no-routine{
+        padding:10px;
+    }
 `;
 export default Wrapper;

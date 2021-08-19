@@ -1,47 +1,66 @@
-import produce from 'immer'
+import produce  from 'immer'
 
 const initialState = {
+  routineModal: false,
+  createRoutineModal: false,
+  modifyHabitModal: false,
+  alertModal : false,
+  confirmModal : false,
+  alertModalMessage : '',
   createEventModal: false,
+  modifyEventModal: false,
   addressModal: false,
 
-  addressInfo:{}
+  addressInfo:{},
+  alertModalFunction : ()=>{}
 }
 
-export const OPEN_CREATE_EVENT_MODAL = 'OPEN_CREATE_EVENT_MODAL'
-export const CLOSE_CREATE_EVENT_MODAL = 'CLOSE_CREATE_EVENT_MODAL'
-export const TOGGLE_CREATE_EVENT_MODAL = 'TOGGLE_CREATE_EVENT_MODAL'
 
-export const OPEN_ADDRESS_MODAL = 'OPEN_ADDRESS_MODAL'
-export const CLOSE_ADDRESS_MODAL = 'CLOSE_ADDRESS_MODAL'
-export const TOGGLE_ADDRESS_MODAL = 'TOGGLE_ADDRESS_MODAL'
 
-export const SET_ADDRESS_INFO = 'SET_ADDRESS_INFO'
+export const OPEN_ALERT_MODAL = 'OPEN_ALERT_MODAL'
+export const CLOSE_ALERT_MODAL = 'CLOSE_ALERT_MODAL'
+export const TOGGLE_ALERT_MODAL = 'TOGGLE_ALERT_MODAL'
+
+export const OPEN_CONFIRM_MODAL = 'OPEN_CONFIRM_MODAL'
+export const CLOSE_CONFIRM_MODAL = 'CLOSE_CONFIRM_MODAL'
+export const TOGGLE_CONFIRM_MODAL = 'TOGGLE_CONFIRM_MODAL'
+
+export const SET_ALERT_MODAL_FUNCTION = 'SET_ALERT_MODAL_FUNCTION'
+export const SET_ALERT_MODAL_MESSAGE = 'SET_ALERT_MODAL_MESSAGE'
+
+
 
 const reducer = (state = initialState, action) => produce(state, (draft) => {
   switch(action.type) {
-    case OPEN_CREATE_EVENT_MODAL:
-      draft.createEventModal = true
+    case OPEN_ALERT_MODAL:
+      draft.alertModal = true
+      draft.alertModalMessage = action.message
       break
-    case TOGGLE_CREATE_EVENT_MODAL:
-      draft.createEventModal = !draft.createEventModal
+    case TOGGLE_ALERT_MODAL:
+      draft.alertModal = !draft.alertModal
       break
-    case CLOSE_CREATE_EVENT_MODAL:
-      draft.createEventModal = false
+    case CLOSE_ALERT_MODAL:
+      draft.alertModal = false
+      draft.alertModalMessage = ''
       break
 
-    case OPEN_ADDRESS_MODAL:
-      draft.addressModal=true
+    case OPEN_CONFIRM_MODAL:
+      draft.confirmModal = true
+      draft.alertModalMessage = action.message
       break
-    case TOGGLE_ADDRESS_MODAL:
-      draft.addressModal=!draft.addressModal
+    case TOGGLE_CONFIRM_MODAL:
+      draft.confirmModal = !draft.confirmModal
       break
-    case CLOSE_ADDRESS_MODAL:
-      draft.addressModal=false
+    case CLOSE_CONFIRM_MODAL:
+      draft.confirmModal = false
+      draft.alertModalMessage = ''
       break
-    case SET_ADDRESS_INFO:
-      draft.addressInfo = action.data
-      draft.addressModal=false
-      default:break
+    case SET_ALERT_MODAL_FUNCTION:
+      draft.alertModalFunction = action.alertModalFunction
+      break
+    case SET_ALERT_MODAL_MESSAGE:
+      draft.alertModalMessage = action.message
+      break
   }
 })
 

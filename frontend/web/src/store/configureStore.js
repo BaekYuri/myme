@@ -13,7 +13,6 @@ const persistConfig = {
 };
 
 const loggerMiddleware = ({ dispath, getState }) => (next) => (action) => {
-  console.log(action)
   return next(action)
 }
 

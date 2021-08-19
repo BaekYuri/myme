@@ -1,4 +1,4 @@
-import React,{useState,useCallback } from 'react';
+import React,{useCallback } from 'react';
 import Wrapper from './styles'
 import update from 'immutability-helper';
 import RoutineModalItem from '../RoutineModalItem/index'
@@ -26,13 +26,13 @@ function App(props){
           })
       })
     },
-    [routinizedHabit]
+    [routinizedHabit, dispatch, num]
   );
 
     return(
         <Wrapper>
             {
-                routinizedHabit != undefined && routinizedHabit.length ?
+                routinizedHabit !== undefined && routinizedHabit.length ?
                 <>
                 {
                 routinizedHabit.map((item, index) => (

@@ -4,7 +4,7 @@ const path = require('path')
 const multerS3 = require('multer-s3')
 const AWS = require('aws-sdk')
 
-const { Challenge, User, Comment, ChallengeParticipation, ChallengeCertificationTime, ChallengeCertificationDay, Sequelize } = require('../models')
+const { Challenge, User, ChallengeParticipation, ChallengeCertificationTime, ChallengeCertificationDay, Sequelize } = require('../models')
 const { isLoggedIn } = require('./middlewares')
 const router = express.Router()
 
@@ -21,9 +21,10 @@ const upload = multer({
     s3: new AWS.S3(),
     bucket: 'ssafymyme',
     key (req, file, cb) {
-      console.log(file.originalname)
-      console.log(file.mimetype)
-      cb(null, `original/${Date.now()}_${path.basename(file.originalname).replace(/ /g, "_")}`)
+      const ext = path.extname(file.originalname)
+      // ${path.basename(file.originalname).replace(/ /g, "_")}
+      // 파일명 한글처리 귀찮다!
+      cb(null, `original/${Date.now()}${ext}`)
     },
   }),
   limits: { fileSize: 20*1024*1024 } // 20MB
@@ -72,7 +73,12 @@ const upload = multer({
  */
 router.get('/', async (req, res, next) => { // GET /challenge
   try {
-    const where = {}
+    const d = new Date()
+    const where = {
+      end_date: {
+        [Op.gt]: d
+      }
+    }
     const challenges = await Challenge.findAll({
       where,
       order: [
@@ -215,7 +221,12 @@ router.get('/', async (req, res, next) => { // GET /challenge
  */
  router.get('/recommended', async (req, res, next) => { // GET /challenge/recommended
   try {
-    const where = {}
+    const d = new Date()
+    const where = {
+      end_date: {
+        [Op.gt]: d
+      }
+    }
     const challenges = await Challenge.findAll({
       where,
       order: [
@@ -286,7 +297,13 @@ router.get('/', async (req, res, next) => { // GET /challenge
  */
  router.get('/workout', async (req, res, next) => { // GET /challenge/workout
   try {
-    const where = { category: 1 }
+    const d = new Date()
+    const where = {
+      Category: 1,
+      end_date: {
+        [Op.gt]: d
+      }
+    }
     const challenges = await Challenge.findAll({
       where,
       order: [
@@ -357,7 +374,13 @@ router.get('/', async (req, res, next) => { // GET /challenge
  */
  router.get('/study', async (req, res, next) => { // GET /challenge/study
   try {
-    const where = { category: 2 }
+    const d = new Date()
+    const where = {
+      Category: 2,
+      end_date: {
+        [Op.gt]: d
+      }
+    }
     const challenges = await Challenge.findAll({
       where,
       order: [
@@ -428,7 +451,13 @@ router.get('/', async (req, res, next) => { // GET /challenge
  */
  router.get('/life', async (req, res, next) => { // GET /challenge/life
   try {
-    const where = { category: 3 }
+    const d = new Date()
+    const where = {
+      Category: 3,
+      end_date: {
+        [Op.gt]: d
+      }
+    }
     const challenges = await Challenge.findAll({
       where,
       order: [
@@ -499,7 +528,13 @@ router.get('/', async (req, res, next) => { // GET /challenge
  */
  router.get('/meal', async (req, res, next) => { // GET /challenge/meal
   try {
-    const where = { category: 4 }
+    const d = new Date()
+    const where = {
+      Category: 4,
+      end_date: {
+        [Op.gt]: d
+      }
+    }
     const challenges = await Challenge.findAll({
       where,
       order: [
@@ -570,7 +605,13 @@ router.get('/', async (req, res, next) => { // GET /challenge
  */
  router.get('/ability', async (req, res, next) => { // GET /challenge/ability
   try {
-    const where = { category: 5 }
+    const d = new Date()
+    const where = {
+      Category: 5,
+      end_date: {
+        [Op.gt]: d
+      }
+    }
     const challenges = await Challenge.findAll({
       where,
       order: [
@@ -641,7 +682,13 @@ router.get('/', async (req, res, next) => { // GET /challenge
  */
  router.get('/hobby', async (req, res, next) => { // GET /challenge/hobby
   try {
-    const where = { category: 6 }
+    const d = new Date()
+    const where = {
+      Category: 6,
+      end_date: {
+        [Op.gt]: d
+      }
+    }
     const challenges = await Challenge.findAll({
       where,
       order: [
@@ -712,7 +759,13 @@ router.get('/', async (req, res, next) => { // GET /challenge
  */
  router.get('/asset', async (req, res, next) => { // GET /challenge/asset
   try {
-    const where = { category: 7 }
+    const d = new Date()
+    const where = {
+      Category: 7,
+      end_date: {
+        [Op.gt]: d
+      }
+    }
     const challenges = await Challenge.findAll({
       where,
       order: [
@@ -783,6 +836,7 @@ router.get('/', async (req, res, next) => { // GET /challenge
  */
  router.post('/search/:searchWord', isLoggedIn, async (req, res, next) => { // GET /challenge/search/{searchWord}
   const searchWord = req.params.searchWord
+  const d = new Date()
 
   try {
     const user = await User.findOne({
@@ -793,6 +847,9 @@ router.get('/', async (req, res, next) => { // GET /challenge
       where: {
         name: {
           [Op.like]: '%'+searchWord+'%'
+        },
+        end_date: {
+          [Op.gt]: d
         }
       },
       limit: 10,
@@ -863,7 +920,13 @@ router.get('/', async (req, res, next) => { // GET /challenge
  */
 router.get('/mychallenge', isLoggedIn, async (req, res, next) => { // GET /mychallenge
   try {
-    const where = { UserId: req.user.id }
+    const d = new Date()
+    const where = {
+      UserId: req.user.id,
+      end_date: {
+        [Op.gt]: d
+      }
+    }
     const myChallenges = await Challenge.findAll({
       where,
       order: [
@@ -1057,7 +1120,7 @@ router.post('/image', isLoggedIn, upload.single('image'), async (req, res, next)
 /**
  * @swagger
  *  /challenge/:challengeId:
- *    patch:
+ *    put:
  *      tags:
  *        - challenge
  *      description: 챌린지 좋아요
@@ -1075,7 +1138,7 @@ router.post('/image', isLoggedIn, upload.single('image'), async (req, res, next)
  *                    type: integer
  * 
  */
- router.patch('/:challengeId/like', async (req, res, next) => { // PATCH /challenge/{challengeID}/like
+ router.put('/:challengeId/like', async (req, res, next) => { // PUT /challenge/{challengeID}/like
   try {
     const challenge = await Challenge.findOne({
       where: { id : req.params.challengeId },

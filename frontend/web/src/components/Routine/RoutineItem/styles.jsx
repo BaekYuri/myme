@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-import Container from '@material-ui/core/Container';
-const Wrapper = styled(Container)`
+const Wrapper = styled.div`
     width: auto;
     .routine-item{
         margin-bottom : 10px;

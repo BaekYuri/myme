@@ -25,7 +25,7 @@ function App(props){
 
   let requiredTime = habit.time_required*60
   function isChecked(){
-    if(dailyAchieveHabits!= undefined && dailyAchieveHabits.length){
+    if(dailyAchieveHabits!== undefined && dailyAchieveHabits.length){
       return true
     }
     return false
@@ -50,13 +50,13 @@ function App(props){
       if(!timeInterval || isAlreadyComplete()) return undefined
       start()
       return ()=>clearTimeout(start)
-  },[time, timeInterval])
+  },[time, timeInterval,isAlreadyComplete,requiredTime])
 
   useEffect(()=>{
     if(choosedRoutinizedHabit!==routinizedHabitIdx){
       setTimeInterval(false)
     }
-  },[choosedRoutinizedHabit])
+  },[choosedRoutinizedHabit,routinizedHabitIdx])
 
   function run(){
       if(isChecked()){
@@ -118,7 +118,7 @@ function App(props){
 
     return (
         <Wrapper>
-            <Accordion className="panel" className='routine-item-check' expanded={choosedRoutinizedHabit === routinizedHabitIdx} onChange={handleChange}>
+            <Accordion className="panel routine-item-check" expanded={choosedRoutinizedHabit === routinizedHabitIdx} onChange={handleChange}>
                 <AccordionSummary
                   className="check-summary"
                   aria-controls="panel1a-content"

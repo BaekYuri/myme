@@ -5,3 +5,6 @@
   color: white;
   border-radius: 5px;
 }
+.like-and-paticipant > *{
+  margin:2px;
+}

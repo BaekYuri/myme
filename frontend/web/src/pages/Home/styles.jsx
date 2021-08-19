@@ -37,6 +37,16 @@ export const Wrapper = styled.div`
     border: none;
     font-weight: bold;
     }
+    .refresh-btn{
+        position : fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 50;
+        background-color: rgb(181,227,216);
+    }
+    .refresh-btn:hover{
+        background-color: rgb(137, 221, 191);
+    }
 `;
 
 export const useStyles = makeStyles((theme)=>({

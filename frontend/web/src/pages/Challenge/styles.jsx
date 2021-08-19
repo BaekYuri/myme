@@ -4,7 +4,7 @@ const Wrapper = styled.div`
   width: auto;
   padding: 10px;
   hr {
-    border: white 1px solid;
+    border: #dbdbdb 1px solid;
     margin-top: 10px;
   }
   .grid {

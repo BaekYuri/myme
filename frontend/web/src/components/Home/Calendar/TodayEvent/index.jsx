@@ -9,16 +9,9 @@ import CheckIcon from '@material-ui/icons/Check';
 const TodayEvent = (props) => {
 
     const eventStartDay = props.event.start 
-    const eventEndDay = props.event.end
-    const todayDate = moment().format('YYYY-MM-DD');
-    const eventStartDate = moment(eventStartDay).format('YYYY-MM-DD')
-    const eventEndDate = moment(eventEndDay).format('YYYY-MM-DD')
     const eventStartTime = moment(eventStartDay).format('HH:mm')
     const bool = props.event.allDay
 
-    function check(){
-        console.log("check= "+props.event)
-    }
     return(
         <div className='demo-app'>
             <ListItem style={{whiteSpace: 'nowrap'}}>
@@ -29,7 +22,7 @@ const TodayEvent = (props) => {
                    style={{marginRight: '10px'}}
                    /> */}
                    
-                   <CheckIcon style={{marginRight: '20px'}} onClick={check}/>   
+                   <CheckIcon style={{marginRight: '20px'}} />   
                {
                    bool ? <ListItemText style={{width:'30px'}}>종일</ListItemText> : <ListItemText>{eventStartTime}</ListItemText> 
                }

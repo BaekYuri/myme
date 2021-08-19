@@ -1,6 +1,6 @@
-import React,{useState, useEffect} from 'react';
+import React,{useState} from 'react';
 import Wrapper from './styles'
-import {Typography, Card, CardContent, CardHeader, CardActions, Tabs, Tab, IconButton, Grid} from '@material-ui/core'
+import {Typography, CardContent, CardActions, Tabs, Tab, IconButton, Grid} from '@material-ui/core'
 import YouTubeIcon from '@material-ui/icons/YouTube';
 import NoteIcon from '@material-ui/icons/Note';
 import PlayIcon from '@material-ui/icons/PlayArrow'
@@ -11,7 +11,9 @@ import ZoomInIcon from '@material-ui/icons/ZoomIn';
 import ZoomOutIcon from '@material-ui/icons/ZoomOut';
 import {SET_CHOOSED_ROUTINIZED_HABIT, CHECK_ROUTINIZED_HABIT_REQUEST} from '../../../reducers/routine'
 import { useSelector, useDispatch } from 'react-redux';
+import { useSnackbar } from 'notistack';
 function App(props){
+    const { enqueueSnackbar } = useSnackbar();
     const dispatch = useDispatch()
     let [tabValue, setTabValue] = useState(0)
     let {choosedRoutine, choosedRoutinizedHabit, zoomIn, changeZoomIn, changeZoomOut} = props
@@ -28,7 +30,7 @@ function App(props){
     let requiredMin = Math.floor(requiredTime/60)
     let requiredSec = requiredTime%60
     function isChecked(){
-        if(dailyAchieveHabits!= undefined && dailyAchieveHabits.length){
+        if(dailyAchieveHabits!== undefined && dailyAchieveHabits.length){
         return true
         }
         return false
@@ -36,10 +38,10 @@ function App(props){
 
     function run(){
         if(isChecked()){
-            alert('오늘 이미 완료한 습관입니다.')
+            enqueueSnackbar('오늘 이미 완료한 습관입니다.',{variant:'warning'});
             return
         }else if(isChecked() || isAlreadyComplete()){
-            alert('이미 필요 시간을 충족하였습니다.')
+            enqueueSnackbar('이미 필요 시간을 충족하였습니다.',{variant:'info'});
             return
         }
         props.runInterval()
@@ -52,10 +54,11 @@ function App(props){
   
     function checkRoutinizedHabit(){
         if(isChecked()){
-            alert('오늘 이미 완료한 습관입니다.')
+            enqueueSnackbar('오늘 이미 완료한 습관입니다.',{variant:'warning'});
             return
         }
         checkHabit()
+        
     }
   
     function checkHabit(){
@@ -66,6 +69,7 @@ function App(props){
         routineIdx: choosedRoutine,
         routinizedHabitIdx: choosedRoutinizedHabit
       })
+      enqueueSnackbar('습관이 완료되었습니다.',{variant:'success'});
       props.stopInterval()
     }
   

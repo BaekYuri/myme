@@ -139,6 +139,7 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
     case CHANGE_SIGN_UP_MODE:
       draft.isSignUp = !draft.isSignUp
       break
+      default:break
   }
 })
 

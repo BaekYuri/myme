@@ -1,6 +1,6 @@
-import React,{useState} from 'react';
+import React from 'react';
 import Wrapper from './styles'
-import {Typography, CardActions, Checkbox, ListItemText, ListItemSecondaryAction, Grid} from '@material-ui/core'
+import {Checkbox, Grid} from '@material-ui/core'
 import {SET_CHOOSED_ROUTINIZED_HABIT} from '../../../reducers/routine'
 import { useDispatch, useSelector } from 'react-redux';
 function App(props){
@@ -11,7 +11,7 @@ function App(props){
     function setChoosedRoutinizedHabit(){
         props.stopInterval()
         props.clearTime()
-        if(choosedRoutinizedHabit!=idx){
+        if(choosedRoutinizedHabit!==idx){
             dispatch({type: SET_CHOOSED_ROUTINIZED_HABIT, idx:idx})
         }else{
             dispatch({type: SET_CHOOSED_ROUTINIZED_HABIT, idx:-1})
@@ -25,7 +25,7 @@ function App(props){
                 </Grid>
                 <Grid item xs={3} md={2} xl={1} style={{lineHeight:'58px'}}>
                     <Checkbox
-                    checked={routinizedHabit.DailyAchieveHabits.length==0?false:true}
+                    checked={routinizedHabit.DailyAchieveHabits.length===0?false:true}
                     disabled
                     />
                 </Grid>

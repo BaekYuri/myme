@@ -1,7 +1,8 @@
 const express = require('express')
-const { ChallengeParticipation, User, Challenge, ChallengeCertificationDay, ChallengeCertificationTime, DailyCertifyChallenge } = require('../models')
+const { ChallengeParticipation, User, Challenge, ChallengeCertificationDay, ChallengeCertificationTime, DailyCertifyChallenge, Sequelize } = require('../models')
 const { isLoggedIn } = require('./middlewares')
 
+const Op = Sequelize.Op
 const router = express.Router()
 
 /**
@@ -31,8 +32,14 @@ const router = express.Router()
  */
  router.get('/', isLoggedIn, async (req, res, next) => { // GET /challengeParticipation
   try {
+    const d = new Date()
     const challengeParticipation = await ChallengeParticipation.findAll({
-      where: { UserId: req.user.id },
+      where: {
+        UserId: req.user.id,
+        end_date: {
+          [Op.gt]: d
+        }
+      },
       include: [{
         model: Challenge,
         include: [{
@@ -53,6 +60,7 @@ const router = express.Router()
         model: DailyCertifyChallenge
       }]
     })
+    // console.log(challengeParticipation)
     res.status(200).json(challengeParticipation)
   } catch (error) {
     console.error(error)
@@ -168,11 +176,13 @@ router.post('/', isLoggedIn, async (req, res, next) => { // POST /challengeParti
 router.post('/:challengeId', isLoggedIn, async (req, res, next) => {  // POST /challengeParticipation/1
   try {
     const challengeParticipation = await ChallengeParticipation.findOne({
-      where: { id: req.params.challengeId }
+      where: { id: req.params.challengeId } // challengeParticipationId...
     })
+    console.log(req.body.certification_datetime)
     const exDailyCertifyChallenge = await DailyCertifyChallenge.findOne({
       where: { ChallengeParticipationId: challengeParticipation.id, certification_datetime: req.body.certification_datetime }
     })
+
     if (exDailyCertifyChallenge) {
       return res.status(403).send('이미 인증했습니다!')
     }

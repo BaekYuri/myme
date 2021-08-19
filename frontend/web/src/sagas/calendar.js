@@ -20,13 +20,11 @@ import {
   } from '../reducers/modal'
 
 function createEventAPI(data){
-    console.log('create event요청!')
     return axios.post('/schedule', data)
 }
 function* createEvent(action){
     try{
         const result = yield call(createEventAPI, action.data)
-        console.log(result)
         yield put({
             type: CREATE_EVENT_SUCCESS,
             data: result.data
@@ -49,7 +47,6 @@ function* createEvent(action){
 }
 
 function deleteEventAPI(id){
-    console.log('delete event 요청!')
     return axios.delete('/schedule/'+id)
 }
 function* deleteEvent(action){
@@ -76,7 +73,6 @@ function* deleteEvent(action){
 }
 
 function modifyEventAPI(data,id){
-    console.log('modify event 요청!')
     return axios.put('/schedule/'+id, data)
 }
 function* modifyEvent(action){
@@ -103,7 +99,6 @@ function* modifyEvent(action){
 }
 
 function loadEventAPI(){
-    console.log('load event 요청!')
     return axios.get('/schedule')
 }
 function* loadEvent(){

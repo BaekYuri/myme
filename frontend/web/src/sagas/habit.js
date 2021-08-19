@@ -36,14 +36,12 @@ const myRoutines = state => {
 }
 
 function loadHabitsAPI(){
-  console.log('습관 로드')
   return axios.get('/habit')
 }
 
 function* loadHabits(){
   try{
     const result = yield call(loadHabitsAPI)
-    console.log(result)
     yield put({
       type: LOAD_MY_HABITS_SUCCESS,
       data: result.data
@@ -58,7 +56,6 @@ function* loadHabits(){
 }
 
 function addHabitAPI(data) {
-  console.log('습관 등록 요청')
   return axios.post('/habit', data)
 }
 
@@ -113,7 +110,6 @@ function* addJustHabit(action) {
 }
 
 function modifyMyHabitAPI(data, id){
-  console.log('습관 수정 요청')
   return axios.put('/habit/'+id, data)
 }
 
@@ -141,7 +137,6 @@ function* modifyMyHabit(action){
 }
 
 function deleteMyHabitAPI(id){
-  console.log('습관 삭제 요청')
   return axios.delete('/habit/'+id)
 }
 

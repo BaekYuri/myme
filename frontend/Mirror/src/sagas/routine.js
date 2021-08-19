@@ -1,4 +1,4 @@
-import { all, fork, put, takeLatest, call, take, select } from "redux-saga/effects";
+import { all, fork, put, takeLatest, call,  select } from "redux-saga/effects";
 import axios from 'axios'
 import {
   LOAD_TODAY_ROUTINES_REQUEST,
@@ -280,7 +280,7 @@ function checkDailyAchieveRoutineAPI(routineId){
 }
 function* checkDailyAchieveRoutine(action){
   try{
-    const result = yield call(checkDailyAchieveRoutineAPI, action.routineId)
+    yield call(checkDailyAchieveRoutineAPI, action.routineId)
     yield put({
       type: CHECK_ROUTINE_SUCCESS,
       routineIdx: action.routineIdx,

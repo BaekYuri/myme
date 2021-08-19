@@ -16,14 +16,14 @@ const Auth = () => {
     dispatch({
       type: LOAD_MY_INFO_REQUEST
     })
-  }, [])
+  }, [dispatch])
 
   // 로그인 상태이면 홈 화면으로 이동!
   useEffect(() => {
     if (me) {
       history.push('/Home')
     }
-  }, [me])
+  }, [me, history])
 
   return(
     <Wrapper>

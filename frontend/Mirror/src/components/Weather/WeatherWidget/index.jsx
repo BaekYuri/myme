@@ -1,5 +1,5 @@
 
-import React,{useEffect, useState} from 'react'
+import React,{useEffect} from 'react'
 import weatherToKorean from '../weatherToKorean'
 import Weather from '../WeatherComponent'
 import Wrapper from './styles'
@@ -15,7 +15,7 @@ function App() {
     dispatch({
       type:LOAD_WEATHER_REQUEST,
     })
-  },[])
+  },[dispatch])
   return (
     <Wrapper>
       {

@@ -1,5 +1,5 @@
-import React, {useState, useCallback} from 'react'
-import { connect, useDispatch, useSelector } from 'react-redux'
+import React from 'react'
+import { useSelector } from 'react-redux'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
@@ -7,7 +7,6 @@ import interactionPlugin from '@fullcalendar/interaction'
 import Wrapper from './styles'
 
 const Calendar = (props) => {
-  const dispatch = useDispatch()
   const {events} = useSelector((state) => state.calendar)
  
     return(

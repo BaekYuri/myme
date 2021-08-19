@@ -27,7 +27,7 @@ function App (props) {
     dispatch({
       type: LOAD_MY_HABITS_REQUEST
     })
-  }, [])
+  }, [dispatch])
 
   return(
     <Layout>

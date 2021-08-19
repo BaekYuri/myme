@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import myStyle from './styles.json'
 const useStyles = makeStyles(() => (myStyle));

@@ -34,7 +34,7 @@ const MirrorSetting = () => {
     return(
             <Wrapper>
                 <div className='menu daily-menu'><h3>스마트 미러 관리</h3></div>
-                <hr/>
+                <hr style={{border:'#dbdbdb 1px solid'}}/>
                 <Container>
                     <Card className='mirror-card'>
                         <CardActions>

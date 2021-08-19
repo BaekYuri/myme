@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import Header from './Header/';
 import Drawer from './Drawer/';
-import { CssBaseline, Container, Grid } from '@material-ui/core';
+import { CssBaseline, Container} from '@material-ui/core';
 import Wrapper from './styles';
 import {useMediaQuery} from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';

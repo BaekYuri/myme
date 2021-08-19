@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback,  useState } from 'react';
 import Wrapper from './styles'
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Grid from '@material-ui/core/Grid';
@@ -26,7 +26,7 @@ const App = (props) => {
       data: id
     })
     history.push(`/ChallengeDashboard/${id}`)
-  }, [])
+  }, [dispatch,history])
 
   const closeCertModal = useCallback(() => {
     setModalOpen(false)
@@ -36,13 +36,13 @@ const App = (props) => {
     dispatch({
       type: CLEAR_IMAGE_PATH
     })
-  }, [])
+  }, [dispatch])
 
   return(
     <Wrapper>
-      <img alt={challenge.Challenge?.name} src={challenge.Challenge?.img_addr ? challenge.Challenge?.img_addr : ''} style={{ maxWidth: '270px', maxHeight: '100px' }} />
+      <img alt={challenge.Challenge?challenge.Challenge.name:''} src={challenge.Challenge?.img_addr ? challenge.Challenge?.img_addr : ''} style={{ width: '270px', height: '100px', objectFit: 'contain' }} />
       <Grid item xs={12} >
-        <Typography gutterBottom className='title' component="div" variant="h6" style={{ maxWidth: 250, textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden', fontFamily: 'SCDream4' }}>{challenge.Challenge?.name}</Typography>
+        <Typography gutterBottom className='title' component="div" variant="h6" style={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden', fontFamily: 'SCDream4' }}>{challenge.Challenge?.name}</Typography>
       </Grid>
       <Grid container spacing={0}>
         <Grid item xs={6} >
@@ -62,7 +62,7 @@ const App = (props) => {
       </Grid>
       <Grid container>
         <Grid item xs={12} >
-          <span role="img">📅 </span>
+          <span role="img" aria-label='calendar'>📅 </span>
           <span>
             {challenge.start_date} ~ {challenge.end_date}
           </span>
@@ -74,7 +74,7 @@ const App = (props) => {
         </Grid>
         <Grid item xs={4} >
           <span className='title' >
-            <span role="img">🏃🏼‍♂️</span> {Math.round(10*100*challenge.certification_count/challenge.total_number_of_certification) / 10} %
+            <span role="img" aria-label='run'>🏃🏼‍♂️</span> {Math.round(10*100*challenge.certification_count/challenge.total_number_of_certification) / 10} %
           </span>
         </Grid>
       </Grid>

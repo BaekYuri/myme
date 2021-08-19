@@ -48,6 +48,8 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
       draft.loadWeatherLoading = false
       draft.loadWeatherError = action.error
       break
+      default:
+        break
   }
 })
 

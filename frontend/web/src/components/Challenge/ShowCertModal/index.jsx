@@ -1,13 +1,13 @@
 import React, { forwardRef } from 'react'
 import { Grid, IconButton, Paper, Typography } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close';
+import moment from 'moment-timezone'
 
 // forwardRef를 써서 warning을 없애긴 했는데 어떤 문제인지 정확히는 모르겠다...
 const ShowCertModal = forwardRef((props, ref) => {
   const { info, closeShowCertModal } = props
-  const certDate = info.createdAt.substring(0, 10)
-  const certTime = info.createdAt.substring(11, 16)
-
+  const certDate = moment(info.createdAt).tz('Asia/Seoul').format('YYYY-MM-DD')
+  const certTime = moment(info.createdAt).tz('Asia/Seoul').format('HH:mm')
   return (
     <div 
       style={{

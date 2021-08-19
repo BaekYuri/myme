@@ -4,7 +4,7 @@ require('moment-timezone');
 moment.tz.setDefault("Asia/Seoul");
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
-const { Routine, Habit, RoutinizedHabit, DailyAchieveHabit, sequelize } = require('../models')
+const { Routine, Habit, RoutinizedHabit, DailyAchieveHabit, sequelize, DailyAchieveRoutine } = require('../models')
 const { isLoggedIn } = require('./middlewares')
 
 const router = express.Router()
@@ -44,13 +44,24 @@ const router = express.Router()
  *          description: Success
  */
 router.post('/:routineId', isLoggedIn, async (req, res, next) => {
+  const t = await sequelize.transaction();
   try {
     const routinizedHabit = await RoutinizedHabit.create({
       order: req.body.order,
       achieve_count: req.body.achieve_count,
       RoutineId: req.params.routineId,
       HabitId: req.body.habitId
-    })
+    },{ transaction: t })
+
+    await DailyAchieveRoutine.destroy({
+      where:{
+        RoutineId:req.params.routineId,
+        achieve_datetime:{
+          [Op.between]: [moment().startOf('day'), moment().endOf('day')],
+        }
+      }
+    },{ transaction: t })
+    await t.commit();
     const result = await RoutinizedHabit.findOne({
       where:{id: routinizedHabit.id},
       include: [{
@@ -59,6 +70,7 @@ router.post('/:routineId', isLoggedIn, async (req, res, next) => {
     })
     res.status(200).json(result)
   } catch (error) {
+    await t.rollback();
     console.error(error)
     next(error)
   }
