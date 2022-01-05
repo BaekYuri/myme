@@ -57,7 +57,4 @@ export const backUrl = 'http://localhost:3065'; //정상
 
 #### - 사용 DB : MySQL
 
-- Hostname : ssafy-pjt1-dbserver.cotmr33tcon0.ap-northeast-2.rds.amazonaws.com
-- Username : admin
-- Password : mechanic
 
